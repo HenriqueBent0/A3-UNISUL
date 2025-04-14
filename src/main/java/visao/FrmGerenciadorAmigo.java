@@ -5,20 +5,21 @@ import modelo.Amigo;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import servico.AmigoService;
 
 /**
  * Classe responsável pela interface gráfica de gerenciador de amigo.
  */
 public class FrmGerenciadorAmigo extends javax.swing.JFrame {
 
-    private Amigo objetoamigo;
+    private AmigoService amigoService;
 
     /**
      * Construtor da classe FrmGerenciadorDeAmigo.
      */
     public FrmGerenciadorAmigo() {
         initComponents(); // Inicializa os componentes da interface gráfica
-        this.objetoamigo = new Amigo(); //Carrega objetoamigo de Amigo
+        this.amigoService = new AmigoService(); //Carrega objetoamigo de Amigo
         this.carregaTabela(); // Inicializa a Tabela
 
     }
@@ -264,7 +265,7 @@ public void apagar(){
             // Se o usuário confirmar a exclusão, prossegue com a exclusão
             if (respostaUsuario == 0) {
                 // Apaga o amigo do banco de dados
-                if (this.objetoamigo.deleteAmigoBD(id)) {
+                if (amigoService.deleteAmigoBD(id)) {
                     // Limpa os campos de texto e exibe uma mensagem de sucesso
                     this.JTFNome.setText("");
                     this.JTFTelefone.setText("");
@@ -273,7 +274,7 @@ public void apagar(){
             }
 
             // Exibe a lista atualizada de amigos após a exclusão
-            System.out.println(this.objetoamigo.getListaAmigo().toString());
+            System.out.println(amigoService.getListaAmigo().toString());
         } catch (Mensagem erro) {
             // Exibe mensagem de erro se houver algum problema
             JOptionPane.showMessageDialog(null, erro.getMessage());
@@ -316,7 +317,7 @@ public void editar(){
             }
 
             // Realiza a edição do amigo no banco de dados
-            if (this.objetoamigo.updateAmigoBD(nome, id, telefone)) {
+            if (amigoService.updateAmigoBD(nome, id, telefone)) {
                 // Limpa os campos de texto e exibe uma mensagem de sucesso
                 this.JTFNome.setText("");
                 this.JTFTelefone.setText("");
@@ -324,7 +325,7 @@ public void editar(){
             }
 
             // Exibe a lista atualizada de amigos após a edição
-            System.out.println(this.objetoamigo.getListaAmigo().toString());
+            System.out.println(amigoService.getListaAmigo().toString());
         } catch (Mensagem erro) {
             // Exibe mensagem de erro se houver algum problema
             JOptionPane.showMessageDialog(null, erro.getMessage());
@@ -339,7 +340,7 @@ public void editar(){
 public void carregaTabela() {
         DefaultTableModel modelo = (DefaultTableModel) this.JTableAmigos.getModel();
         modelo.setNumRows(0);
-        ArrayList<Amigo> minhaLista = objetoamigo.getListaAmigo(); //Obtem lista de amigos do DAO
+        ArrayList<Amigo> minhaLista = amigoService.getListaAmigo(); //Obtem lista de amigos do DAO
         for (Amigo a : minhaLista) {
             modelo.addRow(new Object[]{
                 a.getid(),

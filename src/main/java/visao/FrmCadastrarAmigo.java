@@ -1,14 +1,15 @@
 package visao;
 
 import javax.swing.JOptionPane;
-import modelo.Amigo;
+import servico.AmigoService;
 
 /**
  * Classe responsável pela interface gráfica de cadastro de amigo.
  */
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
-    private Amigo objetoamigo; // Objeto para interação com a classe Amigo
+    
+    private AmigoService amigoService; // Objeto para interação com a classe Amigo
     private int id; // Identificador do amigo
 
     /**
@@ -17,7 +18,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     public FrmCadastrarAmigo() {
 
         initComponents(); // Inicializa os componentes da interface gráfica
-        this.objetoamigo = new Amigo(); // Cria uma instância da classe Amigo
+        this.amigoService = new AmigoService(); // Cria uma instância da classe Amigo
     }
 
     @SuppressWarnings("unchecked")
@@ -188,33 +189,31 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
 public void cadastrar(){
     try {
-            //Recebendo e validando dados da interface gráfica.
-            String nome = "";
-            int telefone = 0;
+        String nome = "";
+        int telefone = 0;
 
-            if (this.JTFNome.getText().length() < 2) {
-                throw new Mensagem("Nome deve conter ao menos 2 caracteres.");
-            } else {
-                nome = this.JTFNome.getText();
-            }
-
-            if (this.JTFTelefone.getText().length() == 9) {
-                telefone = Integer.parseInt(this.JTFTelefone.getText());
-            } else {
-                throw new Mensagem("Informe um número válido.");
-            }
-
-            //Envia os dados para o Controlador cadastrar
-            if (this.objetoamigo.insertAmigoBD(nome, id, telefone)) {
-                JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
-                //Limpa campos da interface
-                this.JTFNome.setText("");
-                this.JTFTelefone.setText("");
-            }
-        } catch (Mensagem erro) {
-            JOptionPane.showMessageDialog(null, erro.getMessage());
-        } catch (NumberFormatException erro2) {
-            JOptionPane.showMessageDialog(null, "Informe um número válido.");
+        if (this.JTFNome.getText().length() < 2) {
+            throw new Mensagem("Nome deve conter ao menos 2 caracteres.");
+        } else {
+            nome = this.JTFNome.getText();
         }
+
+        if (this.JTFTelefone.getText().length() == 9) {
+            telefone = Integer.parseInt(this.JTFTelefone.getText());
+        } else {
+            throw new Mensagem("Informe um número válido.");
+        }
+
+        if (amigoService.insertAmigoBD(nome, 0, telefone)) {
+            JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
+            this.JTFNome.setText("");
+            this.JTFTelefone.setText("");
+        }
+
+    } catch (Mensagem erro) {
+        JOptionPane.showMessageDialog(null, erro.getMessage());
+    } catch (NumberFormatException erro2) {
+        JOptionPane.showMessageDialog(null, "Informe um número válido.");
+    }
 }
 }
