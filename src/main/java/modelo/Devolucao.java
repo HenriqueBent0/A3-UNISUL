@@ -75,21 +75,7 @@ public class Devolucao {
         this.nomeDaFerramenta = nomeDaFerramenta;
     }
 
-    /**
-     * Método para obter a lista de devoluções.
-     */
-    public ArrayList<Devolucao> getListaDevolucao() {
-        return dao.getListaDevolucao();
-    }
-
-    /**
-     * Método para inserir uma devolução no banco de dados.
-     */
-    public boolean insertDevolucaoBD(String nomeAmigo, int idFerramenta, String data, String nomeDaFerramenta) {
-        Devolucao objeto = new Devolucao(nomeAmigo, idFerramenta, data, 0, nomeDaFerramenta); // O ID será gerado pelo BD
-        dao.insertDevolucaoBD(objeto);
-        return true;
-    }
+    
 
    
     
