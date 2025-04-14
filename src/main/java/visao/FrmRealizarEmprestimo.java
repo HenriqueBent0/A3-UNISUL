@@ -10,20 +10,21 @@ import java.util.Date;
 import javax.swing.JOptionPane;
 import modelo.Emprestimo;
 import modelo.Ferramenta;
+import servico.EmprestimoService;
 
 /**
  * Classe responsável pela interface gráfica de realização de empréstimo.
  */
 public class FrmRealizarEmprestimo extends javax.swing.JFrame {
 
-    private EmprestimoDAO emprestimoDAO; // Objeto para interação com a classe EmprestimoDAO
+    private EmprestimoService emprestimoService; // Objeto para interação com a classe EmprestimoDAO
 
     /**
      * Construtor da classe FrmRealizarEmprestimo.
      */
     public FrmRealizarEmprestimo() {
         initComponents(); // Inicializa os componentes da interface gráfica
-        this.emprestimoDAO = new EmprestimoDAO(); // Inicializa tabela
+        emprestimoService = new EmprestimoService();     // Inicializa tabela
     }
 
     @SuppressWarnings("unchecked")
