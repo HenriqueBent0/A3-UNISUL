@@ -1,18 +1,15 @@
 package dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import modelo.Devolucao;
-import static dao.AmigoDAO.getConexao;
 
 /**
- * Classe que define as operações de acesso a dados para a entidade de
- * Devolucao.
+ * Classe que define as operações de acesso a dados para a entidade Devolucao.
  */
 public class DevolucaoDAO {
 
@@ -27,7 +24,8 @@ public class DevolucaoDAO {
     public ArrayList<Devolucao> getListaDevolucao() {
         listaDevolucao.clear();
         try {
-            Statement stmt = getConexao().createStatement();
+            Connection conn = ConexaoDAO.getConexao();
+            Statement stmt = conn.createStatement();
             ResultSet res = stmt.executeQuery("SELECT * FROM tb_devolucao");
             while (res.next()) {
                 int id = res.getInt("id");
@@ -46,21 +44,20 @@ public class DevolucaoDAO {
         return listaDevolucao;
     }
 
-    
-    
-
     /**
      * Método para inserir uma devolução no banco de dados.
      */
     public boolean insertDevolucaoBD(Devolucao objeto) {
-        String sql = "INSERT INTO tb_devolucao(nomeAmigo, idFerramenta, nomeDaFerramenta, data,id) VALUES(?,?, ?, ?, ?)";
+        String sql = "INSERT INTO tb_devolucao(nomeAmigo, idFerramenta, nomeDaFerramenta, data, id) VALUES (?, ?, ?, ?, ?)";
         try {
+            Connection conn = ConexaoDAO.getConexao();
+
+            // Descobre o próximo ID
             String sqlUltimoId = "SELECT MAX(id) AS max_id FROM tb_devolucao";
-            Statement stmtUltimoId = getConexao().createStatement();
+            Statement stmtUltimoId = conn.createStatement();
             ResultSet rsUltimoId = stmtUltimoId.executeQuery(sqlUltimoId);
-            PreparedStatement stmt = getConexao().prepareStatement(sql);
+
             int ultimoId = 0;
-            
             if (rsUltimoId.next()) {
                 ultimoId = rsUltimoId.getInt("max_id");
             }
@@ -69,7 +66,8 @@ public class DevolucaoDAO {
 
             int novoId = ultimoId + 1;
 
-            System.out.println("Inserindo Devolução: " + objeto);  // Adicione esta linha para debug
+            // Insere a devolução
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, objeto.getNomeAmigo());
             stmt.setInt(2, objeto.getIdFerramenta());
             stmt.setString(3, objeto.getNomeDaFerramenta());
@@ -86,6 +84,9 @@ public class DevolucaoDAO {
         }
     }
 
+    /**
+     * Conta quantas devoluções um determinado amigo já fez.
+     */
     public int contarEmprestimosPorPessoa(String nomeAmigo) {
         int count = 0;
         for (Devolucao devolucao : listaDevolucao) {
