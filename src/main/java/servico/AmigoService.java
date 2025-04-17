@@ -8,26 +8,29 @@ public class AmigoService {
 
     private AmigoDAO dao;
 
+    // Construtor padrão (uso normal com banco de dados real)
     public AmigoService() {
         this.dao = new AmigoDAO();
+    }
+
+    // Construtor para injetar um DAO (útil para testes com Mockito)
+    public AmigoService(AmigoDAO dao) {
+        this.dao = dao;
     }
 
     public boolean insertAmigoBD(String nome, int id, int telefone) {
         id = this.maiorID() + 1;
         Amigo objeto = new Amigo(nome, id, telefone);
-        dao.insertAmigoBD(objeto);
-        return true;
+        return dao.insertAmigoBD(objeto);
     }
 
     public boolean deleteAmigoBD(int id) {
-        dao.deleteAmigoBD(id);
-        return true;
+        return dao.deleteAmigoBD(id);
     }
 
     public boolean updateAmigoBD(String nome, int id, int telefone) {
         Amigo objeto = new Amigo(nome, id, telefone);
-        dao.updateAmigoBD(objeto);
-        return true;
+        return dao.updateAmigoBD(objeto);
     }
 
     public Amigo carregaAmigo(int id) {
@@ -42,4 +45,3 @@ public class AmigoService {
         return dao.maiorID();
     }
 }
-
