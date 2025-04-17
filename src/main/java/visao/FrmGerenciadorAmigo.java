@@ -343,7 +343,7 @@ public void carregaTabela() {
         ArrayList<Amigo> minhaLista = amigoService.getListaAmigo(); //Obtem lista de amigos do DAO
         for (Amigo a : minhaLista) {
             modelo.addRow(new Object[]{
-                a.getid(),
+                a.getId(),
                 a.getNome(),
                 a.getTelefone(),});
         }

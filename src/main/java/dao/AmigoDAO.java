@@ -71,7 +71,7 @@ public class AmigoDAO {
         String sql = "INSERT INTO tb_amigos(id, nome, telefone) VALUES(?, ?, ?)";
         try {
             PreparedStatement stmt = ConexaoDAO.getConexao().prepareStatement(sql);
-            stmt.setInt(1, objeto.getid());
+            stmt.setInt(1, objeto.getId());
             stmt.setString(2, objeto.getNome());
             stmt.setInt(3, objeto.getTelefone());
             stmt.execute();
@@ -106,7 +106,7 @@ public class AmigoDAO {
             PreparedStatement stmt = ConexaoDAO.getConexao().prepareStatement(sql);
             stmt.setString(1, objeto.getNome());
             stmt.setInt(2, objeto.getTelefone());
-            stmt.setInt(3, objeto.getid());
+            stmt.setInt(3, objeto.getId());
             stmt.executeUpdate();
             stmt.close();
             return true;
@@ -120,19 +120,25 @@ public class AmigoDAO {
      * Carrega as informações de um amigo do banco de dados.
      */
     public Amigo carregaAmigo(int id) {
-        Amigo objeto = new Amigo();
-        objeto.setid(id);
-        try {
-            Statement stmt = ConexaoDAO.getConexao().createStatement();
-            ResultSet res = stmt.executeQuery("SELECT * FROM tb_amigos WHERE id = " + id);
-            if (res.next()) {
-                objeto.setNome(res.getString("nome"));
-                objeto.setTelefone(res.getInt("telefone"));
-            }
-            stmt.close();
-        } catch (SQLException erro) {
-            System.out.println("Erro: " + erro);
+    Amigo objeto = null; // começa como null
+
+    try {
+        Statement stmt = ConexaoDAO.getConexao().createStatement();
+        ResultSet res = stmt.executeQuery("SELECT * FROM tb_amigos WHERE id = " + id);
+
+        if (res.next()) {
+            objeto = new Amigo();
+            objeto.setId(id);
+            objeto.setNome(res.getString("nome"));
+            objeto.setTelefone(res.getInt("telefone"));
         }
-        return objeto;
+
+        stmt.close();
+    } catch (SQLException erro) {
+        System.out.println("Erro: " + erro);
     }
+
+    return objeto;
+}
+
 }
