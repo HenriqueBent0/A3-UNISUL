@@ -75,4 +75,10 @@ void testDeleteAmigoBD() {
     Amigo deletado = service.carregaAmigo(2);
     assertNull(deletado);
 }
+@Test
+@Order(5)
+void testConstrutorPadrao(){
+    AmigoService servicePadrao = new AmigoService();
+    assertNotNull(servicePadrao);
+}
 }
