@@ -1,4 +1,4 @@
-name: Java CI with Maven
+name: Integração contínua de Java com Maven e SonarCloud
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  # Ambiente de desenvolvimento
+  # Jobs do ambiente de desenvolvimento
   build-dev:
     runs-on: ubuntu-latest
     environment:
@@ -26,7 +26,7 @@ jobs:
       - name: Compila o projeto com Maven
         run: mvn -B compile --file pom.xml
 
-  # Ambiente de homologação
+  # Jobs do ambiente de homologação
   build-hmg:
     runs-on: ubuntu-latest
     environment:
@@ -48,7 +48,28 @@ jobs:
       - name: Testa o projeto com Maven
         run: mvn -B test --file pom.xml
 
-  # Ambiente de produção
+      # Executa os passos da análise do código com o SonarCloud
+      - name: Cache dos pacotes do SonarCloud
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache dos pacotes do Maven
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Verifica o projeto com Maven e Jacoco
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=HenriqueBent0_a3_unisul
+
+  # Jobs do ambiente de produção
   build-prd:
     runs-on: ubuntu-latest
     environment:
@@ -65,16 +86,20 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      # Executa o empacotamento do projeto com Maven
       - name: Empacota o projeto com Maven
         run: mvn -B package --file pom.xml -DskipTests
 
+      # Cria uma pasta temporária de downloads de artefatos
       - name: Crie uma pasta temporária de downloads de artefatos
         run: mkdir staging
 
+      # Copia os artefatos a serem publicados na pasta temporária
       - name: Copia os artefatos a serem publicados na pasta temporária
         run: cp target/*jar-with-dependencies.jar staging
 
-      - name: Usa Upload Artifact do GitHub Actions
+      # Usa Upload Artifact do GitHub Action
+      - name: Usa Upload Artifact do GitHub Action
         uses: actions/upload-artifact@v4
         with:
           name: Package
