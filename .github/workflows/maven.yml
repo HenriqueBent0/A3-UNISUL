@@ -48,7 +48,7 @@ jobs:
       - name: Testa o projeto com Maven
         run: mvn -B test --file pom.xml
 
-      # Executa os passos da análise do código com o SonarCloud
+      # Cache dos pacotes do SonarCloud
       - name: Cache dos pacotes do SonarCloud
         uses: actions/cache@v4
         with:
@@ -56,6 +56,7 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
+      # Cache dos pacotes do Maven
       - name: Cache dos pacotes do Maven
         uses: actions/cache@v4
         with:
@@ -63,12 +64,13 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      # Verifica o projeto com Maven e Jacoco
       - name: Verifica o projeto com Maven e Jacoco
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          mvn -B verify \
+          mvn clean verify \
             org.jacoco:jacoco-maven-plugin:prepare-agent \
             org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=HenriqueBent0_a3_unisul \
@@ -94,7 +96,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Executa o empacotamento do projeto com Maven
+      # Empacotamento do projeto com Maven
       - name: Empacota o projeto com Maven
         run: mvn -B package --file pom.xml -DskipTests
 
