@@ -7,8 +7,8 @@ import org.junit.platform.suite.api.Suite;
 
 @Suite
 @SelectClasses({
-    AmigoServiceTest.class
-    // Adicione outras classes de teste aqui, se tiver
+    AmigoServiceTest.class,     // Classe de teste AmigoServiceTest
+    DevolucaoServiceTest.class // Classe de teste DevolucaoServiceTest
 })
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TesteSuite {
