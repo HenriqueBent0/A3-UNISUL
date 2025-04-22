@@ -100,7 +100,7 @@ jobs:
       - name: Empacota o projeto com Maven
         run: mvn -B package --file pom.xml -DskipTests
 
-      # Cria uma pasta temporária de downloads de artefatos
+      # Cria uma pasta temporária de downloads de artefatos.
       - name: Crie uma pasta temporária de downloads de artefatos
         run: mkdir staging
 
