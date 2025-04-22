@@ -15,6 +15,10 @@ public class DevolucaoService {
     public DevolucaoService() {
         this.dao = new DevolucaoDAO();
     }
+    public DevolucaoService(DevolucaoDAO dao) {
+    this.dao = dao;
+}
+
 
     /**
      * Obtém a lista de devoluções.

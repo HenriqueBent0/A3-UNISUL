@@ -7,7 +7,7 @@ import servico.DevolucaoService;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -23,19 +23,18 @@ public class DevolucaoServiceTest {
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        service = new DevolucaoService() {
-            {
-                this.dao = devolucaoDAOMock; // injeção manual para simular DAO
-            }
-        };
+        service = new DevolucaoService(devolucaoDAOMock); // Recomendado: criar esse construtor no DevolucaoService
     }
 
     @Test
     @Order(1)
     void testInsertDevolucao() {
         when(devolucaoDAOMock.insertDevolucaoBD(any())).thenReturn(true);
+
         boolean result = service.insertDevolucao("João", 1, "2025-04-21", "Martelo");
-        assertTrue(result);
+
+        assertTrue(result, "A devolução deveria ter sido inserida com sucesso.");
+        verify(devolucaoDAOMock, times(1)).insertDevolucaoBD(any());
     }
 
     @Test
@@ -48,7 +47,17 @@ public class DevolucaoServiceTest {
 
         ArrayList<Devolucao> resultado = service.getListaDevolucao();
 
-        assertNotNull(resultado);
-        assertEquals(1, resultado.size());
+        assertNotNull(resultado, "A lista retornada não deveria ser nula.");
+        assertEquals(1, resultado.size(), "A lista deveria conter 1 item.");
         assertEquals("João", resultado.get(0).getNomeAmigo());
-        assertEquals("Martelo", resultado.get(0).getNomeDaFerramenta
+        assertEquals("Martelo", resultado.get(0).getNomeDaFerramenta());
+    }
+
+
+    @Test
+    @Order(3)
+    void testConstrutorPadrao() {
+        DevolucaoService servicePadrao = new DevolucaoService();
+        assertNotNull(servicePadrao);
+    }
+}
