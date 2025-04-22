@@ -9,7 +9,7 @@ import javax.swing.JOptionPane;
 
 public class EmprestimoService {
 
-    private EmprestimoDAO emprestimoDAO;
+    public EmprestimoDAO emprestimoDAO;
 
     public EmprestimoService() {
         emprestimoDAO = new EmprestimoDAO();
@@ -27,7 +27,7 @@ public class EmprestimoService {
         }
 
         if (ferramentaEncontrada == null) {
-            JOptionPane.showMessageDialog(null, "Ferramenta não encontrada.");
+            System.out.println("Ferramenta não encontrada.");
             return false;
         }
 
@@ -51,7 +51,7 @@ public class EmprestimoService {
         }
 
         if (!amigoEncontrado) {
-            JOptionPane.showMessageDialog(null, "Amigo não encontrado.");
+            System.out.println("Amigo não encontrado.");
             return false;
         }
 
