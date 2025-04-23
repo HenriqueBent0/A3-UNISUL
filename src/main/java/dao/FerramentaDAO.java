@@ -117,25 +117,27 @@ public class FerramentaDAO {
     }
 
     public Ferramenta carregaFerramenta(int id) {
-    Ferramenta objeto = null; 
-    String sql = "SELECT * FROM tb_ferramentas WHERE id = ?"; 
+    Ferramenta objeto = null;
+    String sql = "SELECT * FROM tb_ferramentas WHERE id = ?";
     
     try (Connection conn = ConexaoDAO.getConexao();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
         
-        stmt.setInt(1, id); // Safely set the parameter
+        stmt.setInt(1, id);
         
-        try (ResultSet res = stmt.executeQuery()) {
-            if (res.next()) { 
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
                 objeto = new Ferramenta();
                 objeto.setId(id);
                 
             }
         }
     } catch (SQLException e) {
-        e.printStackTrace(); 
+        
+        System.err.println("Erro ao carregar ferramenta: ID " + id + " - " + e.getMessage());
+        
     }
     
-    return objeto; 
+    return objeto;
 }
 }
