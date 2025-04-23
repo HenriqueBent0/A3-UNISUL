@@ -6,7 +6,7 @@ import javax.swing.JOptionPane;
 
 public class FerramentaService {
 
-    private FerramentaDAO ferramentaDAO;
+    public FerramentaDAO ferramentaDAO;
 
     public FerramentaService() {
         ferramentaDAO = new FerramentaDAO(); // Cria uma instância do DAO

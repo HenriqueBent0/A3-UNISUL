@@ -88,4 +88,5 @@ public class EmprestimoServiceTest {
         EmprestimoService servicePadrao = new EmprestimoService();
         assertNotNull(servicePadrao);
     }
+    
 }

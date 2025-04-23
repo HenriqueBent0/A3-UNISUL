@@ -84,16 +84,20 @@ public class FerramentaDAO {
     }
 
     public boolean deleteFerramentaBD(int id) {
-        String sql = "DELETE FROM tb_ferramentas WHERE id = " + id;
-        try (Connection conn = ConexaoDAO.getConexao();
-             Statement stmt = conn.createStatement()) {
-
-            stmt.executeUpdate(sql);
-        } catch (SQLException erro) {
-            System.out.println("Erro: " + erro);
-        }
-        return true;
+    String sql = "DELETE FROM tb_ferramentas WHERE id = ?";
+    try (Connection conn = ConexaoDAO.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setInt(1, id); 
+        int linhasAfetadas = stmt.executeUpdate();
+        
+        return linhasAfetadas > 0; 
+    } catch (SQLException erro) {
+        System.out.println("Erro: " + erro);
+        return false;
     }
+}
+
 
     public boolean updateFerramentaBD(int id, String nome, String marca, int valor) {
         String sql = "UPDATE tb_ferramentas SET nome = ?, marca = ?, valor = ? WHERE id = ?";
@@ -113,22 +117,25 @@ public class FerramentaDAO {
     }
 
     public Ferramenta carregaFerramenta(int id) {
-        Ferramenta objeto = new Ferramenta();
-        objeto.setId(id);
-        String sql = "SELECT * FROM tb_ferramentas WHERE id = " + id;
-
-        try (Connection conn = ConexaoDAO.getConexao();
-             Statement stmt = conn.createStatement();
-             ResultSet res = stmt.executeQuery(sql)) {
-
-            if (res.next()) {
-                objeto.setNome(res.getString("nome"));
-                objeto.setMarca(res.getString("marca"));
-                objeto.setValor(res.getInt("valor"));
+    Ferramenta objeto = null; 
+    String sql = "SELECT * FROM tb_ferramentas WHERE id = ?"; 
+    
+    try (Connection conn = ConexaoDAO.getConexao();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+        
+        stmt.setInt(1, id); // Safely set the parameter
+        
+        try (ResultSet res = stmt.executeQuery()) {
+            if (res.next()) { 
+                objeto = new Ferramenta();
+                objeto.setId(id);
+                
             }
-        } catch (SQLException erro) {
-            System.out.println("Erro: " + erro);
         }
-        return objeto;
+    } catch (SQLException e) {
+        e.printStackTrace(); 
     }
+    
+    return objeto; 
+}
 }
