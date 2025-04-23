@@ -14,6 +14,7 @@ import modelo.Amigo;
 public class AmigoDAO {
     // Cria ArrayList de Amigos
     public static ArrayList<Amigo> ListaAmigo = new ArrayList<>();
+    private static Connection conexao;
 
     /**
      * Obtém a lista de amigos do banco de dados.
@@ -133,5 +134,8 @@ public class AmigoDAO {
             System.out.println("Erro: " + erro);
         }
         return objeto;
+    }
+     public static void setMockConnection(Connection mockConnection) {
+        conexao = mockConnection;
     }
 }

@@ -1,0 +1,177 @@
+package test.dao;
+
+import dao.AmigoDAO;
+import dao.ConexaoDAO;
+import modelo.Amigo;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.sql.*;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class AmigoDAOTest {
+
+    @Mock
+    private Connection mockConnection;
+
+    @Mock
+    private Statement mockStatement;
+
+    @Mock
+    private PreparedStatement mockPreparedStatement;
+
+    @Mock
+    private ResultSet mockResultSet;
+
+    @InjectMocks
+    private AmigoDAO amigoDAO;
+
+    @BeforeEach
+    void setUp() {
+        ConexaoDAO.setMockConnection(mockConnection);
+    }
+
+    @AfterEach
+    void tearDown() {
+        ConexaoDAO.disableTestMode();
+        AmigoDAO.ListaAmigo.clear();
+    }
+
+    // ---- TESTES PARA getListaAmigo() ----
+    @Test
+    void testGetListaAmigo_ComDados() throws SQLException {
+        when(mockConnection.createStatement()).thenReturn(mockStatement);
+        when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true, true, false);
+        when(mockResultSet.getInt("id")).thenReturn(1, 2);
+        when(mockResultSet.getString("nome")).thenReturn("João", "Maria");
+        when(mockResultSet.getInt("telefone")).thenReturn(99999999, 88888888);
+
+        ArrayList<Amigo> resultado = amigoDAO.getListaAmigo();
+
+        assertEquals(2, resultado.size());
+        assertEquals("João", resultado.get(0).getNome());
+        assertEquals("Maria", resultado.get(1).getNome());
+    }
+
+    @Test
+    void testGetListaAmigo_Vazia() throws SQLException {
+        when(mockConnection.createStatement()).thenReturn(mockStatement);
+        when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(false);
+
+        ArrayList<Amigo> resultado = amigoDAO.getListaAmigo();
+
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void testGetListaAmigo_ComErroSQL() throws SQLException {
+        when(mockConnection.createStatement()).thenReturn(mockStatement);
+        when(mockStatement.executeQuery(anyString())).thenThrow(new SQLException("Erro de conexão"));
+
+        ArrayList<Amigo> resultado = amigoDAO.getListaAmigo();
+
+        assertTrue(resultado.isEmpty());
+    }
+
+    // ---- TESTES PARA insertAmigoBD() ----
+    @Test
+    void testInsertAmigoBD_Sucesso() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.execute()).thenReturn(true);
+
+        Amigo amigo = new Amigo("Carlos", 3, 77777777);
+        boolean resultado = amigoDAO.insertAmigoBD(amigo);
+
+        assertTrue(resultado);
+        verify(mockPreparedStatement).setInt(1, 3);
+        verify(mockPreparedStatement).setString(2, "Carlos");
+        verify(mockPreparedStatement).setInt(3, 77777777);
+    }
+
+    @Test
+    void testInsertAmigoBD_ComErro() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.execute()).thenThrow(new SQLException("Erro de inserção"));
+
+        Amigo amigo = new Amigo("Falha", 99, 00000000);
+        assertThrows(RuntimeException.class, () -> amigoDAO.insertAmigoBD(amigo));
+    }
+
+    // ---- TESTES PARA deleteAmigoBD() ----
+    @Test
+    void testDeleteAmigoBD_Sucesso() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeUpdate()).thenReturn(1);
+
+        boolean resultado = amigoDAO.deleteAmigoBD(1);
+
+        assertTrue(resultado);
+        verify(mockPreparedStatement).setInt(1, 1);
+    }
+
+    @Test
+    void testDeleteAmigoBD_ComErro() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeUpdate()).thenThrow(new SQLException("Erro de exclusão"));
+
+        boolean resultado = amigoDAO.deleteAmigoBD(1);
+
+        assertFalse(resultado);
+    }
+
+    // ---- TESTES PARA updateAmigoBD() ----
+    @Test
+    void testUpdateAmigoBD_Sucesso() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeUpdate()).thenReturn(1);
+
+        Amigo amigo = new Amigo("Atualizado", 1, 55555555);
+        boolean resultado = amigoDAO.updateAmigoBD(amigo);
+
+        assertTrue(resultado);
+        verify(mockPreparedStatement).setString(1, "Atualizado");
+        verify(mockPreparedStatement).setInt(2, 55555555);
+        verify(mockPreparedStatement).setInt(3, 1);
+    }
+
+    @Test
+void testCarregaAmigo_Existente() throws SQLException {
+    // Arrange
+    AmigoDAO.setMockConnection(mockConnection); // usa a conexão mockada
+    AmigoDAO amigoDAO = new AmigoDAO();
+
+    when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+    when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+    when(mockResultSet.next()).thenReturn(true);
+    when(mockResultSet.getString("nome")).thenReturn("Teste");
+    when(mockResultSet.getInt("telefone")).thenReturn(12345678);
+
+    // Act
+    Amigo resultado = amigoDAO.carregaAmigo(1);
+
+    // Assert
+    assertNotNull(resultado);
+    assertEquals("Teste", resultado.getNome());
+    assertEquals(12345678, resultado.getTelefone());
+}
+
+
+    @Test
+    void testCarregaAmigo_NaoExistente() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(false);
+
+        Amigo resultado = amigoDAO.carregaAmigo(999);
+
+        assertNull(resultado);
+    }
+}
