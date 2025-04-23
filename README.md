@@ -1,4 +1,4 @@
-#  Testes e Aprimoaramentos do Software Empréstimo de Ferramentas 
+#  Testes/Aprimoramentos do Software Empréstimo de Ferramentas 
 
 
 ## 📖 Sobre o Trabalho
