@@ -88,5 +88,31 @@ public class EmprestimoServiceTest {
         EmprestimoService servicePadrao = new EmprestimoService();
         assertNotNull(servicePadrao);
     }
-    
+ @Test
+    @Order(6)
+    void testRegistrarEmprestimo_FerramentaJaEmprestada_Mensagem() {
+        Ferramenta ferramenta = new Ferramenta(1,"Martelo", "Bosch", 10);
+        listaFerramenta.add(ferramenta);
+        listaEmprestimo.add(new Emprestimo(1,"Maria", "Martelo", "01/01/2025", 1));
+        ListaAmigo.add(new Amigo("João", 2, 654321));
+
+        boolean resultado = service.registrarEmprestimo("João", "1", "02/01/2025", listaFerramenta, listaEmprestimo);
+        assertFalse(resultado);
+    }
+@Test
+@Order(7)
+void testEmprestimoGettersESetters() {
+    // Criando um empréstimo para testar os getters e setters
+    Emprestimo emprestimo = new Emprestimo(1, "João", "01/01/2025", "Martelo", 1);
+
+    // Testando os getters
+    assertEquals(1, emprestimo.getId());
+    assertEquals("João", emprestimo.getNomeAmigo());
+    assertEquals("01/01/2025", emprestimo.getData());
+    assertEquals(1, emprestimo.getIdFerramenta());
+
+    // Testando o setter setId
+    emprestimo.setId(2);
+    assertEquals(2, emprestimo.getId());
+}
 }
