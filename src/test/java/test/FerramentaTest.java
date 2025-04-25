@@ -8,8 +8,9 @@ class FerramentaTest {
 
     @Test
     void testConstrutorComParametros() {
-
+        // Instancia um objeto da classe Ferramenta com valores definidos
         Ferramenta ferramenta = new Ferramenta(1, "Martelo", "Tramontina", 100);
+        // Verifica se os valores foram corretamente atribuídos
         assertEquals(1, ferramenta.getId());
         assertEquals("Martelo", ferramenta.getNome());
         assertEquals("Tramontina", ferramenta.getMarca());
@@ -18,8 +19,9 @@ class FerramentaTest {
 
     @Test
     void testConstrutorPadrao() {
-
+        // Instancia um objeto usando o construtor padrão
         Ferramenta ferramenta = new Ferramenta();
+        // Verifica se os valores padrão são atribuídos corretamente
         assertEquals(0, ferramenta.getId());
         assertEquals("", ferramenta.getNome());
         assertEquals("", ferramenta.getMarca());
