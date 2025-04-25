@@ -60,4 +60,44 @@ public class DevolucaoServiceTest {
         DevolucaoService servicePadrao = new DevolucaoService();
         assertNotNull(servicePadrao);
     }
+    
+        @Test
+    public void testConstrutorPadrao_DeveInicializarComValoresPadrao() {
+        Devolucao devolucao = new Devolucao();
+
+        assertEquals("", devolucao.getNomeAmigo());
+        assertEquals(0, devolucao.getIdFerramenta());
+        assertEquals("", devolucao.getData());
+        assertEquals(0, devolucao.getId());
+        assertEquals("", devolucao.getNomeDaFerramenta());
+    }
+
+    @Test
+    public void testConstrutorComParametros_DeveInicializarCorretamente() {
+        Devolucao devolucao = new Devolucao("Carlos", 2, "2025-05-10", 5, "Chave de Fenda");
+
+        assertEquals("Carlos", devolucao.getNomeAmigo());
+        assertEquals(2, devolucao.getIdFerramenta());
+        assertEquals("2025-05-10", devolucao.getData());
+        assertEquals(5, devolucao.getId());
+        assertEquals("Chave de Fenda", devolucao.getNomeDaFerramenta());
+    }
+
+    @Test
+    public void testSettersAndGetters_DeveDefinirEAcessarValoresCorretamente() {
+        Devolucao devolucao = new Devolucao();
+
+        devolucao.setNomeAmigo("Maria");
+        devolucao.setIdFerramenta(3);
+        devolucao.setData("2025-06-15");
+        devolucao.setId(10);
+        devolucao.setNomeDaFerramenta("Alicate");
+
+        assertEquals("Maria", devolucao.getNomeAmigo());
+        assertEquals(3, devolucao.getIdFerramenta());
+        assertEquals("2025-06-15", devolucao.getData());
+        assertEquals(10, devolucao.getId());
+        assertEquals("Alicate", devolucao.getNomeDaFerramenta());
+    }
+    
 }
