@@ -1,5 +1,6 @@
 package test;
 
+import dao.ConexaoDAO;
 import dao.DevolucaoDAO;
 import modelo.Devolucao;
 import org.junit.jupiter.api.*;
@@ -16,35 +17,44 @@ import static org.mockito.Mockito.*;
 public class DevolucaoDAOTest {
 
     private DevolucaoDAO dao;
+    private Connection connectionMock;
+    private Statement statementMock;
+    private PreparedStatement preparedStatementMock;
+    private ResultSet resultSetMock;
 
     @BeforeEach
     void setup() {
         dao = new DevolucaoDAO();
+        connectionMock = mock(Connection.class);
+        statementMock = mock(Statement.class);
+        preparedStatementMock = mock(PreparedStatement.class);
+        resultSetMock = mock(ResultSet.class);
+    }
+
+    @AfterEach
+    void tearDown() {
+        DevolucaoDAO.listaDevolucao.clear();
     }
 
     @Test
     @Order(1)
     void testInsertDevolucaoBD() throws Exception {
-        // Mock conexão e execução do insert
-        Connection connectionMock = mock(Connection.class);
-        Statement statementMock = mock(Statement.class);
-        PreparedStatement preparedStatementMock = mock(PreparedStatement.class);
-        ResultSet resultSetMock = mock(ResultSet.class);
-
         try (MockedStatic<dao.ConexaoDAO> conexaoDAOMock = Mockito.mockStatic(dao.ConexaoDAO.class)) {
-            conexaoDAOMock.when(dao.ConexaoDAO::getConexao).thenReturn(connectionMock);
+            conexaoDAOMock.when(() -> ConexaoDAO.getConexao()).thenReturn(connectionMock);
+
 
             when(connectionMock.createStatement()).thenReturn(statementMock);
             when(statementMock.executeQuery(anyString())).thenReturn(resultSetMock);
             when(resultSetMock.next()).thenReturn(true);
             when(resultSetMock.getInt("max_id")).thenReturn(1);
             when(connectionMock.prepareStatement(anyString())).thenReturn(preparedStatementMock);
+            when(preparedStatementMock.execute()).thenReturn(true);
 
             Devolucao devolucao = new Devolucao("Teste", 1, "2025-04-25", 0, "Martelo");
 
             boolean result = dao.insertDevolucaoBD(devolucao);
-            assertTrue(result);
 
+            assertTrue(result);
             verify(preparedStatementMock, times(1)).execute();
         }
     }
@@ -52,13 +62,9 @@ public class DevolucaoDAOTest {
     @Test
     @Order(2)
     void testGetListaDevolucao() throws Exception {
-        // Mock conexão e execução do select
-        Connection connectionMock = mock(Connection.class);
-        Statement statementMock = mock(Statement.class);
-        ResultSet resultSetMock = mock(ResultSet.class);
-
         try (MockedStatic<dao.ConexaoDAO> conexaoDAOMock = Mockito.mockStatic(dao.ConexaoDAO.class)) {
-            conexaoDAOMock.when(dao.ConexaoDAO::getConexao).thenReturn(connectionMock);
+            conexaoDAOMock.when(() -> ConexaoDAO.getConexao()).thenReturn(connectionMock);
+
 
             when(connectionMock.createStatement()).thenReturn(statementMock);
             when(statementMock.executeQuery(anyString())).thenReturn(resultSetMock);
