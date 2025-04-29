@@ -3,6 +3,8 @@ package dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ConexaoDAO {
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
@@ -20,6 +22,9 @@ public class ConexaoDAO {
     // Flag para controle de modo de teste
     private static boolean testeMode = false;
 
+    // Logger para registrar as exceções
+    private static final Logger logger = Logger.getLogger(ConexaoDAO.class.getName());
+
     public static Connection getConexao() {
         if (testeMode) {
             return conexao; // Retorna a conexão mockada em modo de teste
@@ -33,12 +38,10 @@ public class ConexaoDAO {
             System.out.println("Status: Conectado com sucesso!");
             return conexao;
         } catch (ClassNotFoundException e) {
-            System.out.println("Erro: Driver não encontrado: " + e.getMessage());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Erro: Driver não encontrado: " + e.getMessage(), e);
             return null;
         } catch (SQLException e) {
-            System.out.println("Erro: Conexão falhou: " + e.getMessage());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Erro: Conexão falhou: " + e.getMessage(), e);
             return null;
         }
     }
