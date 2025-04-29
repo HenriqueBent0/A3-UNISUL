@@ -34,7 +34,7 @@ class AmigoDAOTest {
 
     @BeforeEach
     void setUp() {
-        ConexaoDAO.setMockConnection(mockConnection);
+        ConexaoDAO.setMockConnection(mockConnection);  // Configura a conexão mockada
     }
 
     @AfterEach
@@ -143,26 +143,31 @@ class AmigoDAOTest {
     }
 
     @Test
-void testCarregaAmigo_Existente() throws SQLException {
-    // Arrange
-    AmigoDAO.setMockConnection(mockConnection); // usa a conexão mockada
-    AmigoDAO amigoDAO = new AmigoDAO();
+    void testUpdateAmigoBD_ComErro() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeUpdate()).thenThrow(new SQLException("Erro de atualização"));
 
-    when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
-    when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-    when(mockResultSet.next()).thenReturn(true);
-    when(mockResultSet.getString("nome")).thenReturn("Teste");
-    when(mockResultSet.getInt("telefone")).thenReturn(12345678);
+        Amigo amigo = new Amigo("Falha", 99, 00000000);
 
-    // Act
-    Amigo resultado = amigoDAO.carregaAmigo(1);
+        // Testa se o RuntimeException é lançado
+        assertThrows(RuntimeException.class, () -> amigoDAO.updateAmigoBD(amigo));
+    }
 
-    // Assert
-    assertNotNull(resultado);
-    assertEquals("Teste", resultado.getNome());
-    assertEquals(12345678, resultado.getTelefone());
-}
+    // ---- TESTES PARA carregaAmigo() ----
+    @Test
+    void testCarregaAmigo_Existente() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.getString("nome")).thenReturn("Teste");
+        when(mockResultSet.getInt("telefone")).thenReturn(12345678);
 
+        Amigo resultado = amigoDAO.carregaAmigo(1);
+
+        assertNotNull(resultado);
+        assertEquals("Teste", resultado.getNome());
+        assertEquals(12345678, resultado.getTelefone());
+    }
 
     @Test
     void testCarregaAmigo_NaoExistente() throws SQLException {
@@ -174,4 +179,83 @@ void testCarregaAmigo_Existente() throws SQLException {
 
         assertNull(resultado);
     }
+
+    // ---- TESTES PARA maiorID() ----
+    @Test
+    void testMaiorID_ComDados() throws SQLException {
+        when(mockConnection.createStatement()).thenReturn(mockStatement);
+        when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.getInt("id")).thenReturn(5);
+
+        int maiorID = amigoDAO.maiorID();
+
+        assertEquals(5, maiorID);
+    }
+
+    @Test
+    void testMaiorID_ComErroSQL() throws SQLException {
+        when(mockConnection.createStatement()).thenReturn(mockStatement);
+        when(mockStatement.executeQuery(anyString())).thenThrow(new SQLException("Erro ao buscar maior ID"));
+
+        int maiorID = amigoDAO.maiorID();
+
+        assertEquals(0, maiorID); // Esperamos 0, já que a variável foi inicializada com 0 e não houve retorno de dados
+    }
+
+    // ---- TESTES PARA Exceções em insertAmigoBD() e updateAmigoBD() ----
+    @Test
+    void testInsertAmigoBD_ComSQLException() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.execute()).thenThrow(new SQLException("Erro de inserção"));
+
+        Amigo amigo = new Amigo("Falha", 99, 00000000);
+
+        // Testa se o RuntimeException é lançado
+        assertThrows(RuntimeException.class, () -> amigoDAO.insertAmigoBD(amigo));
+    }
+
+    @Test
+    void testUpdateAmigoBD_ComSQLException() throws SQLException {
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeUpdate()).thenThrow(new SQLException("Erro de atualização"));
+
+        Amigo amigo = new Amigo("Falha", 99, 00000000);
+
+        // Testa se o RuntimeException é lançado
+        assertThrows(RuntimeException.class, () -> amigoDAO.updateAmigoBD(amigo));
+    }
+
+    // ---- TESTE PARA CONEXÃO SETADA ----
+    @Test
+    void testSetMockConnection() {
+        ConexaoDAO.setMockConnection(mockConnection); // A linha que configura a conexão mockada
+        assertNotNull(ConexaoDAO.getConexao()); // Garante que a conexão foi configurada corretamente
+    }
+
+    // ---- TESTE PARA setListaAmigo() ----
+    @Test
+    void testSetListaAmigo() {
+        ArrayList<Amigo> listaTeste = new ArrayList<>();
+        amigoDAO.setListaAmigo(listaTeste);
+        assertEquals(listaTeste, amigoDAO.ListaAmigo);
+    }
+
+   @Test
+void testGetListaAmigo_ComSQLException_Tratamento() throws SQLException {
+   
+    when(mockConnection.createStatement()).thenThrow(new SQLException("Erro de conexão"));
+
+    
+    ArrayList<Amigo> resultado = amigoDAO.getListaAmigo();
+
+    
+    assertTrue(resultado.isEmpty(), "A lista não deve ser preenchida se houver erro");
+
+    
+    assertEquals(mockConnection, ConexaoDAO.getConexao(), "A conexão não foi reatribuída corretamente");
 }
+
+
+}
+
