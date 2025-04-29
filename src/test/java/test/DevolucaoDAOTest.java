@@ -42,7 +42,6 @@ public class DevolucaoDAOTest {
         try (MockedStatic<dao.ConexaoDAO> conexaoDAOMock = Mockito.mockStatic(dao.ConexaoDAO.class)) {
             conexaoDAOMock.when(() -> ConexaoDAO.getConexao()).thenReturn(connectionMock);
 
-
             when(connectionMock.createStatement()).thenReturn(statementMock);
             when(statementMock.executeQuery(anyString())).thenReturn(resultSetMock);
             when(resultSetMock.next()).thenReturn(true);
@@ -61,10 +60,30 @@ public class DevolucaoDAOTest {
 
     @Test
     @Order(2)
-    void testGetListaDevolucao() throws Exception {
+    void testInsertDevolucaoBDWithSQLException() throws Exception {
         try (MockedStatic<dao.ConexaoDAO> conexaoDAOMock = Mockito.mockStatic(dao.ConexaoDAO.class)) {
             conexaoDAOMock.when(() -> ConexaoDAO.getConexao()).thenReturn(connectionMock);
 
+            when(connectionMock.createStatement()).thenReturn(statementMock);
+            when(statementMock.executeQuery(anyString())).thenReturn(resultSetMock);
+            when(resultSetMock.next()).thenReturn(true);
+            when(resultSetMock.getInt("max_id")).thenReturn(1);
+
+            // Simulando erro de SQL ao preparar o statement
+            when(connectionMock.prepareStatement(anyString())).thenThrow(new SQLException("Erro ao preparar statement"));
+
+            Devolucao devolucao = new Devolucao("Teste", 1, "2025-04-25", 0, "Martelo");
+
+            // Esperamos que o método lance uma exceção em caso de erro
+            assertThrows(RuntimeException.class, () -> dao.insertDevolucaoBD(devolucao));
+        }
+    }
+
+    @Test
+    @Order(3)
+    void testGetListaDevolucao() throws Exception {
+        try (MockedStatic<dao.ConexaoDAO> conexaoDAOMock = Mockito.mockStatic(dao.ConexaoDAO.class)) {
+            conexaoDAOMock.when(() -> ConexaoDAO.getConexao()).thenReturn(connectionMock);
 
             when(connectionMock.createStatement()).thenReturn(statementMock);
             when(statementMock.executeQuery(anyString())).thenReturn(resultSetMock);
@@ -85,7 +104,24 @@ public class DevolucaoDAOTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
+    void testGetListaDevolucaoWithSQLException() throws Exception {
+        try (MockedStatic<dao.ConexaoDAO> conexaoDAOMock = Mockito.mockStatic(dao.ConexaoDAO.class)) {
+            conexaoDAOMock.when(() -> ConexaoDAO.getConexao()).thenReturn(connectionMock);
+
+            when(connectionMock.createStatement()).thenReturn(statementMock);
+            when(statementMock.executeQuery(anyString())).thenThrow(new SQLException("Erro ao executar consulta"));
+
+            // Esperamos que o método lance uma exceção ou retorne uma lista vazia
+            ArrayList<Devolucao> lista = dao.getListaDevolucao();
+
+            // A lista pode ser vazia ou o método pode lançar uma exceção dependendo da implementação
+            assertTrue(lista.isEmpty());
+        }
+    }
+
+    @Test
+    @Order(5)
     void testContarEmprestimosPorPessoa() {
         Devolucao devolucao1 = new Devolucao("João", 1, "2025-04-25", 1, "Chave de Fenda");
         Devolucao devolucao2 = new Devolucao("João", 2, "2025-04-26", 2, "Martelo");
@@ -104,7 +140,7 @@ public class DevolucaoDAOTest {
     }
 
     @Test
-    @Order(4)
+    @Order(6)
     void testConstrutorPadrao() {
         DevolucaoDAO daoPadrao = new DevolucaoDAO();
         assertNotNull(daoPadrao);
