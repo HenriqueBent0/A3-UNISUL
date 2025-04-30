@@ -49,14 +49,14 @@ class FerramentaDAOTest {
         when(mockStatement.executeQuery(anyString())).thenReturn(mockResultSet);
         when(mockResultSet.next()).thenReturn(true, true, false);
         when(mockResultSet.getInt("id")).thenReturn(1, 2);
-        when(mockResultSet.getString("descricao")).thenReturn("Martelo", "Chave de Fenda");
-        when(mockResultSet.getInt("quantidade")).thenReturn(5, 10);
+        when(mockResultSet.getString("nome")).thenReturn("Martelo", "Chave de Fenda");
+        when(mockResultSet.getInt("valor")).thenReturn(5, 10);
 
         ArrayList<Ferramenta> resultado = ferramentaDAO.getListaFerramenta();
 
         assertEquals(2, resultado.size());
         assertEquals("Martelo", resultado.get(0).getNome());
-        assertEquals(1, resultado.get(1).getValor());
+        assertEquals(10, resultado.get(1).getValor());
     }
 
     @Test
@@ -82,24 +82,34 @@ class FerramentaDAOTest {
 
     @Test
     void testInsertFerramentaBD_Sucesso() throws SQLException {
-        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
-        when(mockPreparedStatement.execute()).thenReturn(true);
+        when(mockConnection.createStatement()).thenReturn(mockStatement);
+        when(mockStatement.executeQuery("SELECT MAX(id) AS max_id FROM tb_ferramentas")).thenReturn(mockResultSet);
+        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.getInt("max_id")).thenReturn(2);
 
-        Ferramenta ferramenta = new Ferramenta(1,"Alicate", "marca", 7);
+        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+        when(mockPreparedStatement.executeUpdate()).thenReturn(1);
+
+        Ferramenta ferramenta = new Ferramenta(0, "Martelo", "Tramontina", 25);
+
         boolean resultado = ferramentaDAO.insertFerramentaBD(ferramenta);
 
         assertTrue(resultado);
         verify(mockPreparedStatement).setInt(1, 3);
-        verify(mockPreparedStatement).setString(2, "Alicate");
-        verify(mockPreparedStatement).setInt(3, 7);
+        verify(mockPreparedStatement).setString(2, "Martelo");
+        verify(mockPreparedStatement).setString(3, "Tramontina");
+        verify(mockPreparedStatement).setInt(4, 25);
     }
 
     @Test
     void testInsertFerramentaBD_ComErro() throws SQLException {
-        when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
-        when(mockPreparedStatement.execute()).thenThrow(new SQLException("Erro de inserção"));
+        when(mockConnection.createStatement()).thenReturn(mockStatement);
 
-        Ferramenta ferramenta = new Ferramenta(2,"Falha", "marca2", 10);
+        when(mockStatement.executeQuery("SELECT MAX(id) AS max_id FROM tb_ferramentas"))
+                .thenThrow(new SQLException("Erro de leitura do último ID"));
+
+        Ferramenta ferramenta = new Ferramenta(0, "Falha", "MarcaX", 10);
+
         assertThrows(RuntimeException.class, () -> ferramentaDAO.insertFerramentaBD(ferramenta));
     }
 
@@ -131,11 +141,13 @@ class FerramentaDAOTest {
 
         Ferramenta ferramenta = new Ferramenta(1, "Atualizada", "MarcaX", 15);
         boolean resultado = ferramentaDAO.updateFerramentaBD(ferramenta.getId(), ferramenta.getNome(), ferramenta.getMarca(), ferramenta.getValor());
-        
+
         assertTrue(resultado);
         verify(mockPreparedStatement).setString(1, "Atualizada");
-        verify(mockPreparedStatement).setInt(2, 15);
-        verify(mockPreparedStatement).setInt(3, 1);
+        verify(mockPreparedStatement).setString(2, "MarcaX");
+        verify(mockPreparedStatement).setInt(3, 15);
+        verify(mockPreparedStatement).setInt(4, 1);
+
     }
 
     @Test
@@ -144,21 +156,31 @@ class FerramentaDAOTest {
         when(mockPreparedStatement.executeUpdate()).thenThrow(new SQLException("Erro de atualização"));
 
         Ferramenta ferramenta = new Ferramenta(1, "Atualizada", "MarcaX", 15);
-        boolean resultado = ferramentaDAO.updateFerramentaBD(ferramenta.getId(), ferramenta.getNome(), ferramenta.getMarca(), ferramenta.getValor());
+
+        assertThrows(RuntimeException.class, () -> {
+            ferramentaDAO.updateFerramentaBD(
+                    ferramenta.getId(), ferramenta.getNome(), ferramenta.getMarca(), ferramenta.getValor()
+            );
+        });
     }
 
     @Test
     void testCarregaFerramenta_Existente() throws SQLException {
+
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
+
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(true);
-        when(mockResultSet.getString("descricao")).thenReturn("Parafusadeira");
-        when(mockResultSet.getInt("quantidade")).thenReturn(20);
+        when(mockResultSet.next()).thenReturn(true);  
+        when(mockResultSet.getString("nome")).thenReturn("Parafusadeira"); 
+        when(mockResultSet.getString("marca")).thenReturn("MarcaX"); 
+        when(mockResultSet.getInt("valor")).thenReturn(20); 
 
         Ferramenta resultado = ferramentaDAO.carregaFerramenta(1);
 
         assertNotNull(resultado);
-        assertEquals("Parafusadeira", resultado.getNome());
+
+        assertEquals("Parafusadeira", resultado.getNome()); 
+        assertEquals("MarcaX", resultado.getMarca()); 
         assertEquals(20, resultado.getValor());
     }
 
@@ -217,4 +239,4 @@ class FerramentaDAOTest {
         assertTrue(resultado.isEmpty());
         assertEquals(mockConnection, ConexaoDAO.getConexao());
     }
-} 
+}
