@@ -45,12 +45,12 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Testa o projeto com Maven (modo headless)
-        run: mvn -B test --file pom.xml
-        env:
-          JAVA_TOOL_OPTIONS: "-Djava.awt.headless=true"
+      - name: Instala o Xvfb
+        run: sudo apt-get update && sudo apt-get install -y xvfb
 
-      # Cache dos pacotes do SonarCloud
+      - name: Testa o projeto com Maven (usando xvfb)
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" mvn -B test --file pom.xml
+
       - name: Cache dos pacotes do SonarCloud
         uses: actions/cache@v4
         with:
@@ -58,7 +58,6 @@ jobs:
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      # Cache dos pacotes do Maven
       - name: Cache dos pacotes do Maven
         uses: actions/cache@v4
         with:
@@ -66,7 +65,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      # Verifica o projeto com Maven e Jacoco
       - name: Verifica o projeto com Maven e Jacoco
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -98,19 +96,15 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # Empacotamento do projeto com Maven
       - name: Empacota o projeto com Maven
         run: mvn -B package --file pom.xml -DskipTests
 
-      # Cria uma pasta temporária de downloads de artefatos.
       - name: Crie uma pasta temporária de downloads de artefatos
         run: mkdir staging
 
-      # Copia os artefatos a serem publicados na pasta temporária
       - name: Copia os artefatos a serem publicados na pasta temporária
         run: cp target/*jar-with-dependencies.jar staging
 
-      # Usa Upload Artifact do GitHub Action
       - name: Usa Upload Artifact do GitHub Action
         uses: actions/upload-artifact@v4
         with:
