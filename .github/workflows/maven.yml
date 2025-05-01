@@ -48,6 +48,9 @@ jobs:
       - name: Instala o Xvfb
         run: sudo apt-get update && sudo apt-get install -y xvfb
 
+      - name: Configura a variável DISPLAY
+        run: export DISPLAY=:99
+
       - name: Testa o projeto com Maven (usando xvfb)
         run: xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" mvn -B test --file pom.xml
 
@@ -65,20 +68,19 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Verifica o projeto com Maven e Jacoco (usando xvfb)
+      - name: Verifica o projeto com Maven e Jacoco
         env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" mvn clean verify \
-           org.jacoco:jacoco-maven-plugin:prepare-agent \
-           org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-           -Dsonar.projectKey=HenriqueBent0_a3_unisul \
-           -Dsonar.organization=henriquebent0 \
-           -Dsonar.host.url=https://sonarcloud.io \
-           -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-           -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-
+          mvn clean verify \
+            org.jacoco:jacoco-maven-plugin:prepare-agent \
+            org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=HenriqueBent0_a3_unisul \
+            -Dsonar.organization=henriquebent0 \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
   # Jobs do ambiente de produção
   build-prd:
