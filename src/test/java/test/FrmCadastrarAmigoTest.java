@@ -23,6 +23,9 @@ class FrmCadastrarAmigoTest {
         amigoServiceMock = mock(AmigoService.class);
         frm.amigoService = amigoServiceMock;
 
+        // Configura o modo de teste para não exibir o JOptionPane
+        frm.setTestMode(true);  // Ativa o modo de teste
+
         // Criar campos privados simulados
         setPrivateField(frm, "JTFNome", new JTextField());
         setPrivateField(frm, "JTFTelefone", new JTextField());
@@ -30,14 +33,14 @@ class FrmCadastrarAmigoTest {
 
     @Test
     void testCadastrarComDadosValidos() throws Exception {
-        getTextField("JTFNome").setText("Marquinhos");
+        getTextField("JTFNome").setText("Henrique");
         getTextField("JTFTelefone").setText("123456789");
 
-        when(amigoServiceMock.insertAmigoBD("Marquinhos", 0, 123456789)).thenReturn(true);
+        when(amigoServiceMock.insertAmigoBD("Henrique", 0, 123456789)).thenReturn(true);
 
         frm.cadastrar();
 
-        verify(amigoServiceMock).insertAmigoBD("Marquinhos", 0, 123456789);
+        verify(amigoServiceMock).insertAmigoBD("Henrique", 0, 123456789);
         assert getTextField("JTFNome").getText().isEmpty();
         assert getTextField("JTFTelefone").getText().isEmpty();
     }
