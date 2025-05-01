@@ -9,8 +9,12 @@ import servico.AmigoService;
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
     
-    private AmigoService amigoService; // Objeto para interação com a classe Amigo
+    public AmigoService amigoService; // Objeto para interação com a classe Amigo
     private int id; // Identificador do amigo
+
+    protected void showMessage(String mensagem) {
+    JOptionPane.showMessageDialog(null, mensagem);
+}
 
     /**
      * Construtor da classe FrmCadastrarAmigo.
