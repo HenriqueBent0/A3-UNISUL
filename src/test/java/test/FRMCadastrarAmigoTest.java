@@ -18,7 +18,7 @@ class FRMCadastrarAmigoTest {
 
     @BeforeEach
 void setUp() {
-    System.setProperty("java.awt.headless", "true");  // Força o modo headless
+    System.setProperty("java.awt.headless", "true");  // Força o modo headlesss
     tela = new FrmCadastrarAmigo();
     amigoServiceMock = mock(AmigoService.class);
     tela.setAmigoService(amigoServiceMock);
