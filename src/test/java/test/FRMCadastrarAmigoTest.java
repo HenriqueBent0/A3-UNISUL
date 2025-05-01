@@ -17,11 +17,12 @@ class FRMCadastrarAmigoTest {
     private AmigoService amigoServiceMock;
 
     @BeforeEach
-    void setUp() {
-        tela = new FrmCadastrarAmigo();
-        amigoServiceMock = mock(AmigoService.class);
-        tela.setAmigoService(amigoServiceMock);
-    }
+void setUp() {
+    System.setProperty("java.awt.headless", "true");  // Força o modo headless
+    tela = new FrmCadastrarAmigo();
+    amigoServiceMock = mock(AmigoService.class);
+    tela.setAmigoService(amigoServiceMock);
+}
 
     @Test
     void deveCadastrarComDadosValidos() {
