@@ -45,8 +45,10 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Testa o projeto com Maven
+      - name: Testa o projeto com Maven (modo headless)
         run: mvn -B test --file pom.xml
+        env:
+          JAVA_TOOL_OPTIONS: "-Djava.awt.headless=true"
 
       # Cache dos pacotes do SonarCloud
       - name: Cache dos pacotes do SonarCloud
