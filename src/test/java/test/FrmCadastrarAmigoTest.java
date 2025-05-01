@@ -18,6 +18,8 @@ class FrmCadastrarAmigoTest {
     @BeforeEach
     void setUp() throws Exception {
         frm = new FrmCadastrarAmigo();
+        
+        System.setProperty("java.awt.headless", "true");
 
         // Mock do serviço
         amigoServiceMock = mock(AmigoService.class);
