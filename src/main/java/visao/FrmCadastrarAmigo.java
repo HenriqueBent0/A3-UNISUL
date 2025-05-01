@@ -1,7 +1,6 @@
 package visao;
 
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import servico.AmigoService;
 
 /**
@@ -9,45 +8,17 @@ import servico.AmigoService;
  */
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
-    public AmigoService amigoService; // Objeto para interação com a classe Amigo
+    private AmigoService amigoService; // Objeto para interação com a classe Amigo
     private int id; // Identificador do amigo
-    private boolean isTest = false;  // Flag para testar sem exibir mensagens
-
-    public FrmCadastrarAmigo(AmigoService amigoService) {
-        initComponents(); // Inicializa os componentes da interface gráfica
-        this.amigoService = amigoService; // Injeta o mock ou instância real
-    }
-
-    // Método para configurar a flag de teste
-    public void setTestMode(boolean isTest) {
-        this.isTest = isTest;
-    }
-
-    // Sobrescreve o método showMessage para não exibir mensagens no modo de teste
-    protected void showMessage(String mensagem) {
-        if (!isTest) {
-            JOptionPane.showMessageDialog(null, mensagem);
-        }
-    }
-
-    protected JTextField getJTFNome() {
-        return JTFNome;
-    }
-
-    protected JTextField getJTFTelefone() {
-        return JTFTelefone;
-    }
 
     /**
      * Construtor da classe FrmCadastrarAmigo.
      */
-  public FrmCadastrarAmigo() {
+    public FrmCadastrarAmigo() {
+
         initComponents(); // Inicializa os componentes da interface gráfica
         this.amigoService = new AmigoService(); // Cria uma instância da classe Amigo
     }
-
-    // O restante do código da classe permanece o mesmo...
-
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -233,15 +204,15 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
             }
 
             if (amigoService.insertAmigoBD(nome, 0, telefone)) {
-                showMessage("Amigo Cadastrado com Sucesso!");
+                JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
                 this.JTFNome.setText("");
                 this.JTFTelefone.setText("");
             }
 
         } catch (Mensagem erro) {
-            showMessage(erro.getMessage());
+            JOptionPane.showMessageDialog(null, erro.getMessage());
         } catch (NumberFormatException erro2) {
-            showMessage("Informe um número válido.");
+            JOptionPane.showMessageDialog(null, "Informe um número válido.");
         }
 
     }
