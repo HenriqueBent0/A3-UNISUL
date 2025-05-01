@@ -17,12 +17,12 @@ class FRMCadastrarAmigoTest {
     private AmigoService amigoServiceMock;
 
     @BeforeEach
-void setUp() {
-    System.setProperty("java.awt.headless", "true");  // Força o modo headlesss
-    tela = new FrmCadastrarAmigo();
-    amigoServiceMock = mock(AmigoService.class);
-    tela.setAmigoService(amigoServiceMock);
-}
+    void setUp() {
+        System.setProperty("java.awt.headless", "true");
+        tela = new FrmCadastrarAmigo(true); // ← evita initComponents()
+        amigoServiceMock = mock(AmigoService.class);
+        tela.setAmigoService(amigoServiceMock);
+    }
 
     @Test
     void deveCadastrarComDadosValidos() {
@@ -33,8 +33,8 @@ void setUp() {
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
             tela.cadastrar();
-            mockJOptionPane.verify(() ->
-                JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!")
+            mockJOptionPane.verify(()
+                    -> JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!")
             );
         }
     }
@@ -46,8 +46,8 @@ void setUp() {
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
             tela.cadastrar();
-            mockJOptionPane.verify(() ->
-                JOptionPane.showMessageDialog(null, "Nome deve conter ao menos 2 caracteres.")
+            mockJOptionPane.verify(()
+                    -> JOptionPane.showMessageDialog(null, "Nome deve conter ao menos 2 caracteres.")
             );
         }
     }
@@ -59,8 +59,8 @@ void setUp() {
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
             tela.cadastrar();
-            mockJOptionPane.verify(() ->
-                JOptionPane.showMessageDialog(null, "Informe um número válido.")
+            mockJOptionPane.verify(()
+                    -> JOptionPane.showMessageDialog(null, "Informe um número válido.")
             );
         }
     }
@@ -72,8 +72,8 @@ void setUp() {
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
             tela.cadastrar();
-            mockJOptionPane.verify(() ->
-                JOptionPane.showMessageDialog(null, "Informe um número válido.")
+            mockJOptionPane.verify(()
+                    -> JOptionPane.showMessageDialog(null, "Informe um número válido.")
             );
         }
     }
@@ -87,8 +87,8 @@ void setUp() {
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
             tela.cadastrar();
-            mockJOptionPane.verify(() ->
-                JOptionPane.showMessageDialog(null, "Erro ao cadastrar amigo.")
+            mockJOptionPane.verify(()
+                    -> JOptionPane.showMessageDialog(null, "Erro ao cadastrar amigo.")
             );
         }
     }
@@ -102,14 +102,11 @@ void setUp() {
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
             tela.getBotaoCadastrar().doClick(); // Simula clique no botão
-            mockJOptionPane.verify(() ->
-                JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!")
+            mockJOptionPane.verify(()
+                    -> JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!")
             );
         }
     }
-
-
-
 
     @Test
     void deveExecutarMetodoMainSemErros() {
