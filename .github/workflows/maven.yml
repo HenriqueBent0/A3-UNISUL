@@ -48,8 +48,14 @@ jobs:
       - name: Instala o Xvfb
         run: sudo apt-get update && sudo apt-get install -y xvfb
 
+      - name: Configura a variável DISPLAY
+        run: export DISPLAY=:99
+
+      - name: Inicia o servidor Xvfb
+        run: Xvfb :99 -screen 0 1024x768x24 &
+
       - name: Testa o projeto com Maven (usando xvfb)
-        run: xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" mvn -B test --file pom.xml -Djava.awt.headless=false
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" mvn -B test --file pom.xml
 
       - name: Cache dos pacotes do SonarCloud
         uses: actions/cache@v4
