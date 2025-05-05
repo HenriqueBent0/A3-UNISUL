@@ -242,5 +242,22 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     public void setAmigoService(AmigoService amigoService) {
         this.amigoService = amigoService;
     }
+public JTextField getJTFNome() {
+        return JTFNome;
+    }
 
+    // Método get para JTFTelefone
+    public JTextField getJTFTelefone() {
+        return JTFTelefone;
+    }
+
+    // Método get para JBCadastrar
+    public JButton getJBCadastrar() {
+        return JBCadastrar;
+    }
+
+    // Método get para JBCancelar
+    public JButton getJBCancelar() {
+        return JBCancelar;
+    }
 }

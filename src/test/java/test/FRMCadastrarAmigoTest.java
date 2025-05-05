@@ -16,13 +16,20 @@ class FRMCadastrarAmigoTest {
     private FrmCadastrarAmigo tela;
     private AmigoService amigoServiceMock;
 
-    @BeforeEach
-    void setUp() {
-        System.setProperty("java.awt.headless", "true");
-        tela = new FrmCadastrarAmigo(true); // Evita carregar GUI completa
-        amigoServiceMock = mock(AmigoService.class);
-        tela.setAmigoService(amigoServiceMock);
-    }
+   @BeforeEach
+void setUp() {
+    System.setProperty("java.awt.headless", "true");
+    tela = new FrmCadastrarAmigo(true);  // Não carrega a GUI completa
+
+    // Inicializando os componentes manualmente
+    tela.getJTFNome().setText("Nome Teste");
+    tela.getJTFTelefone().setText("123456789");
+    tela.getJBCadastrar().setText("Cadastrar");
+    tela.getJBCancelar().setText("Cancelar");
+
+    amigoServiceMock = mock(AmigoService.class);
+    tela.setAmigoService(amigoServiceMock);
+}
 
     @Test
     void deveCadastrarComDadosValidos() {
