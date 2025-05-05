@@ -2,6 +2,7 @@ package visao;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import servico.AmigoService;
 
 /**
@@ -9,25 +10,29 @@ import servico.AmigoService;
  */
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
-    public AmigoService amigoService; // Objeto para interação com a classe Amigo
-    private int id; // Identificador do amigo
 
-    /**
-     * Construtor da classe FrmCadastrarAmigo.
-     */
+    private AmigoService amigoService;
+
     public FrmCadastrarAmigo() {
-
-        initComponents(); // Inicializa os componentes da interface gráfica
-        this.amigoService = new AmigoService(); // Cria uma instância da classe Amigo
-
+        initComponents();
+        this.amigoService = new AmigoService();
     }
 
     public FrmCadastrarAmigo(boolean skipGUI) {
         if (!skipGUI) {
             initComponents();
+        } else {
+            this.JTFNome = new JTextField();
+            this.JTFTelefone = new JTextField();
+            this.JBCadastrar = new JButton();
+            this.JBCancelar = new JButton();
+
+            this.JBCadastrar.addActionListener(e -> cadastrar());
         }
+
         this.amigoService = new AmigoService();
     }
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -196,58 +201,46 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     public void cadastrar() {
+        String nome = JTFNome.getText().trim();
+        String telefoneStr = JTFTelefone.getText().trim();
+
+        if (nome.length() < 2) {
+            JOptionPane.showMessageDialog(null, "Nome deve conter ao menos 2 caracteres.");
+            return;
+        }
+
+        int telefone;
         try {
-            String nome = "";
-            int telefone = 0;
-
-            if (this.JTFNome.getText().length() < 2) {
-                throw new Mensagem("Nome deve conter ao menos 2 caracteres.");
-            } else {
-                nome = this.JTFNome.getText();
-            }
-
-            if (this.JTFTelefone.getText().length() == 9) {
-                telefone = Integer.parseInt(this.JTFTelefone.getText());
-            } else {
-                throw new Mensagem("Informe um número válido.");
-            }
-
-            if (amigoService.insertAmigoBD(nome, 0, telefone)) {
-                JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
-                this.JTFNome.setText("");
-                this.JTFTelefone.setText("");
-            } else {
-                JOptionPane.showMessageDialog(null, "Erro ao cadastrar amigo.");
-            }
-
-        } catch (Mensagem erro) {
-            JOptionPane.showMessageDialog(null, erro.getMessage());
-        } catch (NumberFormatException erro2) {
+            telefone = Integer.parseInt(telefoneStr);
+        } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(null, "Informe um número válido.");
+            return;
+        }
+
+        boolean sucesso = amigoService.insertAmigoBD(nome, 0, telefone);
+        if (sucesso) {
+            JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
+        } else {
+            JOptionPane.showMessageDialog(null, "Erro ao cadastrar amigo.");
         }
     }
 
-    // Permite injetar o mock do serviço no teste
-    public void setAmigoService(AmigoService amigoService) {
-        this.amigoService = amigoService;
-    }
+    // Métodos usados pelos testes
 
-// Permite definir o nome no campo de texto nos testes
     public void setNome(String nome) {
         this.JTFNome.setText(nome);
     }
 
-// Permite definir o telefone no campo de texto nos testes
     public void setTelefone(String telefone) {
         this.JTFTelefone.setText(telefone);
     }
 
     public JButton getBotaoCadastrar() {
-        return JBCadastrar;
+        return this.JBCadastrar;
     }
 
-    public JButton getBotaoCancelar() {
-        return JBCancelar;
+    public void setAmigoService(AmigoService amigoService) {
+        this.amigoService = amigoService;
     }
 
 }
