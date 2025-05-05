@@ -16,60 +16,71 @@ class FRMCadastrarAmigoTest {
     private FrmCadastrarAmigo tela;
     private AmigoService amigoServiceMock;
 
-   @BeforeEach
-void setUp() {
-    System.setProperty("java.awt.headless", "true");
-    tela = new FrmCadastrarAmigo(true);  // Não carrega a GUI completa
+    @BeforeEach
+    void setUp() {
+        // Forçar a execução em modo headless
+        System.setProperty("java.awt.headless", "true");
 
-    // Inicializando os componentes manualmente
-    tela.getJTFNome().setText("Nome Teste");
-    tela.getJTFTelefone().setText("123456789");
-    tela.getJBCadastrar().setText("Cadastrar");
-    tela.getJBCancelar().setText("Cancelar");
+        // Criação da tela com a configuração para não carregar a GUI completa
+        tela = new FrmCadastrarAmigo(true);
 
-    amigoServiceMock = mock(AmigoService.class);
-    tela.setAmigoService(amigoServiceMock);
-}
+        // Inicializando manualmente os campos de texto
+        tela.setNome("Nome Teste");
+        tela.setTelefone("123456789");
+
+        // Mockando o serviço AmigoService
+        amigoServiceMock = mock(AmigoService.class);
+        tela.setAmigoService(amigoServiceMock);
+    }
 
     @Test
     void deveCadastrarComDadosValidos() {
+        // Configura os dados de entrada
         tela.setNome("João");
         tela.setTelefone("123456789");
 
+        // Definir comportamento esperado do mock
         when(amigoServiceMock.insertAmigoBD("João", 0, 123456789)).thenReturn(true);
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
-            tela.cadastrar();
-            mockJOptionPane.verify(() ->
-                    JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!")
+            // Chamando o método de cadastro
+            tela.cadastrar("João", "123456789");
+
+            // Verificando se a mensagem de sucesso foi exibida
+            mockJOptionPane.verify(() -> 
+                JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!")
             );
         }
     }
 
     @Test
     void deveMostrarErroQuandoNomeInvalido() {
-        tela.setNome("J");
+        tela.setNome("J"); // Nome inválido
         tela.setTelefone("123456789");
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
-            tela.cadastrar();
-            mockJOptionPane.verify(() ->
-                    JOptionPane.showMessageDialog(null, "Nome deve conter ao menos 2 caracteres.")
+            // Chamando o método de cadastro
+            tela.cadastrar("J", "123456789");
+
+            // Verificando se a mensagem de erro foi exibida
+            mockJOptionPane.verify(() -> 
+                JOptionPane.showMessageDialog(null, "Nome deve conter ao menos 2 caracteres.")
             );
         }
     }
 
- 
-
     @Test
     void deveMostrarErroSeTelefoneNaoForNumero() {
         tela.setNome("João");
-        tela.setTelefone("abcdefghi");
+        tela.setTelefone("abcdefghi"); // Telefone inválido
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
-            tela.cadastrar();
-            mockJOptionPane.verify(() ->
-                    JOptionPane.showMessageDialog(null, "Informe um número válido.")
+            // Chamando o método de cadastro
+            tela.cadastrar("João", "abcdefghi");
+
+            // Verificando se a mensagem de erro foi exibida
+            mockJOptionPane.verify(() -> 
+                JOptionPane.showMessageDialog(null, "Informe um número válido.")
             );
         }
     }
@@ -79,12 +90,16 @@ void setUp() {
         tela.setNome("João");
         tela.setTelefone("123456789");
 
+        // Simula falha ao cadastrar
         when(amigoServiceMock.insertAmigoBD("João", 0, 123456789)).thenReturn(false);
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
-            tela.cadastrar();
-            mockJOptionPane.verify(() ->
-                    JOptionPane.showMessageDialog(null, "Erro ao cadastrar amigo.")
+            // Chamando o método de cadastro
+            tela.cadastrar("João", "123456789");
+
+            // Verificando se a mensagem de erro foi exibida
+            mockJOptionPane.verify(() -> 
+                JOptionPane.showMessageDialog(null, "Erro ao cadastrar amigo.")
             );
         }
     }
@@ -97,15 +112,19 @@ void setUp() {
         when(amigoServiceMock.insertAmigoBD("João", 0, 123456789)).thenReturn(true);
 
         try (MockedStatic<JOptionPane> mockJOptionPane = mockStatic(JOptionPane.class)) {
-            tela.getBotaoCadastrar().doClick(); // Simula clique
-            mockJOptionPane.verify(() ->
-                    JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!")
+            // Simula o clique no botão de cadastrar
+            tela.getBotaoCadastrar().doClick();
+
+            // Verificando se a mensagem de sucesso foi exibida
+            mockJOptionPane.verify(() -> 
+                JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!")
             );
         }
     }
 
     @Test
     void deveExecutarMetodoMainSemErros() {
-        FrmCadastrarAmigo.main(new String[]{}); // Garante que a main executa sem erro
+        // Testa a execução do método main sem erros
+        FrmCadastrarAmigo.main(new String[]{});
     }
 }

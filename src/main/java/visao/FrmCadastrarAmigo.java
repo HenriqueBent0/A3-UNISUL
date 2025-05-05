@@ -22,12 +22,17 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
         if (!skipGUI) {
             initComponents();
         } else {
+            // Inicializa os componentes de forma programática, útil para testes
             this.JTFNome = new JTextField();
             this.JTFTelefone = new JTextField();
             this.JBCadastrar = new JButton();
             this.JBCancelar = new JButton();
 
-            this.JBCadastrar.addActionListener(e -> cadastrar());
+            this.JBCadastrar.addActionListener(e -> {
+    String nome = JTFNome.getText().trim();
+    String telefoneStr = JTFTelefone.getText().trim();
+    cadastrar(nome, telefoneStr); // Chama o método cadastrar com os parâmetros corretos
+});
         }
 
         this.amigoService = new AmigoService();
@@ -139,7 +144,9 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JTFTelefoneActionPerformed
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-        cadastrar();
+         String nome = JTFNome.getText().trim();
+         String telefoneStr = JTFTelefone.getText().trim();
+         cadastrar(nome, telefoneStr);
     }
 
     /**
@@ -200,30 +207,27 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 
-    public void cadastrar() {
-        String nome = JTFNome.getText().trim();
-        String telefoneStr = JTFTelefone.getText().trim();
-
-        if (nome.length() < 2) {
-            JOptionPane.showMessageDialog(null, "Nome deve conter ao menos 2 caracteres.");
-            return;
-        }
-
-        int telefone;
-        try {
-            telefone = Integer.parseInt(telefoneStr);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Informe um número válido.");
-            return;
-        }
-
-        boolean sucesso = amigoService.insertAmigoBD(nome, 0, telefone);
-        if (sucesso) {
-            JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
-        } else {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar amigo.");
-        }
+    public void cadastrar(String nome, String telefoneStr) {
+    if (nome.length() < 2) {
+        JOptionPane.showMessageDialog(null, "Nome deve conter ao menos 2 caracteres.");
+        return;
     }
+
+    int telefone;
+    try {
+        telefone = Integer.parseInt(telefoneStr);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Informe um número válido.");
+        return;
+    }
+
+    boolean sucesso = amigoService.insertAmigoBD(nome, 0, telefone);
+    if (sucesso) {
+        JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
+    } else {
+        JOptionPane.showMessageDialog(null, "Erro ao cadastrar amigo.");
+    }
+}
 
     // Métodos usados pelos testes
 
