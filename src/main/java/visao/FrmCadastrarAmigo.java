@@ -1,8 +1,7 @@
 package visao;
 
-import javax.swing.JButton;
+
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import servico.AmigoService;
 
 /**
@@ -11,31 +10,16 @@ import servico.AmigoService;
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
 
-    private AmigoService amigoService;
+    private AmigoService amigoService; // Objeto para interação com a classe Amigo
+    private int id; // Identificador do amigo
 
+    /**
+     * Construtor da classe FrmCadastrarAmigo.
+     */
     public FrmCadastrarAmigo() {
-        initComponents();
-        this.amigoService = new AmigoService();
-    }
 
-    public FrmCadastrarAmigo(boolean skipGUI) {
-        if (!skipGUI) {
-            initComponents();
-        } else {
-            // Inicializa os componentes de forma programática, útil para testes
-            this.JTFNome = new JTextField();
-            this.JTFTelefone = new JTextField();
-            this.JBCadastrar = new JButton();
-            this.JBCancelar = new JButton();
-
-            this.JBCadastrar.addActionListener(e -> {
-    String nome = JTFNome.getText().trim();
-    String telefoneStr = JTFTelefone.getText().trim();
-    cadastrar(nome, telefoneStr); // Chama o método cadastrar com os parâmetros corretos
-});
-        }
-
-        this.amigoService = new AmigoService();
+        initComponents(); // Inicializa os componentes da interface gráfica
+        amigoService = new AmigoService();  // Cria uma instância da classe Amigo
     }
 
 
@@ -144,9 +128,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JTFTelefoneActionPerformed
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-         String nome = JTFNome.getText().trim();
-         String telefoneStr = JTFTelefone.getText().trim();
-         cadastrar(nome, telefoneStr);
+         cadastrar();
     }
 
     /**
@@ -207,61 +189,36 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 
-    public void cadastrar(String nome, String telefoneStr) {
-    if (nome.length() < 2) {
-        JOptionPane.showMessageDialog(null, "Nome deve conter ao menos 2 caracteres.");
-        return;
-    }
-
-    int telefone;
+     public void cadastrar(){
     try {
-        telefone = Integer.parseInt(telefoneStr);
-    } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(null, "Informe um número válido.");
-        return;
-    }
+            //Recebendo e validando dados da interface gráfica.
+            String nome = "";
+            int telefone = 0;
 
-    boolean sucesso = amigoService.insertAmigoBD(nome, 0, telefone);
-    if (sucesso) {
-        JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
-    } else {
-        JOptionPane.showMessageDialog(null, "Erro ao cadastrar amigo.");
-    }
+            if (this.JTFNome.getText().length() < 2) {
+                throw new Mensagem("Nome deve conter ao menos 2 caracteres.");
+            } else {
+                nome = this.JTFNome.getText();
+            }
+
+            if (this.JTFTelefone.getText().length() == 9) {
+                telefone = Integer.parseInt(this.JTFTelefone.getText());
+            } else {
+                throw new Mensagem("Informe um número válido.");
+            }
+
+            //Envia os dados para o Controlador cadastrar
+            if (this.amigoService.insertAmigoBD(nome, id, telefone)) {
+                JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
+                //Limpa campos da interface
+                this.JTFNome.setText("");
+                this.JTFTelefone.setText("");
+            }
+        } catch (Mensagem erro) {
+            JOptionPane.showMessageDialog(null, erro.getMessage());
+        } catch (NumberFormatException erro2) {
+            JOptionPane.showMessageDialog(null, "Informe um número válido.");
+        }
+}
 }
 
-    // Métodos usados pelos testes
-
-    public void setNome(String nome) {
-        this.JTFNome.setText(nome);
-    }
-
-    public void setTelefone(String telefone) {
-        this.JTFTelefone.setText(telefone);
-    }
-
-    public JButton getBotaoCadastrar() {
-        return this.JBCadastrar;
-    }
-
-    public void setAmigoService(AmigoService amigoService) {
-        this.amigoService = amigoService;
-    }
-public JTextField getJTFNome() {
-        return JTFNome;
-    }
-
-    // Método get para JTFTelefone
-    public JTextField getJTFTelefone() {
-        return JTFTelefone;
-    }
-
-    // Método get para JBCadastrar
-    public JButton getJBCadastrar() {
-        return JBCadastrar;
-    }
-
-    // Método get para JBCancelar
-    public JButton getJBCancelar() {
-        return JBCancelar;
-    }
-}
