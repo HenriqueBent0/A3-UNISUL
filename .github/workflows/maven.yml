@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  # Ambiente de desenvolvimento
+  # Jobs do ambiente de desenvolvimento
   build-dev:
     runs-on: ubuntu-latest
     environment:
@@ -26,7 +26,7 @@ jobs:
       - name: Compila o projeto com Maven
         run: mvn -B compile --file pom.xml
 
-  # Ambiente de homologação
+  # Jobs do ambiente de homologação
   build-hmg:
     runs-on: ubuntu-latest
     environment:
@@ -54,10 +54,8 @@ jobs:
       - name: Inicia o servidor Xvfb
         run: Xvfb :99 -screen 0 1024x768x24 &
 
-      - name: Testa o projeto com Maven (usando xvfb e LAF seguro)
-        run: |
-          xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" \
-          mvn -B test --file pom.xml -Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel
+      - name: Testa o projeto com Maven (usando xvfb)
+        run: xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" mvn -B test --file pom.xml
 
       - name: Cache dos pacotes do SonarCloud
         uses: actions/cache@v4
@@ -73,13 +71,12 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Verifica o projeto com Jacoco e Sonar (com LAF seguro)
+      - name: Verifica o projeto com Maven e Jacoco
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           mvn clean verify \
-            -Dswing.defaultlaf=javax.swing.plaf.metal.MetalLookAndFeel \
             org.jacoco:jacoco-maven-plugin:prepare-agent \
             org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
             -Dsonar.projectKey=HenriqueBent0_a3_unisul \
@@ -88,7 +85,7 @@ jobs:
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
-  # Ambiente de produção
+  # Jobs do ambiente de produção
   build-prd:
     runs-on: ubuntu-latest
     environment:
