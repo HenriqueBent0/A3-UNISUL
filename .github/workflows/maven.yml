@@ -7,13 +7,13 @@ on:
     branches: [ main ]
 
 jobs:
-  # Jobs do ambiente de desenvolvimento
+  # Ambiente de desenvolvimento
   build-dev:
     runs-on: ubuntu-latest
     environment:
       name: dev
     steps:
-      - name: Realiza o checkout do repositório
+      - name: Checkout do repositório
         uses: actions/checkout@v3
 
       - name: Configura o JDK 18
@@ -26,14 +26,14 @@ jobs:
       - name: Compila o projeto com Maven
         run: mvn -B compile --file pom.xml
 
-  # Jobs do ambiente de homologação
+  # Ambiente de homologação
   build-hmg:
     runs-on: ubuntu-latest
     environment:
       name: hmg
     needs: build-dev
     steps:
-      - name: Realiza o checkout do repositório
+      - name: Checkout do repositório
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -45,33 +45,21 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Instala o Xvfb
-        run: sudo apt-get update && sudo apt-get install -y xvfb
-
-      - name: Configura a variável DISPLAY
-        run: export DISPLAY=:99
-
-      - name: Inicia o servidor Xvfb
-        run: Xvfb :99 -screen 0 1024x768x24 &
-
-      - name: Testa o projeto com Maven (usando xvfb)
-        run: xvfb-run --auto-servernum --server-args="-screen 0 1024x768x24" mvn -B test --file pom.xml
-
-      - name: Cache dos pacotes do SonarCloud
+      - name: Cache do SonarCloud
         uses: actions/cache@v4
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
-      - name: Cache dos pacotes do Maven
+      - name: Cache do Maven
         uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Verifica o projeto com Maven e Jacoco
+      - name: Testa e analisa com SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -85,14 +73,14 @@ jobs:
             -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
             -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
-  # Jobs do ambiente de produção
+  # Ambiente de produção
   build-prd:
     runs-on: ubuntu-latest
     environment:
       name: prd
     needs: build-hmg
     steps:
-      - name: Realiza o checkout do repositório
+      - name: Checkout do repositório
         uses: actions/checkout@v3
 
       - name: Configura o JDK 18
@@ -105,13 +93,13 @@ jobs:
       - name: Empacota o projeto com Maven
         run: mvn -B package --file pom.xml -DskipTests
 
-      - name: Crie uma pasta temporária de downloads de artefatos
+      - name: Cria diretório temporário
         run: mkdir staging
 
-      - name: Copia os artefatos a serem publicados na pasta temporária
+      - name: Copia o JAR para o diretório temporário
         run: cp target/*jar-with-dependencies.jar staging
 
-      - name: Usa Upload Artifact do GitHub Action
+      - name: Upload do artefato gerado
         uses: actions/upload-artifact@v4
         with:
           name: Package
