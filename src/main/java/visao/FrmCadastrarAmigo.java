@@ -1,6 +1,7 @@
 package visao;
 
 
+import java.awt.GraphicsEnvironment;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import servico.AmigoService;
@@ -14,13 +15,22 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     private AmigoService amigoService; // Objeto para interação com a classe Amigo
     private int id; // Identificador do amigo
 
-    /**
-     * Construtor da classe FrmCadastrarAmigo.
-     */
     public FrmCadastrarAmigo() {
-
         initComponents(); // Inicializa os componentes da interface gráfica
         amigoService = new AmigoService();  // Cria uma instância da classe Amigo
+    }
+
+    public void mostrarMensagem(String mensagem) {
+        if (isHeadless()) {
+            System.out.println(mensagem); // Em ambiente headless, printa a mensagem no console
+        } else {
+            JOptionPane.showMessageDialog(null, mensagem); // Caso contrário, mostra o JOptionPane
+        }
+    }
+
+    // Método para verificar se o ambiente é headless
+    private boolean isHeadless() {
+        return GraphicsEnvironment.isHeadless(); 
     }
 
 
@@ -241,9 +251,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     public void setJTFTelefone(String telefone) {
         this.JTFTelefone.setText(telefone);
     }
-    public void mostrarMensagem(String mensagem) {
-    JOptionPane.showMessageDialog(null, mensagem);
-}
+    
 
 }
 

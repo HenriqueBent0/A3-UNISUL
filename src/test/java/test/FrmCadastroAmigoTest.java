@@ -16,7 +16,7 @@ public class FrmCadastroAmigoTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this); // Inicializa os mocks
-        frm = new FrmAmigoFake();
+        frm = new FrmAmigoFake(); // Usa a versão fake da tela
         when(service.insertAmigoBD(anyString(), anyInt(), anyInt())).thenReturn(true); // Simula o comportamento do método insertAmigoBD
     }
 
@@ -26,7 +26,7 @@ public class FrmCadastroAmigoTest {
         frm.getJTFTelefone().setText("123456789");
         frm.cadastrar();
 
-        assertEquals("Amigo Cadastrado com Sucesso!", frm.getMensagem());
+        assertEquals("Amigo Cadastrado com Sucesso!", frm.getMensagem()); // Verifica a mensagem gerada
     }
 
     @Test
@@ -35,7 +35,7 @@ public class FrmCadastroAmigoTest {
         frm.getJTFTelefone().setText("123456789");
         frm.cadastrar();
 
-        assertEquals("Nome deve conter ao menos 2 caracteres.", frm.getMensagem());
+        assertEquals("Nome deve conter ao menos 2 caracteres.", frm.getMensagem()); // Verifica a mensagem gerada
     }
 
     @Test
@@ -44,7 +44,7 @@ public class FrmCadastroAmigoTest {
         frm.getJTFTelefone().setText("123"); // Inválido (menos que 9 dígitos)
         frm.cadastrar();
 
-        assertEquals("Informe um número válido.", frm.getMensagem());
+        assertEquals("Informe um número válido.", frm.getMensagem()); // Verifica a mensagem gerada
     }
 
     @Test
@@ -53,7 +53,7 @@ public class FrmCadastroAmigoTest {
         frm.getJTFTelefone().setText("abcdefghi"); // não é número
         frm.cadastrar();
 
-        assertEquals("Informe um número válido.", frm.getMensagem());
+        assertEquals("Informe um número válido.", frm.getMensagem()); // Verifica a mensagem gerada
     }
 
     @AfterEach
