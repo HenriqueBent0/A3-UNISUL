@@ -2,6 +2,7 @@ package visao;
 
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import servico.AmigoService;
 
 /**
@@ -191,34 +192,58 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
      public void cadastrar(){
     try {
-            //Recebendo e validando dados da interface gráfica.
-            String nome = "";
-            int telefone = 0;
+        //Recebendo e validando dados da interface gráfica.
+        String nome = "";
+        int telefone = 0;
 
-            if (this.JTFNome.getText().length() < 2) {
-                throw new Mensagem("Nome deve conter ao menos 2 caracteres.");
-            } else {
-                nome = this.JTFNome.getText();
-            }
-
-            if (this.JTFTelefone.getText().length() == 9) {
-                telefone = Integer.parseInt(this.JTFTelefone.getText());
-            } else {
-                throw new Mensagem("Informe um número válido.");
-            }
-
-            //Envia os dados para o Controlador cadastrar
-            if (this.amigoService.insertAmigoBD(nome, id, telefone)) {
-                JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
-                //Limpa campos da interface
-                this.JTFNome.setText("");
-                this.JTFTelefone.setText("");
-            }
-        } catch (Mensagem erro) {
-            JOptionPane.showMessageDialog(null, erro.getMessage());
-        } catch (NumberFormatException erro2) {
-            JOptionPane.showMessageDialog(null, "Informe um número válido.");
+        if (this.JTFNome.getText().length() < 2) {
+            throw new Mensagem("Nome deve conter ao menos 2 caracteres.");
+        } else {
+            nome = this.JTFNome.getText();
         }
+
+        if (this.JTFTelefone.getText().length() == 9) {
+            telefone = Integer.parseInt(this.JTFTelefone.getText());
+        } else {
+            throw new Mensagem("Informe um número válido.");
+        }
+
+        //Envia os dados para o Controlador cadastrar
+        if (this.amigoService.insertAmigoBD(nome, id, telefone)) {
+            mostrarMensagem("Amigo Cadastrado com Sucesso!");
+            //Limpa campos da interface
+            this.JTFNome.setText("");
+            this.JTFTelefone.setText("");
+        }
+    } catch (Mensagem erro) {
+        mostrarMensagem(erro.getMessage()); // <-- aqui era JOptionPane
+    } catch (NumberFormatException erro2) {
+        mostrarMensagem("Informe um número válido.");
+    }
 }
+
+    // Getter para JTFNome
+    public JTextField getJTFNome() {
+        return JTFNome;
+    }
+
+    // Setter para JTFNome
+    public void setJTFNome(String nome) {
+        this.JTFNome.setText(nome);
+    }
+
+    // Getter para JTFTelefone
+    public JTextField getJTFTelefone() {
+        return JTFTelefone;
+    }
+
+    // Setter para JTFTelefone
+    public void setJTFTelefone(String telefone) {
+        this.JTFTelefone.setText(telefone);
+    }
+    public void mostrarMensagem(String mensagem) {
+    JOptionPane.showMessageDialog(null, mensagem);
+}
+
 }
 
