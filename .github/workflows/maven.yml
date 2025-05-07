@@ -104,3 +104,10 @@ jobs:
         with:
           name: Package
           path: staging
+
+  # Ajustando para modo headless
+  set-headless:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Definir variável de ambiente para modo headless
+        run: echo "JAVA_OPTS=-Djava.awt.headless=true" >> $GITHUB_ENV
