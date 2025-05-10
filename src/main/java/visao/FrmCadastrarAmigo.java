@@ -13,15 +13,35 @@ import javax.swing.JOptionPane;
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
 
-  private AmigoController controller;
+    private AmigoController controller;
     private String ultimaMensagem;
-    
-public void setController(AmigoController controller) {
-    this.controller = controller;
-}
 
     public FrmCadastrarAmigo() {
-         initComponents();
+        initComponents(); // Certifique-se de chamar o initComponents aqui
+        inicializar();    // Agora você pode adicionar os listeners depois da inicialização
+    }
+
+    private void inicializar() {
+        setTitle("Cadastro De Amigos");
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+        // Adiciona os ActionListener agora que os componentes estão inicializados
+        JBCadastrar.addActionListener(evt -> {
+            if (controller != null) {
+                controller.jButtonCadastrarActionPerformed(evt);
+            }
+        });
+
+        JBCancelar.addActionListener(evt -> {
+            if (controller != null) {
+                controller.jButtonFecharActionPerformed(evt);
+            }
+        });
+    }
+
+    public void setController(AmigoController controller) {
+        this.controller = controller;
     }
 
     public javax.swing.JButton getJBCadastrar() {
@@ -41,7 +61,12 @@ public void setController(AmigoController controller) {
     }
 
     public void mostrarMensagem(String mensagem) {
+        this.ultimaMensagem = mensagem;
         JOptionPane.showMessageDialog(this, mensagem);
+    }
+
+    public String getUltimaMensagem() {
+        return ultimaMensagem;
     }
 
 
@@ -151,9 +176,9 @@ public void setController(AmigoController controller) {
     }//GEN-LAST:event_JTFTelefoneActionPerformed
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-          if (controller != null) {
-             controller.jButtonCadastrarActionPerformed(evt);
-         }
+           if (controller != null) {
+            controller.jButtonCadastrarActionPerformed(evt);
+        }
     }
 
     /**
@@ -169,40 +194,15 @@ public void setController(AmigoController controller) {
     }//GEN-LAST:event_JBCadastrarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
-        if (controller != null) {
+         if (controller != null) {
             controller.jButtonFecharActionPerformed(evt);
         }
+    
     }//GEN-LAST:event_JBCancelarActionPerformed
 
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastrarAmigo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastrarAmigo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastrarAmigo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmCadastrarAmigo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmCadastrarAmigo().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new FrmCadastrarAmigo().setVisible(true);
         });
     }
 

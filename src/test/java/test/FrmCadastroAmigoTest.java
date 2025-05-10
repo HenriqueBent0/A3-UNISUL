@@ -1,72 +1,59 @@
 package test;
 
 import controle.AmigoController;
-import dao.AmigoDAO;
-import modelo.Amigo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
+import visao.FrmCadastrarAmigo;
+import test.FrmAmigoFake;
 
 public class FrmCadastroAmigoTest {
 
-    private FrmAmigoFake frmCadastrarAmigoFake;
-    private AmigoController controller;
-    private AmigoDAO amigoDAO;
+    private FrmCadastrarAmigo frm;
 
     @BeforeEach
-    void setUp() {
-        // Inicializa a instância do formulário fake e o controlador
-        frmCadastrarAmigoFake = new FrmAmigoFake();
-        controller = new AmigoController(frmCadastrarAmigoFake);
-        amigoDAO = new AmigoDAO();
-
-        // Vincula o controller ao formulário fake
-        frmCadastrarAmigoFake.setController(controller);  // Agora funciona corretamente
+    public void setUp() {
+        frm = new FrmAmigoFake();  // Usa a versão fake do formulário
+        AmigoController controller = new AmigoController(frm); // Passando o formulário fake para o controller
+        frm.setController(controller); // Setando o controller
     }
 
     @Test
-    void testCadastroAmigoComSucesso() {
-        // Configura dados válidos para o cadastro
-        frmCadastrarAmigoFake.getJTFNome().setText("João");
-        frmCadastrarAmigoFake.getJTFTelefone().setText("123456789");
+    public void testCadastroComSucesso() {
+        // Simula o cadastro com dados válidos
+        frm.getJTFNome().setText("João");
+        frm.getJTFTelefone().setText("123456789");
 
-        // Simula a ação de clicar no botão Cadastrar
-        frmCadastrarAmigoFake.getJBCadastrar().doClick();
+        frm.getJBCadastrar().doClick(); // Aciona o botão "Cadastrar"
 
-        // Verifica se a mensagem de sucesso foi exibida
+        // Verifica se a mensagem de sucesso foi gerada corretamente
         String mensagemEsperada = "Amigo Cadastrado com Sucesso!";
-        assertEquals(mensagemEsperada, frmCadastrarAmigoFake.getUltimaMensagem());
+        assertEquals(mensagemEsperada, ((FrmAmigoFake) frm).getUltimaMensagem());
     }
 
     @Test
-    void testCadastroAmigoComTelefoneInvalido() {
-        // Configura dados com telefone inválido
-        frmCadastrarAmigoFake.getJTFNome().setText("Maria");
-        frmCadastrarAmigoFake.getJTFTelefone().setText("abc123");
+    public void testCadastroComCamposVazios() {
+        // Simula o cadastro com dados vazios
+        frm.getJTFNome().setText("");
+        frm.getJTFTelefone().setText("");
 
-        // Simula a ação de clicar no botão Cadastrar
-        frmCadastrarAmigoFake.getJBCadastrar().doClick();
+        frm.getJBCadastrar().doClick(); // Aciona o botão "Cadastrar"
 
-        // Verifica se a mensagem de erro foi exibida
+        // Verifica se a mensagem de erro foi gerada corretamente
         String mensagemEsperada = "Telefone inválido. Por favor, insira um número válido.";
-        assertEquals(mensagemEsperada, frmCadastrarAmigoFake.getUltimaMensagem());
+        assertEquals(mensagemEsperada, ((FrmAmigoFake) frm).getUltimaMensagem());
     }
 
     @Test
-    void testCadastroAmigoComCamposVazios() {
-        // Deixa os campos em branco
-        frmCadastrarAmigoFake.getJTFNome().setText("");
-        frmCadastrarAmigoFake.getJTFTelefone().setText("");
+    public void testCadastroComTelefoneInvalido() {
+        // Simula o cadastro com telefone inválido
+        frm.getJTFNome().setText("João");
+        frm.getJTFTelefone().setText("abc123");
 
-        // Simula a ação de clicar no botão Cadastrar
-        frmCadastrarAmigoFake.getJBCadastrar().doClick();
+        frm.getJBCadastrar().doClick(); // Aciona o botão "Cadastrar"
 
-        // Verifica se a mensagem de erro foi exibida
+        // Verifica se a mensagem de erro foi gerada corretamente
         String mensagemEsperada = "Telefone inválido. Por favor, insira um número válido.";
-        assertEquals(mensagemEsperada, frmCadastrarAmigoFake.getUltimaMensagem());
+        assertEquals(mensagemEsperada, ((FrmAmigoFake) frm).getUltimaMensagem());
     }
 }
-
-
-    

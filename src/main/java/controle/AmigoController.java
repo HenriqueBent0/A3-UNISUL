@@ -13,13 +13,23 @@ public class AmigoController {
     private FrmCadastrarAmigo frm;
     private AmigoDAO amigoDao;
 
+    // Construtor padrão
     public AmigoController(FrmCadastrarAmigo frm) {
         this.frm = frm;
         this.amigoDao = new AmigoDAO(); // Inicializando o DAO
-
         // Conectando os listeners aos botões
         this.frm.getJBCadastrar().addActionListener(this::jButtonCadastrarActionPerformed);
         this.frm.getJBCancelar().addActionListener(this::jButtonFecharActionPerformed);
+    }
+
+    // Método para injetar o DAO nos testes
+    public void setAmigoDao(AmigoDAO amigoDao) {
+        this.amigoDao = amigoDao;
+    }
+
+    // Método para acessar o DAO (caso precise)
+    public AmigoDAO getAmigoDao() {
+        return amigoDao;
     }
 
     public void executar() {
@@ -30,36 +40,36 @@ public class AmigoController {
      * Método acionado ao clicar em "Cadastrar".
      */
     public void jButtonCadastrarActionPerformed(ActionEvent e) {
-    Amigo amigo = new Amigo();
-    amigo.setNome(frm.getJTFNome().getText());
+        Amigo amigo = new Amigo();
+        amigo.setNome(frm.getJTFNome().getText());
 
-    try {
-        // Verificando se o telefone contém apenas números
-        String telefone = frm.getJTFTelefone().getText();
-        if (telefone.matches("\\d+")) {  // Verifica se contém apenas dígitos
-            amigo.setTelefone(Integer.parseInt(telefone));  // Convertendo para inteiro
-        } else {
+        try {
+            // Verificando se o telefone contém apenas números
+            String telefone = frm.getJTFTelefone().getText();
+            if (telefone.matches("\\d+")) {  // Verifica se contém apenas dígitos
+                amigo.setTelefone(Integer.parseInt(telefone));  // Convertendo para inteiro
+            } else {
+                frm.mostrarMensagem("Telefone inválido. Por favor, insira um número válido.");
+                return;
+            }
+        } catch (NumberFormatException ex) {
             frm.mostrarMensagem("Telefone inválido. Por favor, insira um número válido.");
             return;
         }
-    } catch (NumberFormatException ex) {
-        frm.mostrarMensagem("Telefone inválido. Por favor, insira um número válido.");
-        return;
+
+        // Definir o ID manualmente
+        int novoId = amigoDao.maiorID() + 1;
+        amigo.setId(novoId);  // Atribui o novo ID
+
+        // Inserção do amigo no banco
+        boolean sucesso = amigoDao.insertAmigoBD(amigo);
+
+        if (sucesso) {
+            frm.mostrarMensagem("Amigo Cadastrado com Sucesso!");
+        } else {
+            frm.mostrarMensagem("Erro ao cadastrar o amigo.");
+        }
     }
-
-    // Definir o ID manualmente
-    int novoId = amigoDao.maiorID() + 1;
-    amigo.setId(novoId);  // Atribui o novo ID
-
-    // Inserção do amigo no banco
-    boolean sucesso = amigoDao.insertAmigoBD(amigo);
-
-    if (sucesso) {
-        frm.mostrarMensagem("Amigo Cadastrado com Sucesso!");
-    } else {
-        frm.mostrarMensagem("Erro ao cadastrar o amigo.");
-    }
-}
 
     /**
      * Método acionado ao clicar em "Fechar".
