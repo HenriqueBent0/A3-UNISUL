@@ -2,6 +2,7 @@ package visao;
 
 
 
+import controle.AmigoController;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import servico.AmigoService;
@@ -12,16 +13,15 @@ import servico.AmigoService;
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
 
-    private AmigoService amigoService; // Objeto para interação com a classe Amigo
-    private int id; // Identificador do amigo
+   private AmigoController controller; // Controlador que irá gerenciar a lógica
+    private String ultimaMensagem;
 
-    /**
-     * Construtor da classe FrmCadastrarAmigo.
-     */
     public FrmCadastrarAmigo() {
+        initComponents();
+    }
 
-        initComponents(); // Inicializa os componentes da interface gráfica
-        amigoService = new AmigoService();  // Cria uma instância da classe Amigo
+    public void setController(AmigoController controller) {
+        this.controller = controller;
     }
 
 
@@ -130,7 +130,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JTFTelefoneActionPerformed
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-         cadastrar();
+         controller.cadastrarAmigo();
     }
 
     /**
@@ -146,7 +146,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JBCadastrarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
-        this.dispose();
+        controller.cancelarCadastro();
     }//GEN-LAST:event_JBCancelarActionPerformed
 
     public static void main(String args[]) {
@@ -191,60 +191,33 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 
-      public void cadastrar(){
-    try {
-        //Recebendo e validando dados da interface gráfica.
-        String nome = "";
-        int telefone = 0;
-
-        if (this.JTFNome.getText().length() < 2) {
-            throw new Mensagem("Nome deve conter ao menos 2 caracteres.");
-        } else {
-            nome = this.JTFNome.getText();
-        }
-
-        if (this.JTFTelefone.getText().length() == 9) {
-            telefone = Integer.parseInt(this.JTFTelefone.getText());
-        } else {
-            throw new Mensagem("Informe um número válido.");
-        }
-
-        //Envia os dados para o Controlador cadastrar
-        if (this.amigoService.insertAmigoBD(nome, id, telefone)) {
-            mostrarMensagem("Amigo Cadastrado com Sucesso!");
-            //Limpa campos da interface
-            this.JTFNome.setText("");
-            this.JTFTelefone.setText("");
-        }
-    } catch (Mensagem erro) {
-        mostrarMensagem(erro.getMessage()); // <-- aqui era JOptionPane
-    } catch (NumberFormatException erro2) {
-        mostrarMensagem("Informe um número válido.");
+      public void mostrarMensagem(String mensagem) {
+    ultimaMensagem = mensagem; // Armazena a mensagem para ser verificada no teste
+    if (!isTestEnvironment()) { // Verifica se está no ambiente de teste
+        JOptionPane.showMessageDialog(null, mensagem);
     }
 }
 
-    // Getter para JTFNome
-    public JTextField getJTFNome() {
+// Método para verificar se o ambiente é de teste
+private boolean isTestEnvironment() {
+    return System.getProperty("test.environment") != null;
+}
+
+    public void limparCampos() {
+        JTFNome.setText("");
+        JTFTelefone.setText("");
+    }
+
+    public javax.swing.JTextField getJTFNome() {
         return JTFNome;
     }
 
-    // Setter para JTFNome
-    public void setJTFNome(String nome) {
-        this.JTFNome.setText(nome);
-    }
-
-    // Getter para JTFTelefone
-    public JTextField getJTFTelefone() {
+    public javax.swing.JTextField getJTFTelefone() {
         return JTFTelefone;
     }
 
-    // Setter para JTFTelefone
-    public void setJTFTelefone(String telefone) {
-        this.JTFTelefone.setText(telefone);
+    public String getUltimaMensagem() {
+        return ultimaMensagem;
     }
-    public void mostrarMensagem(String mensagem) {
-    JOptionPane.showMessageDialog(null, mensagem);
-}
-
 }
 

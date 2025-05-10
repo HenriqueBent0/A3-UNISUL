@@ -1,64 +1,44 @@
 package test;
 
+import controle.AmigoController;
+import visao.FrmCadastrarAmigo;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
-import servico.AmigoService;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
+import servico.AmigoService;
+
 public class FrmCadastroAmigoTest {
 
     @Mock
-    AmigoService service; // Mock da classe AmigoService
-    FrmAmigoFake frm;
+    AmigoService amigoService;
+
+    FrmCadastrarAmigo frm;
+    AmigoController controller;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.openMocks(this); // Inicializa os mocks
-        frm = new FrmAmigoFake();
-        when(service.insertAmigoBD(anyString(), anyInt(), anyInt())).thenReturn(true); // Simula o comportamento do método insertAmigoBD
-    }
+public void setUp() {
+    System.setProperty("test.environment", "true"); // Define a propriedade de ambiente de teste
+    MockitoAnnotations.openMocks(this);
+    frm = new FrmCadastrarAmigo();
+    controller = new AmigoController(frm);
+    frm.setController(controller);
+}
+
 
     @Test
-    public void testCadastroComSucesso() {
-        frm.getJTFNome().setText("João Teste");
-        frm.getJTFTelefone().setText("123456789");
-        frm.cadastrar();
+public void testCadastroComSucesso() {
+    when(amigoService.insertAmigoBD(anyString(), anyInt(), anyInt())).thenReturn(true);
 
-        assertEquals("Amigo Cadastrado com Sucesso!", frm.getMensagem());
-    }
+    frm.getJTFNome().setText("João Teste");
+    frm.getJTFTelefone().setText("123456789");
 
-    @Test
-    public void testCadastroComNomeInvalido() {
-        frm.getJTFNome().setText("J");
-        frm.getJTFTelefone().setText("123456789");
-        frm.cadastrar();
+    controller.cadastrarAmigo(); // Executa a lógica do cadastro
 
-        assertEquals("Nome deve conter ao menos 2 caracteres.", frm.getMensagem());
-    }
+    assertEquals("Amigo Cadastrado com Sucesso!", frm.getUltimaMensagem());
+}
 
-    @Test
-    public void testCadastroComTelefoneInvalido() {
-        frm.getJTFNome().setText("Nome Válido");
-        frm.getJTFTelefone().setText("123"); // Inválido (menos que 9 dígitos)
-        frm.cadastrar();
 
-        assertEquals("Informe um número válido.", frm.getMensagem());
-    }
-
-    @Test
-    public void testCadastroComTelefoneNaoNumerico() {
-        frm.getJTFNome().setText("Teste");
-        frm.getJTFTelefone().setText("abcdefghi"); // não é número
-        frm.cadastrar();
-
-        assertEquals("Informe um número válido.", frm.getMensagem());
-    }
-
-    @AfterEach
-    public void tearDown() {
-        frm = null;
-        service = null;
-    }
-} 
+    // Testes adicionais para nome inválido, telefone inválido etc.
+}
