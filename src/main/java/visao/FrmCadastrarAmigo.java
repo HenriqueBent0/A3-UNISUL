@@ -4,8 +4,8 @@ package visao;
 
 import controle.AmigoController;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import servico.AmigoService;
+
+
 
 /**
  * Classe responsável pela interface gráfica de cadastro de amigo.
@@ -13,16 +13,37 @@ import servico.AmigoService;
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
 
-   private AmigoController controller; // Controlador que irá gerenciar a lógica
+  private AmigoController controller;
     private String ultimaMensagem;
+    
+public void setController(AmigoController controller) {
+    this.controller = controller;
+}
 
     public FrmCadastrarAmigo() {
-        initComponents();
+         initComponents();
     }
 
-    public void setController(AmigoController controller) {
-        this.controller = controller;
+    public javax.swing.JButton getJBCadastrar() {
+        return JBCadastrar;
     }
+
+    public javax.swing.JButton getJBCancelar() {
+        return JBCancelar;
+    }
+
+    public javax.swing.JTextField getJTFNome() {
+        return JTFNome;
+    }
+
+    public javax.swing.JTextField getJTFTelefone() {
+        return JTFTelefone;
+    }
+
+    public void mostrarMensagem(String mensagem) {
+        JOptionPane.showMessageDialog(this, mensagem);
+    }
+
 
 
     @SuppressWarnings("unchecked")
@@ -130,7 +151,9 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JTFTelefoneActionPerformed
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-         controller.cadastrarAmigo();
+          if (controller != null) {
+             controller.jButtonCadastrarActionPerformed(evt);
+         }
     }
 
     /**
@@ -146,7 +169,9 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JBCadastrarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
-        controller.cancelarCadastro();
+        if (controller != null) {
+            controller.jButtonFecharActionPerformed(evt);
+        }
     }//GEN-LAST:event_JBCancelarActionPerformed
 
     public static void main(String args[]) {
@@ -191,33 +216,8 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 
-      public void mostrarMensagem(String mensagem) {
-    ultimaMensagem = mensagem; // Armazena a mensagem para ser verificada no teste
-    if (!isTestEnvironment()) { // Verifica se está no ambiente de teste
-        JOptionPane.showMessageDialog(null, mensagem);
-    }
+      
 }
 
-// Método para verificar se o ambiente é de teste
-private boolean isTestEnvironment() {
-    return System.getProperty("test.environment") != null;
-}
 
-    public void limparCampos() {
-        JTFNome.setText("");
-        JTFTelefone.setText("");
-    }
-
-    public javax.swing.JTextField getJTFNome() {
-        return JTFNome;
-    }
-
-    public javax.swing.JTextField getJTFTelefone() {
-        return JTFTelefone;
-    }
-
-    public String getUltimaMensagem() {
-        return ultimaMensagem;
-    }
-}
 

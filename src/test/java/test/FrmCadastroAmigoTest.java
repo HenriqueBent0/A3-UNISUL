@@ -1,45 +1,72 @@
 package test;
 
 import controle.AmigoController;
-import visao.FrmCadastrarAmigo;
-import org.junit.jupiter.api.*;
-import org.mockito.*;
-import static org.mockito.Mockito.*;
+import dao.AmigoDAO;
+import modelo.Amigo;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
-import servico.AmigoService;
 
 public class FrmCadastroAmigoTest {
 
-    @Mock
-    AmigoService amigoService;
-
-    FrmCadastrarAmigo frm;
-    AmigoController controller;
+    private FrmAmigoFake frmCadastrarAmigoFake;
+    private AmigoController controller;
+    private AmigoDAO amigoDAO;
 
     @BeforeEach
-    public void setUp() {
-        System.setProperty("test.environment", "true"); // Define a propriedade de ambiente de teste
-        MockitoAnnotations.openMocks(this);
-        frm = new FrmCadastrarAmigo() {
-            // Sobrescreve a exibição de mensagem para imprimir no console durante os testes
-            @Override
-            public void mostrarMensagem(String mensagem) {
-                System.out.println(mensagem);
-            }
-        };
-        controller = new AmigoController(frm);
-        frm.setController(controller);
+    void setUp() {
+        // Inicializa a instância do formulário fake e o controlador
+        frmCadastrarAmigoFake = new FrmAmigoFake();
+        controller = new AmigoController(frmCadastrarAmigoFake);
+        amigoDAO = new AmigoDAO();
+
+        // Vincula o controller ao formulário fake
+        frmCadastrarAmigoFake.setController(controller);  // Agora funciona corretamente
     }
 
     @Test
-    public void testCadastroComSucesso() {
-        when(amigoService.insertAmigoBD(anyString(), anyInt(), anyInt())).thenReturn(true);
+    void testCadastroAmigoComSucesso() {
+        // Configura dados válidos para o cadastro
+        frmCadastrarAmigoFake.getJTFNome().setText("João");
+        frmCadastrarAmigoFake.getJTFTelefone().setText("123456789");
 
-        frm.getJTFNome().setText("João Teste");
-        frm.getJTFTelefone().setText("123456789");
+        // Simula a ação de clicar no botão Cadastrar
+        frmCadastrarAmigoFake.getJBCadastrar().doClick();
 
-        controller.cadastrarAmigo(); // Executa a lógica do cadastro
+        // Verifica se a mensagem de sucesso foi exibida
+        String mensagemEsperada = "Amigo Cadastrado com Sucesso!";
+        assertEquals(mensagemEsperada, frmCadastrarAmigoFake.getUltimaMensagem());
+    }
 
-        assertEquals("Amigo Cadastrado com Sucesso!", frm.getUltimaMensagem());
+    @Test
+    void testCadastroAmigoComTelefoneInvalido() {
+        // Configura dados com telefone inválido
+        frmCadastrarAmigoFake.getJTFNome().setText("Maria");
+        frmCadastrarAmigoFake.getJTFTelefone().setText("abc123");
+
+        // Simula a ação de clicar no botão Cadastrar
+        frmCadastrarAmigoFake.getJBCadastrar().doClick();
+
+        // Verifica se a mensagem de erro foi exibida
+        String mensagemEsperada = "Telefone inválido. Por favor, insira um número válido.";
+        assertEquals(mensagemEsperada, frmCadastrarAmigoFake.getUltimaMensagem());
+    }
+
+    @Test
+    void testCadastroAmigoComCamposVazios() {
+        // Deixa os campos em branco
+        frmCadastrarAmigoFake.getJTFNome().setText("");
+        frmCadastrarAmigoFake.getJTFTelefone().setText("");
+
+        // Simula a ação de clicar no botão Cadastrar
+        frmCadastrarAmigoFake.getJBCadastrar().doClick();
+
+        // Verifica se a mensagem de erro foi exibida
+        String mensagemEsperada = "Telefone inválido. Por favor, insira um número válido.";
+        assertEquals(mensagemEsperada, frmCadastrarAmigoFake.getUltimaMensagem());
     }
 }
+
+
+    
