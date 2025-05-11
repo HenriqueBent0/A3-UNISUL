@@ -1,8 +1,7 @@
 package visao;
 
 
-import javax.swing.JButton;
-import javax.swing.JTextField;
+
 import servico.FerramentaService;
 
 /**
@@ -115,7 +114,7 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-       
+       cadastrar();
     }//GEN-LAST:event_JBCadastrarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
@@ -167,11 +166,23 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     // End of variables declaration//GEN-END:variables
-public JTextField getJTFNomeField() { return JTFNome; }
-    public JTextField getJTFMarcaField() { return JTFMarca; }
-    public JTextField getJTFValorField() { return JTFValor; }
-    public JButton getJBCadastrar() { return JBCadastrar; }
-    public JButton getJBCancelar() { return JBCancelar; }
+
+    private void cadastrar() {
+        String nome = this.JTFNome.getText();
+        String marca = this.JTFMarca.getText();
+        String valor = this.JTFValor.getText();
+
+        // Chama o serviço para cadastrar a ferramenta
+        boolean sucesso = ferramentaService.cadastrarFerramenta(nome, marca, valor);
+
+        if (sucesso) {
+            // Limpa campos da interface após sucesso
+            this.JTFNome.setText("");
+            this.JTFMarca.setText("");
+            this.JTFValor.setText("");
+        }
+    }
 }
+
 
 
