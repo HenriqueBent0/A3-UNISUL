@@ -1,20 +1,18 @@
 package visao;
 
-import controle.AmigoController;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
-
 
 /**
  * Classe responsável pela interface gráfica de cadastro de amigo.
  */
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
-    
     public FrmCadastrarAmigo() {
-        initComponents(); // apenas 1 método initComponents
+        initComponents(); 
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -120,7 +118,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JTFTelefoneActionPerformed
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-          
+
     }
 
     /**
@@ -136,8 +134,8 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JBCadastrarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
-         this.dispose();
-    
+        this.dispose();
+
     }//GEN-LAST:event_JBCancelarActionPerformed
 
     public static void main(String args[]) {
@@ -212,9 +210,4 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
         this.jLabel3 = jLabel3;
     }
 
-      
-
 }
-
-
-
