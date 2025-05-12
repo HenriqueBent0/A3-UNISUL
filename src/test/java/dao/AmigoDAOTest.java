@@ -1,4 +1,4 @@
-package test;
+package dao;
 
 import dao.AmigoDAO;
 import dao.ConexaoDAO;
