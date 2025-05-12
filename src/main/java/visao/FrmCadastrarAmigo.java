@@ -1,8 +1,9 @@
 package visao;
 
-import javax.swing.JOptionPane;
-import servico.AmigoService;
-
+import controle.AmigoController;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
 
 
 /**
@@ -10,20 +11,10 @@ import servico.AmigoService;
  */
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
-
-    private AmigoService amigoService; // Objeto para interação com a classe Amigo
-    private int id; // Identificador do amigo
-
-    /**
-     * Construtor da classe FrmCadastrarAmigo.
-     */
+    
     public FrmCadastrarAmigo() {
-
-        initComponents(); // Inicializa os componentes da interface gráfica
-       this.amigoService = new AmigoService(); // Cria uma instância da classe Amigo
+        initComponents(); // apenas 1 método initComponents
     }
-
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -129,7 +120,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JTFTelefoneActionPerformed
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-          cadastrar();
+          
     }
 
     /**
@@ -164,38 +155,65 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
-public void cadastrar(){
-    try {
-            //Recebendo e validando dados da interface gráfica.
-            String nome = "";
-            int telefone = 0;
 
-            if (this.JTFNome.getText().length() < 2) {
-                throw new Mensagem("Nome deve conter ao menos 2 caracteres.");
-            } else {
-                nome = this.JTFNome.getText();
-            }
+    public JButton getJBCadastrar() {
+        return JBCadastrar;
+    }
 
-            if (this.JTFTelefone.getText().length() == 9) {
-                telefone = Integer.parseInt(this.JTFTelefone.getText());
-            } else {
-                throw new Mensagem("Informe um número válido.");
-            }
+    public void setJBCadastrar(JButton JBCadastrar) {
+        this.JBCadastrar = JBCadastrar;
+    }
 
-            //Envia os dados para o Controlador cadastrar
-             if (this.amigoService.insertAmigoBD(nome, id,  telefone)) {
-                JOptionPane.showMessageDialog(null, "Amigo Cadastrado com Sucesso!");
-                //Limpa campos da interface
-                this.JTFNome.setText("");
-                this.JTFTelefone.setText("");
-            }
-        } catch (Mensagem erro) {
-            JOptionPane.showMessageDialog(null, erro.getMessage());
-        } catch (NumberFormatException erro2) {
-            JOptionPane.showMessageDialog(null, "Informe um número válido.");
-        }
-}
+    public JButton getJBCancelar() {
+        return JBCancelar;
+    }
+
+    public void setJBCancelar(JButton JBCancelar) {
+        this.JBCancelar = JBCancelar;
+    }
+
+    public JTextField getJTFNome() {
+        return JTFNome;
+    }
+
+    public void setJTFNome(JTextField JTFNome) {
+        this.JTFNome = JTFNome;
+    }
+
+    public JTextField getJTFTelefone() {
+        return JTFTelefone;
+    }
+
+    public void setJTFTelefone(JTextField JTFTelefone) {
+        this.JTFTelefone = JTFTelefone;
+    }
+
+    public JLabel getjLabel1() {
+        return jLabel1;
+    }
+
+    public void setjLabel1(JLabel jLabel1) {
+        this.jLabel1 = jLabel1;
+    }
+
+    public JLabel getjLabel2() {
+        return jLabel2;
+    }
+
+    public void setjLabel2(JLabel jLabel2) {
+        this.jLabel2 = jLabel2;
+    }
+
+    public JLabel getjLabel3() {
+        return jLabel3;
+    }
+
+    public void setjLabel3(JLabel jLabel3) {
+        this.jLabel3 = jLabel3;
+    }
+
       
+
 }
 
 
