@@ -41,7 +41,6 @@ public class AmigoFake extends FrmCadastrarAmigo {
     }
 
     public void cadastrar() {
-        // Simula o processo de cadastro, mas sem acessar banco de dados
         System.out.println("Cadastro realizado: " + getCampoNome() + " - " + getCampoTelefone());
     }
 }
