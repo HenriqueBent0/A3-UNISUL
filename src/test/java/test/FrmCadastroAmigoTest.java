@@ -20,6 +20,7 @@ public class FrmCadastroAmigoTest {
 
     @BeforeEach
     public void setUp() {
+        System.setProperty("java.awt.headless", "true");
         telaFake = new AmigoFake();
         amigoDAOMock = mock(AmigoDAO.class);
         amigoService = new AmigoService(amigoDAOMock);
