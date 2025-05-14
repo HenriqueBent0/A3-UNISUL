@@ -7,9 +7,6 @@ import visao.FrmCadastrarAmigo;
  */
 public class AmigoFake extends FrmCadastrarAmigo {
 
-    public AmigoFake() {
-       
-    }
   @Override
     public void mostrarMensagem(String mensagem) {
         //Atribui a mensagem ao atributo para ser utilizado nos testes

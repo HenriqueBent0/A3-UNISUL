@@ -14,7 +14,10 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     private String mensagem;
     AmigoController amigoController;
     
-    public FrmCadastrarAmigo() {
+    public FrmCadastrarAmigo(){
+        initComponents();
+    }
+    private void FrmCadastrarAmigo() {
         initComponents(); 
         this.amigoController = new AmigoController(this);
     }
