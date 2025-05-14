@@ -3,11 +3,18 @@ package test;
 import visao.FrmCadastrarAmigo;
 
 /**
- * Classe que cria um formulário de cadastro de amigo falso para ser utilizado nos testes.
+ * Classe que cria um formulário de cadastro de amigo falso para ser utilizado
+ * nos testes.
  */
 public class AmigoFake extends FrmCadastrarAmigo {
 
-  @Override
+    public AmigoFake() {
+        
+        super(); 
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);  
+    }
+
+    @Override
     public void mostrarMensagem(String mensagem) {
         //Atribui a mensagem ao atributo para ser utilizado nos testes
         setMensagem(mensagem);
@@ -15,4 +22,5 @@ public class AmigoFake extends FrmCadastrarAmigo {
         //Mostra a mensagem
         System.out.println("Mensagem:" + mensagem);
     }
+
 }
