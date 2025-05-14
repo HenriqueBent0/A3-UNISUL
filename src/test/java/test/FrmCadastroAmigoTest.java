@@ -1,30 +1,28 @@
 package test;
 
 import controle.AmigoController;
-import dao.AmigoDAO;
-import modelo.Amigo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import servico.AmigoService;
-
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class FrmCadastroAmigoTest {
 
     private AmigoFake telaFake;
-    private AmigoDAO amigoDAOMock;
-    private AmigoService amigoService;
+    private AmigoService amigoServiceMock;
     private AmigoController controller;
 
     @BeforeEach
     public void setUp() {
-        System.setProperty("java.awt.headless", "true");
+        // Cria a tela fake para capturar mensagens
         telaFake = new AmigoFake();
-        amigoDAOMock = mock(AmigoDAO.class);
-        amigoService = new AmigoService(amigoDAOMock);
-        controller = new AmigoController(telaFake, amigoService);
+        
+        // Mock do serviço
+        amigoServiceMock = mock(AmigoService.class);
+        
+        // Cria o controlador passando a tela fake e o mock do serviço
+        controller = new AmigoController(telaFake, amigoServiceMock);
     }
 
     @Test
@@ -52,8 +50,9 @@ public class FrmCadastroAmigoTest {
         telaFake.getJTFNome().setText("Maria");
         telaFake.getJTFTelefone().setText("123456");
 
-        when(amigoDAOMock.maiorID()).thenReturn(10);
-        when(amigoDAOMock.insertAmigoBD(any(Amigo.class))).thenReturn(true);
+        // Simulando o retorno de maiorID e a inserção no banco
+        when(amigoServiceMock.maiorID()).thenReturn(10); // Retorna ID maior 10
+        when(amigoServiceMock.insertAmigoBD(anyString(), anyInt(), anyInt())).thenReturn(true); // Simula inserção com sucesso
 
         controller.cadastrar();
 
@@ -65,8 +64,9 @@ public class FrmCadastroAmigoTest {
         telaFake.getJTFNome().setText("Carlos");
         telaFake.getJTFTelefone().setText("987654");
 
-        when(amigoDAOMock.maiorID()).thenReturn(5);
-        when(amigoDAOMock.insertAmigoBD(any(Amigo.class))).thenReturn(false);
+        // Simulando o retorno de maiorID e a falha na inserção
+        when(amigoServiceMock.maiorID()).thenReturn(5); // Retorna ID maior 5
+        when(amigoServiceMock.insertAmigoBD(anyString(), anyInt(), anyInt())).thenReturn(false); // Simula falha na inserção
 
         controller.cadastrar();
 

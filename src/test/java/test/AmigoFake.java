@@ -8,7 +8,7 @@ import visao.FrmCadastrarAmigo;
 public class AmigoFake extends FrmCadastrarAmigo {
 
     public AmigoFake() {
-        super();
+       
     }
   @Override
     public void mostrarMensagem(String mensagem) {

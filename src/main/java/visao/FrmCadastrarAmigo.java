@@ -139,7 +139,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JBCadastrarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
-        this.dispose();
+        
 
     }//GEN-LAST:event_JBCancelarActionPerformed
 
