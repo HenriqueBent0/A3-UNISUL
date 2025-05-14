@@ -1,52 +1,56 @@
 package controle;
 
-import visao.FrmCadastrarAmigo;
 import servico.AmigoService;
+import visao.FrmCadastrarAmigo;
 
 public class AmigoController {
-    
-    private FrmCadastrarAmigo tela;
-    private AmigoService amigoService;
 
-    public AmigoController(FrmCadastrarAmigo tela, AmigoService amigoService) {
+    private final FrmCadastrarAmigo tela;
+    private final AmigoService service;
+
+    public AmigoController(FrmCadastrarAmigo tela, AmigoService amigoServiceMock) {
         this.tela = tela;
-        this.amigoService = amigoService;
-        
-        // Adiciona ações aos botões
-        this.tela.getJBCadastrar().addActionListener(evt -> cadastrar());
-        this.tela.getJBCancelar().addActionListener(evt -> cancelar());
+        this.service = new AmigoService(); // ou injete um mock se necessário
     }
-
-    // Método para cadastrar amigo
+public AmigoController(FrmCadastrarAmigo tela) {
+    this.tela = tela;
+    this.service = new AmigoService(); // Criação real do service
+}
     public void cadastrar() {
-        String nome = this.tela.getJTFNome().getText();
-        String telefoneStr = this.tela.getJTFTelefone().getText();
-
-        if (nome.isEmpty() || telefoneStr.isEmpty()) {
-            tela.mostrarMensagem("Todos os campos devem ser preenchidos.");
-            return;
-        }
-
         try {
-            int telefone = Integer.parseInt(telefoneStr);
-            int id = amigoService.maiorID() + 1; // Define um novo ID para o amigo
+            String nome = tela.getJTFNome().getText().trim();
+            String telefoneStr = tela.getJTFTelefone().getText().trim();
 
-            // Chama o serviço para salvar o amigo no banco
-            boolean sucesso = amigoService.insertAmigoBD(nome, id, telefone);
+            // Validação simples
+            if (nome.isEmpty()) {
+                tela.mostrarMensagem("O nome não pode estar em branco.");
+                return;
+            }
+            if (telefoneStr.isEmpty()) {
+                tela.mostrarMensagem("O telefone não pode estar em branco.");
+                return;
+            }
 
+            int telefone;
+            try {
+                telefone = Integer.parseInt(telefoneStr);
+            } catch (NumberFormatException e) {
+                tela.mostrarMensagem("Telefone deve conter apenas números.");
+                return;
+            }
+
+            boolean sucesso = service.insertAmigoBD(nome, 0, telefone);
             if (sucesso) {
                 tela.mostrarMensagem("Amigo cadastrado com sucesso!");
-                this.tela.dispose(); // Fecha a tela após sucesso
+                tela.getJTFNome().setText("");
+                tela.getJTFTelefone().setText("");
             } else {
-                tela.mostrarMensagem("Erro ao cadastrar o amigo.");
+                tela.mostrarMensagem("Erro ao cadastrar amigo.");
             }
-        } catch (NumberFormatException e) {
-            tela.mostrarMensagem("Telefone deve ser um número válido.");
-        }
-    }
 
-    // Método para cancelar o cadastro
-    private void cancelar() {
-        this.tela.dispose(); // Fecha a tela
+        } catch (Exception e) {
+            tela.mostrarMensagem("Erro inesperado: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }

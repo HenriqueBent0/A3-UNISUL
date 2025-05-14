@@ -16,6 +16,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     
     public FrmCadastrarAmigo() {
         initComponents(); 
+        this.amigoController = new AmigoController(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -139,14 +140,12 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JBCadastrarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
-        
+        this.dispose();
 
     }//GEN-LAST:event_JBCancelarActionPerformed
 
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(() -> {
-            new FrmCadastrarAmigo().setVisible(true);
-        });
+       
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

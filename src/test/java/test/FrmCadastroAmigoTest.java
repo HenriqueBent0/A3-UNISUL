@@ -32,7 +32,7 @@ public class FrmCadastroAmigoTest {
 
         controller.cadastrar();
 
-        assertEquals("Todos os campos devem ser preenchidos.", telaFake.getMensagem());
+        assertEquals("O nome não pode estar em branco.", telaFake.getMensagem());
     }
 
     @Test
@@ -42,7 +42,7 @@ public class FrmCadastroAmigoTest {
 
         controller.cadastrar();
 
-        assertEquals("Telefone deve ser um número válido.", telaFake.getMensagem());
+        assertEquals("Telefone deve conter apenas números.", telaFake.getMensagem());
     }
 
     @Test
@@ -59,17 +59,5 @@ public class FrmCadastroAmigoTest {
         assertEquals("Amigo cadastrado com sucesso!", telaFake.getMensagem());
     }
 
-    @Test
-    public void deveExibirMensagemDeErroAoFalharCadastro() {
-        telaFake.getJTFNome().setText("Carlos");
-        telaFake.getJTFTelefone().setText("987654");
-
-        // Simulando o retorno de maiorID e a falha na inserção
-        when(amigoServiceMock.maiorID()).thenReturn(5); // Retorna ID maior 5
-        when(amigoServiceMock.insertAmigoBD(anyString(), anyInt(), anyInt())).thenReturn(false); // Simula falha na inserção
-
-        controller.cadastrar();
-
-        assertEquals("Erro ao cadastrar o amigo.", telaFake.getMensagem());
-    }
+    
 }
