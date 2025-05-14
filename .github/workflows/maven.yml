@@ -23,6 +23,9 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      - name: Definir variável de ambiente para modo headless
+        run: echo "JAVA_OPTS=-Djava.awt.headless=true" >> $GITHUB_ENV
+
       - name: Compila o projeto com Maven
         run: mvn -B compile --file pom.xml
 
@@ -59,6 +62,9 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
+      - name: Definir variável de ambiente para modo headless
+        run: echo "JAVA_OPTS=-Djava.awt.headless=true" >> $GITHUB_ENV
+
       - name: Testa e analisa com SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -89,6 +95,9 @@ jobs:
           java-version: '18'
           distribution: 'temurin'
           cache: maven
+
+      - name: Definir variável de ambiente para modo headless
+        run: echo "JAVA_OPTS=-Djava.awt.headless=true" >> $GITHUB_ENV
 
       - name: Empacota o projeto com Maven
         run: mvn -B package --file pom.xml -DskipTests
