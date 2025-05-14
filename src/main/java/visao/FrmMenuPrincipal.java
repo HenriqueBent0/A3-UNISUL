@@ -247,8 +247,7 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuSobreMouseClicked
 
     private void jMenuHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuHistoricoActionPerformed
- FrmHistoricoDeEmprestimos menu = new FrmHistoricoDeEmprestimos();
-        menu.setVisible (true);
+ 
     }//GEN-LAST:event_jMenuHistoricoActionPerformed
 
     private void jMenuMovimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMovimentoActionPerformed

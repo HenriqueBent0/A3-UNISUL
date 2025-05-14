@@ -2,7 +2,6 @@ package controle;
 
 import visao.FrmCadastrarAmigo;
 import servico.AmigoService;
-import javax.swing.JOptionPane;
 
 public class AmigoController {
     
@@ -19,12 +18,12 @@ public class AmigoController {
     }
 
     // Método para cadastrar amigo
-    private void cadastrar() {
+    public void cadastrar() {
         String nome = this.tela.getJTFNome().getText();
         String telefoneStr = this.tela.getJTFTelefone().getText();
 
         if (nome.isEmpty() || telefoneStr.isEmpty()) {
-            JOptionPane.showMessageDialog(tela, "Todos os campos devem ser preenchidos.", "Erro", JOptionPane.ERROR_MESSAGE);
+            tela.mostrarMensagem("Todos os campos devem ser preenchidos.");
             return;
         }
 
@@ -36,13 +35,13 @@ public class AmigoController {
             boolean sucesso = amigoService.insertAmigoBD(nome, id, telefone);
 
             if (sucesso) {
-                JOptionPane.showMessageDialog(tela, "Amigo cadastrado com sucesso!");
+                tela.mostrarMensagem("Amigo cadastrado com sucesso!");
                 this.tela.dispose(); // Fecha a tela após sucesso
             } else {
-                JOptionPane.showMessageDialog(tela, "Erro ao cadastrar o amigo.", "Erro", JOptionPane.ERROR_MESSAGE);
+                tela.mostrarMensagem("Erro ao cadastrar o amigo.");
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(tela, "Telefone deve ser um número válido.", "Erro", JOptionPane.ERROR_MESSAGE);
+            tela.mostrarMensagem("Telefone deve ser um número válido.");
         }
     }
 

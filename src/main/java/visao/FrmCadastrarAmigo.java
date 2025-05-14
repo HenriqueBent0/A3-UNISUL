@@ -1,7 +1,9 @@
 package visao;
 
+import controle.AmigoController;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
@@ -9,6 +11,9 @@ import javax.swing.JTextField;
  */
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
+    private String mensagem;
+    AmigoController amigoController;
+    
     public FrmCadastrarAmigo() {
         initComponents(); 
     }
@@ -118,7 +123,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JTFTelefoneActionPerformed
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-
+      amigoController.cadastrar();
     }
 
     /**
@@ -154,6 +159,14 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 
+    public String getMensagem() {
+        return mensagem;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
+    
     public JButton getJBCadastrar() {
         return JBCadastrar;
     }
@@ -209,5 +222,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     public void setjLabel3(JLabel jLabel3) {
         this.jLabel3 = jLabel3;
     }
-
+public void mostrarMensagem(String mensagem) {
+        JOptionPane.showMessageDialog(null, mensagem);
+    }
 }
