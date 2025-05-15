@@ -1,20 +1,24 @@
 package visao;
 
-import servico.FerramentaService;
+import controle.FerramentaController;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 /**
  * Classe responsável pela interface gráfica de cadastro de ferramenta.
  */
 public class FrmCadastrarFerramenta extends javax.swing.JFrame {
 
-    private FerramentaService ferramentaService; // Objeto para interação com a classe FerramentaDAO
+    private String mensagem;
+    private FerramentaController ferramentaController;
 
-    /**
-     * Construtor da classe FrmCadastrarFerramenta.
-     */
+    ;
+    
     public FrmCadastrarFerramenta() {
-        initComponents(); // Inicializa os componentes da interface gráfica
-        ferramentaService = new FerramentaService(); // Cria uma instância da classe FerramentaDAO
+        initComponents();
+        this.ferramentaController = new FerramentaController(this);
     }
 
     @SuppressWarnings("unchecked")
@@ -112,7 +116,7 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-        cadastrar();
+        ferramentaController.cadastrar();
     }//GEN-LAST:event_JBCadastrarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
@@ -165,19 +169,96 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     // End of variables declaration//GEN-END:variables
 
-    private void cadastrar() {
-        String nome = this.JTFNome.getText();
-        String marca = this.JTFMarca.getText();
-        int valor = Integer.parseInt(this.JTFValor.getText());
-
-        // Chama o serviço para cadastrar a ferramenta
-        boolean sucesso = ferramentaService.insertFerramentaBD(nome, marca, valor);
-
-        if (sucesso) {
-            // Limpa campos da interface após sucesso
-            this.JTFNome.setText("");
-            this.JTFMarca.setText("");
-            this.JTFValor.setText("");
-        }
+    public void mostrarMensagem(String mensagem) {
+        JOptionPane.showMessageDialog(null, mensagem);
     }
+
+    public String getMensagem() {
+        return mensagem;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
+
+    public FerramentaController getFerramentaController() {
+        return ferramentaController;
+    }
+
+    public void setFerramentaController(FerramentaController ferramentaController) {
+        this.ferramentaController = ferramentaController;
+    }
+
+    public JButton getJBCadastrar() {
+        return JBCadastrar;
+    }
+
+    public void setJBCadastrar(JButton JBCadastrar) {
+        this.JBCadastrar = JBCadastrar;
+    }
+
+    public JButton getJBCancelar() {
+        return JBCancelar;
+    }
+
+    public void setJBCancelar(JButton JBCancelar) {
+        this.JBCancelar = JBCancelar;
+    }
+
+    public JTextField getJTFMarca() {
+        return JTFMarca;
+    }
+
+    public void setJTFMarca(JTextField JTFMarca) {
+        this.JTFMarca = JTFMarca;
+    }
+
+    public JTextField getJTFNome() {
+        return JTFNome;
+    }
+
+    public void setJTFNome(JTextField JTFNome) {
+        this.JTFNome = JTFNome;
+    }
+
+    public JTextField getJTFValor() {
+        return JTFValor;
+    }
+
+    public void setJTFValor(JTextField JTFValor) {
+        this.JTFValor = JTFValor;
+    }
+
+    public JLabel getjLabel1() {
+        return jLabel1;
+    }
+
+    public void setjLabel1(JLabel jLabel1) {
+        this.jLabel1 = jLabel1;
+    }
+
+    public JLabel getjLabel2() {
+        return jLabel2;
+    }
+
+    public void setjLabel2(JLabel jLabel2) {
+        this.jLabel2 = jLabel2;
+    }
+
+    public JLabel getjLabel3() {
+        return jLabel3;
+    }
+
+    public void setjLabel3(JLabel jLabel3) {
+        this.jLabel3 = jLabel3;
+    }
+
+    public JLabel getjLabel4() {
+        return jLabel4;
+    }
+
+    public void setjLabel4(JLabel jLabel4) {
+        this.jLabel4 = jLabel4;
+    }
+
 }
