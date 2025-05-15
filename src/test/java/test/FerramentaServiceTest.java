@@ -4,116 +4,121 @@ import dao.FerramentaDAO;
 import modelo.Ferramenta;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.MockedStatic;
 
-import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+
 import servico.FerramentaService;
 
 public class FerramentaServiceTest {
 
-    private FerramentaDAO ferramentaDAOMock;
-    private FerramentaService ferramentaService;
+    private FerramentaDAO daoMock;
+    private FerramentaService service;
 
     @BeforeEach
     public void setUp() {
-        ferramentaDAOMock = mock(FerramentaDAO.class);
-        ferramentaService = new FerramentaService() {
-            {
-                this.ferramentaDAO = ferramentaDAOMock; // Injeção do mock
-            }
-        };
+        daoMock = mock(FerramentaDAO.class);
+        service = new FerramentaService(daoMock);
     }
 
     @Test
-    public void testCadastrarFerramenta_ComDadosValidos_DeveRetornarTrue() {
-        try (MockedStatic<JOptionPane> mocked = mockStatic(JOptionPane.class)) {
-            when(ferramentaDAOMock.insertFerramentaBD(any(Ferramenta.class))).thenReturn(true);
+    public void testInsertFerramentaBD_Success() {
+        when(daoMock.maiorID()).thenReturn(10);
+        when(daoMock.insertFerramentaBD(any(Ferramenta.class))).thenReturn(true);
 
-            boolean resultado = ferramentaService.cadastrarFerramenta("Martelo", "Tramontina", "100");
+        boolean result = service.insertFerramentaBD("Martelo", "Tramontina", 100);
 
-            assertTrue(resultado);
-            verify(ferramentaDAOMock, times(1)).insertFerramentaBD(any(Ferramenta.class));
-        }
+        assertTrue(result);
+        verify(daoMock, times(1)).insertFerramentaBD(any(Ferramenta.class));
     }
 
     @Test
-    public void testCadastrarFerramenta_NomeInvalido_DeveRetornarFalse() {
-        try (MockedStatic<JOptionPane> mocked = mockStatic(JOptionPane.class)) {
-            boolean resultado = ferramentaService.cadastrarFerramenta("A", "Tramontina", "100");
+    public void testInsertFerramentaBD_Failure() {
+        when(daoMock.maiorID()).thenReturn(5);
+        when(daoMock.insertFerramentaBD(any(Ferramenta.class))).thenReturn(false);
 
-            assertFalse(resultado);
-            verify(ferramentaDAOMock, never()).insertFerramentaBD(any(Ferramenta.class));
-        }
+        boolean result = service.insertFerramentaBD("Martelo", "Tramontina", 100);
+
+        assertFalse(result);
+        verify(daoMock, times(1)).insertFerramentaBD(any(Ferramenta.class));
     }
 
     @Test
-    public void testCadastrarFerramenta_ValorVazio_DeveRetornarFalse() {
-        try (MockedStatic<JOptionPane> mocked = mockStatic(JOptionPane.class)) {
-            boolean resultado = ferramentaService.cadastrarFerramenta("Martelo", "Tramontina", "");
+    public void testDeleteFerramentaBD_Success() {
+        when(daoMock.deleteFerramentaBD(1)).thenReturn(true);
 
-            assertFalse(resultado);
-            verify(ferramentaDAOMock, never()).insertFerramentaBD(any(Ferramenta.class));
-        }
+        boolean result = service.deleteFerramentaBD(1);
+
+        assertTrue(result);
+        verify(daoMock, times(1)).deleteFerramentaBD(1);
     }
 
     @Test
-    public void testCadastrarFerramenta_ValorInvalido_DeveRetornarFalse() {
-        try (MockedStatic<JOptionPane> mocked = mockStatic(JOptionPane.class)) {
-            boolean resultado = ferramentaService.cadastrarFerramenta("Martelo", "Tramontina", "abc");
+    public void testDeleteFerramentaBD_Failure() {
+        when(daoMock.deleteFerramentaBD(1)).thenReturn(false);
 
-            assertFalse(resultado);
-            verify(ferramentaDAOMock, never()).insertFerramentaBD(any(Ferramenta.class));
-        }
+        boolean result = service.deleteFerramentaBD(1);
+
+        assertFalse(result);
+        verify(daoMock, times(1)).deleteFerramentaBD(1);
     }
 
     @Test
-    public void testCadastrarFerramenta_FalhaNaInsercao_DeveRetornarFalse() {
-        try (MockedStatic<JOptionPane> mocked = mockStatic(JOptionPane.class)) {
-            when(ferramentaDAOMock.insertFerramentaBD(any(Ferramenta.class))).thenReturn(false);
+    public void testUpdateFerramentaBD_Success() {
+        when(daoMock.updateFerramentaBD(1, "Chave", "Gedore", 50)).thenReturn(true);
 
-            boolean resultado = ferramentaService.cadastrarFerramenta("Martelo", "Tramontina", "100");
+        boolean result = service.updateFerramentaBD(1, "Chave", "Gedore", 50);
 
-            assertFalse(resultado);
-            verify(ferramentaDAOMock, times(1)).insertFerramentaBD(any(Ferramenta.class));
-        }
-    }
-    
-        @Test
-    public void testConstrutorPadrao_DeveInicializarComValoresPadrao() {
-        Ferramenta ferramenta = new Ferramenta();
-
-        assertEquals(0, ferramenta.getId());
-        assertEquals("", ferramenta.getNome());
-        assertEquals("", ferramenta.getMarca());
-        assertEquals(0, ferramenta.getValor());
+        assertTrue(result);
+        verify(daoMock, times(1)).updateFerramentaBD(1, "Chave", "Gedore", 50);
     }
 
     @Test
-    public void testConstrutorComParametros_DeveInicializarComValoresInformados() {
-        Ferramenta ferramenta = new Ferramenta(1, "Chave de Fenda", "Philips", 50);
+    public void testUpdateFerramentaBD_Failure() {
+        when(daoMock.updateFerramentaBD(1, "Chave", "Gedore", 50)).thenReturn(false);
 
-        assertEquals(1, ferramenta.getId());
-        assertEquals("Chave de Fenda", ferramenta.getNome());
-        assertEquals("Philips", ferramenta.getMarca());
-        assertEquals(50, ferramenta.getValor());
+        boolean result = service.updateFerramentaBD(1, "Chave", "Gedore", 50);
+
+        assertFalse(result);
+        verify(daoMock, times(1)).updateFerramentaBD(1, "Chave", "Gedore", 50);
     }
 
     @Test
-    public void testSettersAndGetters() {
-        Ferramenta ferramenta = new Ferramenta();
+    public void testCarregaFerramenta() {
+        Ferramenta ferramenta = new Ferramenta(1, "Furadeira", "Bosch", 300);
+        when(daoMock.carregaFerramenta(1)).thenReturn(ferramenta);
 
-        ferramenta.setId(2);
-        ferramenta.setNome("Alicate");
-        ferramenta.setMarca("Gedore");
-        ferramenta.setValor(75);
+        Ferramenta resultado = service.carregaFerramenta(1);
 
-        assertEquals(2, ferramenta.getId());
-        assertEquals("Alicate", ferramenta.getNome());
-        assertEquals("Gedore", ferramenta.getMarca());
-        assertEquals(75, ferramenta.getValor());
+        assertNotNull(resultado);
+        assertEquals("Furadeira", resultado.getNome());
+        verify(daoMock, times(1)).carregaFerramenta(1);
     }
-    
+
+    @Test
+    public void testGetListaFerramenta() {
+        ArrayList<Ferramenta> lista = new ArrayList<>(Arrays.asList(
+                new Ferramenta(1, "Martelo", "Tramontina", 100),
+                new Ferramenta(2, "Chave de Fenda", "Philips", 50)
+        ));
+        when(daoMock.getListaFerramenta()).thenReturn(lista);
+
+        ArrayList<Ferramenta> resultado = service.getListaFerramenta();
+
+        assertEquals(2, resultado.size());
+        verify(daoMock, times(1)).getListaFerramenta();
+    }
+
+    @Test
+    public void testMaiorID() {
+        when(daoMock.maiorID()).thenReturn(42);
+
+        int maiorID = service.maiorID();
+
+        assertEquals(42, maiorID);
+        verify(daoMock, times(1)).maiorID();
+    }
 }

@@ -2,48 +2,45 @@ package servico;
 
 import dao.FerramentaDAO;
 import modelo.Ferramenta;
-import javax.swing.JOptionPane;
+import java.util.ArrayList;
 
 public class FerramentaService {
 
-    public FerramentaDAO ferramentaDAO;
+    private FerramentaDAO dao;
 
+    // Construtor padrão (uso real com banco)
     public FerramentaService() {
-        ferramentaDAO = new FerramentaDAO(); // Cria uma instância do DAO
+        this.dao = new FerramentaDAO();
     }
 
-    public boolean cadastrarFerramenta(String nome, String marca, String valorTexto) {
-        // Valida os dados de entrada
-        if (nome.length() < 2) {
-            JOptionPane.showMessageDialog(null, "Nome deve conter ao menos 2 caracteres.");
-            return false;
-        }
+    // Construtor alternativo para testes com mock do DAO
+    public FerramentaService(FerramentaDAO dao) {
+        this.dao = dao;
+    }
 
-        if (valorTexto.length() <= 0) {
-            JOptionPane.showMessageDialog(null, "Digite um valor válido!");
-            return false;
-        }
+    public boolean insertFerramentaBD(String nome, String marca, int valor) {
+        int id = this.maiorID() + 1;
+        Ferramenta ferramenta = new Ferramenta(id, nome, marca, valor);
+        return dao.insertFerramentaBD(ferramenta);
+    }
 
-        int valor;
-        try {
-            valor = Integer.parseInt(valorTexto);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Informe um número válido.");
-            return false;
-        }
+    public boolean deleteFerramentaBD(int id) {
+        return dao.deleteFerramentaBD(id);
+    }
 
-        // Cria um novo objeto Ferramenta
-        Ferramenta ferramenta = new Ferramenta(0, nome, marca, valor);
+    public boolean updateFerramentaBD(int id, String nome, String marca, int valor) {
+        return dao.updateFerramentaBD(id, nome, marca, valor);
+    }
 
-        // Chama o método de inserção no banco de dados
-        boolean sucesso = ferramentaDAO.insertFerramentaBD(ferramenta);
+    public Ferramenta carregaFerramenta(int id) {
+        return dao.carregaFerramenta(id);
+    }
 
-        if (sucesso) {
-            JOptionPane.showMessageDialog(null, "Ferramenta Cadastrada com Sucesso!");
-        } else {
-            JOptionPane.showMessageDialog(null, "Erro ao cadastrar ferramenta.");
-        }
+    public ArrayList<Ferramenta> getListaFerramenta() {
+        return dao.getListaFerramenta();
+    }
 
-        return sucesso;
+    public int maiorID() {
+        return dao.maiorID();
     }
 }

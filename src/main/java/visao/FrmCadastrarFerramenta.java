@@ -1,7 +1,5 @@
 package visao;
 
-
-
 import servico.FerramentaService;
 
 /**
@@ -16,7 +14,7 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
      */
     public FrmCadastrarFerramenta() {
         initComponents(); // Inicializa os componentes da interface gráfica
-         ferramentaService = new FerramentaService(); // Cria uma instância da classe FerramentaDAO
+        ferramentaService = new FerramentaService(); // Cria uma instância da classe FerramentaDAO
     }
 
     @SuppressWarnings("unchecked")
@@ -114,7 +112,7 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-       cadastrar();
+        cadastrar();
     }//GEN-LAST:event_JBCadastrarActionPerformed
 
     private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
@@ -170,10 +168,10 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
     private void cadastrar() {
         String nome = this.JTFNome.getText();
         String marca = this.JTFMarca.getText();
-        String valor = this.JTFValor.getText();
+        int valor = Integer.parseInt(this.JTFValor.getText());
 
         // Chama o serviço para cadastrar a ferramenta
-        boolean sucesso = ferramentaService.cadastrarFerramenta(nome, marca, valor);
+        boolean sucesso = ferramentaService.insertFerramentaBD(nome, marca, valor);
 
         if (sucesso) {
             // Limpa campos da interface após sucesso
@@ -183,6 +181,3 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
         }
     }
 }
-
-
-
