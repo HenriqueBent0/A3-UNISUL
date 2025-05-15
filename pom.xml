@@ -77,9 +77,6 @@
                 <version>3.0.0</version>
                 <configuration>
                     <useModulePath>false</useModulePath>
-                    <systemPropertyVariables>
-                        <java.awt.headless>true</java.awt.headless> <!-- Set headless mode -->
-                    </systemPropertyVariables>
                 </configuration>
             </plugin>
 
