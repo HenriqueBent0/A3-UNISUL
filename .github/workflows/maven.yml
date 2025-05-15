@@ -16,6 +16,12 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v3
 
+      - name: Configura xvfb para tela 0
+        run: Xvfb :1 -screen 0 1600x1200x24 &
+
+      - name: Configura DISPLAY para xvfb
+        run: echo "DISPLAY=:1" >> $GITHUB_ENV
+
       - name: Configura o JDK 18
         uses: actions/setup-java@v3
         with:
@@ -23,11 +29,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Definir variável de ambiente para modo headless
-        run: echo "JAVA_OPTS=-Djava.awt.headless=true" >> $GITHUB_ENV
-
       - name: Compila o projeto com Maven
         run: mvn -B compile --file pom.xml
+
+      - name: Desliga Xvfb
+        run: killall Xvfb
 
   # Ambiente de homologação
   build-hmg:
@@ -40,6 +46,12 @@ jobs:
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Configura xvfb para tela 0
+        run: Xvfb :1 -screen 0 1600x1200x24 &
+
+      - name: Configura DISPLAY para xvfb
+        run: echo "DISPLAY=:1" >> $GITHUB_ENV
 
       - name: Configura o JDK 18
         uses: actions/setup-java@v3
@@ -62,61 +74,6 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Definir variável de ambiente para modo headless
-        run: echo "JAVA_OPTS=-Djava.awt.headless=true" >> $GITHUB_ENV
-
       - name: Testa e analisa com SonarCloud
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn clean verify \
-            org.jacoco:jacoco-maven-plugin:prepare-agent \
-            org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=HenriqueBent0_a3_unisul \
-            -Dsonar.organization=henriquebent0 \
-            -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-
-  # Ambiente de produção
-  build-prd:
-    runs-on: ubuntu-latest
-    environment:
-      name: prd
-    needs: build-hmg
-    steps:
-      - name: Checkout do repositório
-        uses: actions/checkout@v3
-
-      - name: Configura o JDK 18
-        uses: actions/setup-java@v3
-        with:
-          java-version: '18'
-          distribution: 'temurin'
-          cache: maven
-
-      - name: Definir variável de ambiente para modo headless
-        run: echo "JAVA_OPTS=-Djava.awt.headless=true" >> $GITHUB_ENV
-
-      - name: Empacota o projeto com Maven
-        run: mvn -B package --file pom.xml -DskipTests
-
-      - name: Cria diretório temporário
-        run: mkdir staging
-
-      - name: Copia o JAR para o diretório temporário
-        run: cp target/*jar-with-dependencies.jar staging
-
-      - name: Upload do artefato gerado
-        uses: actions/upload-artifact@v4
-        with:
-          name: Package
-          path: staging
-
-  # Ajustando para modo headless
-  set-headless:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Definir variável de ambiente para modo headless
-        run: echo "JAVA_OPTS=-Djava.awt.headless=true" >> $GITHUB_ENV
