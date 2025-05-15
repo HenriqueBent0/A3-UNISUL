@@ -15,12 +15,10 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     AmigoController amigoController;
     
     public FrmCadastrarAmigo(){
-        initComponents();
-    }
-    private void FrmCadastrarAmigo() {
         initComponents(); 
         this.amigoController = new AmigoController(this);
     }
+   
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents

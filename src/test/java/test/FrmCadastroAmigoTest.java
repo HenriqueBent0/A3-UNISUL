@@ -59,5 +59,16 @@ public class FrmCadastroAmigoTest {
         assertEquals("Amigo cadastrado com sucesso!", telaFake.getMensagem());
     }
 
-    
+    @Test
+    public void deveExibirMensagemDeErroQuandoInsercaoFalha() {
+        telaFake.getJTFNome().setText("Carlos");
+        telaFake.getJTFTelefone().setText("987654");
+
+        when(amigoServiceMock.maiorID()).thenReturn(5);
+        when(amigoServiceMock.insertAmigoBD(anyString(), anyInt(), anyInt())).thenReturn(false);
+
+        controller.cadastrar();
+
+        assertEquals("Erro ao cadastrar amigo.", telaFake.getMensagem());
+    }
 }
