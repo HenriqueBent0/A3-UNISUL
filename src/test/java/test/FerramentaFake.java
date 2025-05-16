@@ -1,6 +1,5 @@
 package test;
 
-import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 import visao.FrmCadastrarFerramenta;
 
 /**
@@ -12,11 +11,7 @@ import visao.FrmCadastrarFerramenta;
 
 public class FerramentaFake extends FrmCadastrarFerramenta {
 
-    public FerramentaFake() {
 
-        super();
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-    }
 
     @Override
     public void mostrarMensagem(String mensagem) {

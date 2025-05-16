@@ -8,11 +8,6 @@ import visao.FrmCadastrarAmigo;
  */
 public class AmigoFake extends FrmCadastrarAmigo {
 
-    public AmigoFake() {
-        
-        super(); 
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);  
-    }
 
     @Override
     public void mostrarMensagem(String mensagem) {
