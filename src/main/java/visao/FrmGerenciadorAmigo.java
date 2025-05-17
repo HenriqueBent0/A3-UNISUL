@@ -1,27 +1,20 @@
 package visao;
 
-import dao.AmigoDAO;
-import modelo.Amigo;
-import java.util.ArrayList;
+import controle.GerenciadorAmigoController;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import servico.AmigoService;
+
 
 /**
  * Classe responsável pela interface gráfica de gerenciador de amigo.
  */
 public class FrmGerenciadorAmigo extends javax.swing.JFrame {
 
-    private AmigoService amigoService;
+    private GerenciadorAmigoController controller;
 
-    /**
-     * Construtor da classe FrmGerenciadorDeAmigo.
-     */
     public FrmGerenciadorAmigo() {
-        initComponents(); // Inicializa os componentes da interface gráfica
-        this.amigoService = new AmigoService(); //Carrega objetoamigo de Amigo
-        this.carregaTabela(); // Inicializa a Tabela
-
+        initComponents();
+        controller = new GerenciadorAmigoController(this); // Cria o controlador
+        carregaTabela(); // Inicializa a Tabela
     }
 
     @SuppressWarnings("unchecked")
@@ -190,11 +183,11 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JBCancelarActionPerformed
 
     private void JBApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBApagarActionPerformed
-          apagar();
+           controller.apagarAmigo();
     }//GEN-LAST:event_JBApagarActionPerformed
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
-          editar();
+          controller.editarAmigo();
         
     }//GEN-LAST:event_JBEditarActionPerformed
 
@@ -245,119 +238,51 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-public void apagar(){
-     try {
-            int id = 0;
-            String nome = "";
-            int telefone = 0;
-
-            // Verifica se algum amigo foi selecionado na tabela
-            if (this.JTableAmigos.getSelectedRow() == -1) {
-                throw new Mensagem("Selecione um Amigo para apagar primeiro");
-            } else {
-                // Obtém o ID do amigo selecionado
-                id = Integer.parseInt(this.JTableAmigos.getValueAt(this.JTableAmigos.getSelectedRow(), 0).toString());
-            }
-
-            // Pergunta ao usuário se ele tem certeza que deseja apagar o amigo
-            int respostaUsuario = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja apagar este Amigo?");
-
-            // Se o usuário confirmar a exclusão, prossegue com a exclusão
-            if (respostaUsuario == 0) {
-                // Apaga o amigo do banco de dados
-                if (amigoService.deleteAmigoBD(id)) {
-                    // Limpa os campos de texto e exibe uma mensagem de sucesso
-                    this.JTFNome.setText("");
-                    this.JTFTelefone.setText("");
-                    JOptionPane.showMessageDialog(rootPane, "Amigo Apagado com Sucesso.");
-                }
-            }
-
-            // Exibe a lista atualizada de amigos após a exclusão
-            System.out.println(amigoService.getListaAmigo().toString());
-        } catch (Mensagem erro) {
-            // Exibe mensagem de erro se houver algum problema
-            JOptionPane.showMessageDialog(null, erro.getMessage());
-        } finally {
-            // Recarrega a tabela de amigos após a exclusão (mesmo que não tenha sido realizada)
-            carregaTabela();
-
-        }
-}
-public void editar(){
-    
-
-           try {
-            int id = 0;
-            String nome = "";
-            int telefone = 0;
-
-            // Verifica se o campo de nome está preenchido
-            if (this.JTFNome.getText().length() < 1) {
-                throw new Mensagem("Nome deve conter ao menos 1 caracteres.");
-            } else {
-                // Obtém o nome do amigo a ser editado
-                nome = this.JTFNome.getText();
-            }
-
-            // Verifica se o campo de telefone está preenchido corretamente
-            if (this.JTFTelefone.getText().length() < 9 && this.JTFTelefone.getText().length() < 10) {
-                throw new Mensagem("O Telefone deve ter 9 digitos.");
-            } else {
-                // Obtém o telefone do amigo a ser editado
-                telefone = Integer.parseInt(this.JTFTelefone.getText());
-            }
-
-            // Verifica se algum amigo foi selecionado na tabela
-            if (this.JTableAmigos.getSelectedRow() == -1) {
-                throw new Mensagem("Escolha um Amigo para Editar Primeiro");
-            } else {
-                // Obtém o ID do amigo selecionado
-                id = Integer.parseInt(this.JTableAmigos.getValueAt(this.JTableAmigos.getSelectedRow(), 0).toString());
-            }
-
-            // Realiza a edição do amigo no banco de dados
-            if (amigoService.updateAmigoBD(nome, id, telefone)) {
-                // Limpa os campos de texto e exibe uma mensagem de sucesso
-                this.JTFNome.setText("");
-                this.JTFTelefone.setText("");
-                JOptionPane.showMessageDialog(null, "Amigo Editado com sucesso.");
-            }
-
-            // Exibe a lista atualizada de amigos após a edição
-            System.out.println(amigoService.getListaAmigo().toString());
-        } catch (Mensagem erro) {
-            // Exibe mensagem de erro se houver algum problema
-            JOptionPane.showMessageDialog(null, erro.getMessage());
-        } catch (NumberFormatException erro2) {
-            // Exibe mensagem de erro se o telefone informado não for um número válido
-            JOptionPane.showMessageDialog(null, "Informe um número válido.");
-        } finally {
-            // Recarrega a tabela de amigos após a edição (mesmo que não tenha sido realizada)
-            carregaTabela();
-        }
-}
-public void carregaTabela() {
-        DefaultTableModel modelo = (DefaultTableModel) this.JTableAmigos.getModel();
-        modelo.setNumRows(0);
-        ArrayList<Amigo> minhaLista = amigoService.getListaAmigo(); //Obtem lista de amigos do DAO
-        for (Amigo a : minhaLista) {
-            modelo.addRow(new Object[]{
-                a.getId(),
-                a.getNome(),
-                a.getTelefone(),});
-        }
+  public String getJTFNome() {
+        return JTFNome.getText();
     }
-public void carregarTabelaGerenciador(){
-     // Verifica se algum amigo foi selecionado na tabela
-        if (this.JTableAmigos.getSelectedRow() != -1) {
-            String nome = this.JTableAmigos.getValueAt(this.JTableAmigos.getSelectedRow(), 1).toString();
-            String telefone = this.JTableAmigos.getValueAt(this.JTableAmigos.getSelectedRow(), 2).toString();
 
-            // Preenche os campos de texto com os dados do amigo selecionado
-            this.JTFNome.setText(nome);
-            this.JTFTelefone.setText(telefone);
+    public void setJTFNome(String nome) {
+        JTFNome.setText(nome);
+    }
 
-        }
-}
+    public String getJTFTelefone() {
+        return JTFTelefone.getText();
+    }
+
+    public void setJTFTelefone(String telefone) {
+        JTFTelefone.setText(telefone);
+    }
+
+    public javax.swing.JTable getJTableAmigos() {
+        return JTableAmigos;
+    }
+
+    public void clearFields() {
+        JTFNome.setText("");
+        JTFTelefone.setText("");
+    }
+
+    public void clearTable() {
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) JTableAmigos.getModel();
+        modelo.setNumRows(0);
+    }
+
+    public void addRowToTable(int id, String nome, int telefone) {
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) JTableAmigos.getModel();
+        modelo.addRow(new Object[]{id, nome, telefone});
+    }
+
+    public void carregaTabela() {
+        controller.carregarTabela();
+    }
+
+    public void carregarTabelaGerenciador() {
+        controller.carregarTabelaGerenciador();
+    }
+    public void mostrarMensagem(String mensagem) {
+        JOptionPane.showMessageDialog(null, mensagem);
+    }
+
+    
 }
