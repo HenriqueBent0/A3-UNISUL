@@ -10,7 +10,8 @@ import javax.swing.JOptionPane;
 public class FrmGerenciadorAmigo extends javax.swing.JFrame {
 
     private GerenciadorAmigoController controller;
-
+    private String mensagem;
+    
     public FrmGerenciadorAmigo() {
         initComponents();
         controller = new GerenciadorAmigoController(this); // Cria o controlador
@@ -219,7 +220,7 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmGerenciadorAmigo().setVisible(true);
+                
             }
         });
     }
@@ -282,6 +283,14 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
     }
     public void mostrarMensagem(String mensagem) {
         JOptionPane.showMessageDialog(null, mensagem);
+    }
+
+    public String getMensagem() {
+        return mensagem;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
     }
 
     
