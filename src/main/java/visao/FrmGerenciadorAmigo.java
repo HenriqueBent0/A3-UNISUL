@@ -1,8 +1,12 @@
 package visao;
 
 import controle.GerenciadorAmigoController;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  * Classe responsável pela interface gráfica de gerenciador de amigo.
@@ -11,7 +15,7 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
 
     private GerenciadorAmigoController controller;
     private String mensagem;
-    
+
     public FrmGerenciadorAmigo() {
         initComponents();
         controller = new GerenciadorAmigoController(this); // Cria o controlador
@@ -184,14 +188,13 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JBCancelarActionPerformed
 
     private void JBApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBApagarActionPerformed
-           controller.apagarAmigo();
+        controller.apagarAmigo();
     }//GEN-LAST:event_JBApagarActionPerformed
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
-          controller.editarAmigo();
-        
-    }//GEN-LAST:event_JBEditarActionPerformed
+        controller.editarAmigo();
 
+    }//GEN-LAST:event_JBEditarActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -220,7 +223,7 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                
+
             }
         });
     }
@@ -239,7 +242,7 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-  public String getJTFNome() {
+    public String getJTFNome() {
         return JTFNome.getText();
     }
 
@@ -281,6 +284,7 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
     public void carregarTabelaGerenciador() {
         controller.carregarTabelaGerenciador();
     }
+
     public void mostrarMensagem(String mensagem) {
         JOptionPane.showMessageDialog(null, mensagem);
     }
@@ -293,5 +297,88 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
         this.mensagem = mensagem;
     }
 
-    
+    public void setController(GerenciadorAmigoController controller) {
+        this.controller = controller;
+    }
+
+    public void setJBApagar(JButton JBApagar) {
+        this.JBApagar = JBApagar;
+    }
+
+    public void setJBCancelar(JButton JBCancelar) {
+        this.JBCancelar = JBCancelar;
+    }
+
+    public void setJBEditar(JButton JBEditar) {
+        this.JBEditar = JBEditar;
+    }
+
+    public void setJTFNome(JTextField JTFNome) {
+        this.JTFNome = JTFNome;
+    }
+
+    public void setJTFTelefone(JTextField JTFTelefone) {
+        this.JTFTelefone = JTFTelefone;
+    }
+
+    public void setJTableAmigos(JTable JTableAmigos) {
+        this.JTableAmigos = JTableAmigos;
+    }
+
+    public void setjLabel1(JLabel jLabel1) {
+        this.jLabel1 = jLabel1;
+    }
+
+    public void setjLabel2(JLabel jLabel2) {
+        this.jLabel2 = jLabel2;
+    }
+
+    public void setjLabel3(JLabel jLabel3) {
+        this.jLabel3 = jLabel3;
+    }
+
+    public void setjLabel4(JLabel jLabel4) {
+        this.jLabel4 = jLabel4;
+    }
+
+    public void setjScrollPane1(JScrollPane jScrollPane1) {
+        this.jScrollPane1 = jScrollPane1;
+    }
+
+    public GerenciadorAmigoController getController() {
+        return controller;
+    }
+
+    public JButton getJBApagar() {
+        return JBApagar;
+    }
+
+    public JButton getJBCancelar() {
+        return JBCancelar;
+    }
+
+    public JButton getJBEditar() {
+        return JBEditar;
+    }
+
+    public JLabel getjLabel1() {
+        return jLabel1;
+    }
+
+    public JLabel getjLabel2() {
+        return jLabel2;
+    }
+
+    public JLabel getjLabel3() {
+        return jLabel3;
+    }
+
+    public JLabel getjLabel4() {
+        return jLabel4;
+    }
+
+    public JScrollPane getjScrollPane1() {
+        return jScrollPane1;
+    }
+
 }

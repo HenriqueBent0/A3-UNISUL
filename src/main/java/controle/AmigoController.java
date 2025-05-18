@@ -63,4 +63,6 @@ public class AmigoController {
         tela.getJTFNome().setText("");
         tela.getJTFTelefone().setText("");
     }
+    
+    
 }
