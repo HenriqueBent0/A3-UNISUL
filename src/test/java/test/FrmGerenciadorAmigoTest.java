@@ -1,6 +1,7 @@
 package test;
 
 import controle.GerenciadorAmigoController;
+import test.AmigoDAOFake;
 import modelo.Amigo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,9 +9,6 @@ import servico.AmigoService;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,14 +21,32 @@ class GerenciadorAmigoTest {
     @BeforeEach
     void setUp() {
         fakeView = new GerenciadorAmigoFake();
-        amigoService = new AmigoServiceFake(); // você precisa criar essa classe também (um mock/fake do AmigoService)
+
+        // Aqui instancia o DAO Fake
+        AmigoDAOFake daoFake = new AmigoDAOFake();
+
+        // Injeta o DAO Fake no serviço
+        amigoService = new AmigoService(daoFake);
+
+        // Cria o controller com a view fake e o serviço com DAO fake
         controller = new GerenciadorAmigoController(fakeView, amigoService);
 
-        // Configura a tabela com colunas simuladas
+        // Configura a tabela simulada com colunas: ID, Nome, Telefone
         String[] colunas = {"ID", "Nome", "Telefone"};
         DefaultTableModel model = new DefaultTableModel(colunas, 0);
         JTable tabela = new JTable(model);
         fakeView.setJTableAmigos(tabela);
+
+        // Popular a tabela com os dados do DAO Fake via serviço
+        atualizaTabelaComAmigos();
+    }
+
+    private void atualizaTabelaComAmigos() {
+        DefaultTableModel model = (DefaultTableModel) fakeView.getJTableAmigos().getModel();
+        model.setRowCount(0); // limpa a tabela
+        for (Amigo a : amigoService.getListaAmigo()) {
+            model.addRow(new Object[]{a.getId(), a.getNome(), String.valueOf(a.getTelefone())});
+        }
     }
 
     @Test
@@ -50,7 +66,7 @@ class GerenciadorAmigoTest {
     @Test
     void testEditarAmigoTelefoneInvalido() {
         fakeView.setJTFNome("João");
-        fakeView.setJTFTelefone("abc123");
+        fakeView.setJTFTelefone("abc123");  // inválido
         controller.editarAmigo();
         assertEquals("O Telefone deve ter entre 9 e 10 dígitos.", fakeView.getMensagem());
     }
@@ -65,17 +81,21 @@ class GerenciadorAmigoTest {
 
     @Test
     void testEditarAmigoComSucesso() {
-        // Prepara a tabela com um amigo selecionado
-        DefaultTableModel model = (DefaultTableModel) fakeView.getJTableAmigos().getModel();
-        model.addRow(new Object[]{1, "Carlos", "987654321"});
+        // Seleciona o primeiro amigo da tabela (que já foi populada no setUp)
         fakeView.getJTableAmigos().setRowSelectionInterval(0, 0);
 
-        fakeView.setJTFNome("Carlos");
+        fakeView.setJTFNome("Carlos Editado");
         fakeView.setJTFTelefone("987654321");
 
         controller.editarAmigo();
 
         assertEquals("Amigo Editado com sucesso.", fakeView.getMensagem());
-    }
 
+        // Atualiza a tabela para refletir edição (se seu controller não faz isso automaticamente)
+        atualizaTabelaComAmigos();
+
+        // Confere se o nome foi realmente atualizado no serviço
+        Amigo a = amigoService.carregaAmigo(1);  // id do primeiro amigo
+        assertEquals("Carlos Editado", a.getNome());
+    }
 }

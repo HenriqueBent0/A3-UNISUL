@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class AmigoService {
 
-    private AmigoDAO dao;
+    public AmigoDAO dao;
 
     // Construtor padrão (uso normal com banco de dados real)
     public AmigoService() {
@@ -44,4 +44,13 @@ public class AmigoService {
     public int maiorID() {
         return dao.maiorID();
     }
+
+    public AmigoDAO getDao() {
+        return dao;
+    }
+
+    public void setDao(AmigoDAO dao) {
+        this.dao = dao;
+    }
+    
 }
