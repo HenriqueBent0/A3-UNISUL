@@ -81,4 +81,14 @@ void testConstrutorPadrao(){
     AmigoService servicePadrao = new AmigoService();
     assertNotNull(servicePadrao);
 }
+@Test
+@Order(6)
+void testGetAndSetDao() {
+    AmigoService service = new AmigoService();
+    AmigoDAO mockDao = mock(AmigoDAO.class);
+    
+    service.setDao(mockDao);
+    assertEquals(mockDao, service.getDao());
+}
+
 }

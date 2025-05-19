@@ -255,6 +255,14 @@ void testGetListaAmigo_ComSQLException_Tratamento() throws SQLException {
     
     assertEquals(mockConnection, ConexaoDAO.getConexao(), "A conexão não foi reatribuída corretamente");
 }
+@Test
+void testCarregaAmigo_ComSQLException() throws SQLException {
+    when(mockConnection.prepareStatement(anyString())).thenThrow(new SQLException("Erro ao carregar amigo"));
+
+    Amigo resultado = amigoDAO.carregaAmigo(1);
+
+    assertNull(resultado); // Esperado, pois houve exceção
+}
 
 
 }

@@ -239,4 +239,13 @@ class FerramentaDAOTest {
         assertTrue(resultado.isEmpty());
         assertEquals(mockConnection, ConexaoDAO.getConexao());
     }
+    @Test
+void testCarregaFerramenta_ComErroSQL() throws SQLException {
+    when(mockConnection.prepareStatement(anyString())).thenThrow(new SQLException("Erro simulado"));
+
+    Ferramenta resultado = ferramentaDAO.carregaFerramenta(123);
+
+    assertNull(resultado); // Como o método retorna null no catch
+}
+
 }
