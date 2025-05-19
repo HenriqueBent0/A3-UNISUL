@@ -14,6 +14,10 @@ public class GerenciadorAmigoController {
         this.amigoService = amigoService;
     }
 
+    public void setView(FrmGerenciadorAmigo view) {
+        this.view = view;
+    }
+
     // Lógica de apagar amigo
     public void apagarAmigo() {
         try {

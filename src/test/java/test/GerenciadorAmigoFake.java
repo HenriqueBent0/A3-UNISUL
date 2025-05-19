@@ -1,16 +1,17 @@
-
 package test;
+
+import controle.GerenciadorAmigoController;
 import visao.FrmGerenciadorAmigo;
 
-
 public class GerenciadorAmigoFake extends FrmGerenciadorAmigo {
-    @Override
-    public void mostrarMensagem(String mensagem) {
-        //Atribui a mensagem ao atributo para ser utilizado nos testes
-        setMensagem(mensagem);
 
-        //Mostra a mensagem
-        System.out.println("Mensagem:" + mensagem);
+    public GerenciadorAmigoFake(GerenciadorAmigoController controller) {
+        super(controller);
     }
 
+    @Override
+    public void mostrarMensagem(String mensagem) {
+        setMensagem(mensagem);
+        System.out.println("Mensagem:" + mensagem);
+    }
 }

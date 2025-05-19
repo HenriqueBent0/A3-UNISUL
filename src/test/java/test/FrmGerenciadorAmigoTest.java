@@ -12,7 +12,7 @@ import javax.swing.table.DefaultTableModel;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class GerenciadorAmigoTest {
+    class GerenciadorAmigoTest {
 
     private GerenciadorAmigoFake fakeView;
     private GerenciadorAmigoController controller;
@@ -20,16 +20,11 @@ class GerenciadorAmigoTest {
 
     @BeforeEach
     void setUp() {
-        fakeView = new GerenciadorAmigoFake();
-
-        // Aqui instancia o DAO Fake
-        AmigoDAOFake daoFake = new AmigoDAOFake();
-
-        // Injeta o DAO Fake no serviço
-        amigoService = new AmigoService(daoFake);
-
-        // Cria o controller com a view fake e o serviço com DAO fake
-        controller = new GerenciadorAmigoController(fakeView, amigoService);
+  
+        amigoService = new AmigoServiceFake();
+        controller = new GerenciadorAmigoController(null, amigoService);
+        fakeView = new GerenciadorAmigoFake(controller);
+        controller.setView(fakeView); // caso precise
 
         // Configura a tabela simulada com colunas: ID, Nome, Telefone
         String[] colunas = {"ID", "Nome", "Telefone"};

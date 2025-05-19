@@ -17,6 +17,12 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
     private GerenciadorAmigoController controller;
     private String mensagem;
 
+    public FrmGerenciadorAmigo(GerenciadorAmigoController controller) {
+        initComponents();
+        this.controller = controller;
+
+    }
+
     public FrmGerenciadorAmigo() {
         initComponents();
 
@@ -24,7 +30,6 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
 
         controller = new GerenciadorAmigoController(this, amigoService);
 
-        carregaTabela();
     }
 
     @SuppressWarnings("unchecked")
