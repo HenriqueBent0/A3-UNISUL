@@ -4,6 +4,11 @@ import controle.FerramentaController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import servico.FerramentaService;
+import visao.FrmCadastrarFerramenta; // Import necessário para acessar a classe real
+
+import javax.swing.JButton;
+import javax.swing.JTextField;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -36,7 +41,7 @@ public class FrmCadastroFerramentaTest {
         assertEquals("O nome não pode estar em branco.", telaFake.getMensagem());
     }
     
-        @Test
+    @Test
     public void deveExibirMensagemDeErroQuandoMarcaEstaVazio() {
         telaFake.getJTFNome().setText("Carlinhos");
         telaFake.getJTFMarca().setText("");
@@ -47,28 +52,25 @@ public class FrmCadastroFerramentaTest {
         assertEquals("A marca não pode estar em branco.", telaFake.getMensagem());
     }
 
-
     @Test
     public void deveCadastrarFerramentaComSucesso() {
         telaFake.getJTFNome().setText("Maria");
         telaFake.getJTFMarca().setText("samsung");
         telaFake.getJTFValor().setText("123456");
 
-        // Simulando o retorno de maiorID e a inserção no banco
-        when(ferramentaServiceMock.maiorID()).thenReturn(10); // Retorna ID maior 10
-        when(ferramentaServiceMock.insertFerramentaBD(anyString(), anyString(), anyInt())).thenReturn(true); // Simula inserção com sucesso
+        when(ferramentaServiceMock.maiorID()).thenReturn(10);
+        when(ferramentaServiceMock.insertFerramentaBD(anyString(), anyString(), anyInt())).thenReturn(true);
 
         controller.cadastrar();
 
         assertEquals("Ferramenta cadastrada com sucesso!", telaFake.getMensagem());
     }
     
-        @Test
+    @Test
     public void deveExibirMensagemDeErroQuandoValorNaoENumero() {
         telaFake.getJTFNome().setText("Carlos");
         telaFake.getJTFMarca().setText("sam12sug");
         telaFake.getJTFValor().setText("123adasf456");
-        
 
         when(ferramentaServiceMock.maiorID()).thenReturn(5);
         when(ferramentaServiceMock.insertFerramentaBD(anyString(), anyString(), anyInt())).thenReturn(false);
@@ -83,7 +85,6 @@ public class FrmCadastroFerramentaTest {
         telaFake.getJTFNome().setText("Carlos");
         telaFake.getJTFMarca().setText("sam12sug");
         telaFake.getJTFValor().setText("123456");
-        
 
         when(ferramentaServiceMock.maiorID()).thenReturn(5);
         when(ferramentaServiceMock.insertFerramentaBD(anyString(), anyString(), anyInt())).thenReturn(false);
@@ -91,5 +92,52 @@ public class FrmCadastroFerramentaTest {
         controller.cadastrar();
 
         assertEquals("Erro ao cadastrar ferramenta.", telaFake.getMensagem());
+    }
+
+    // --- Testes adicionais para cobertura dos getters e setters da FrmCadastrarFerramenta ---
+
+    @Test
+    public void deveSetarEObterCampoNome() {
+        FrmCadastrarFerramenta tela = new FrmCadastrarFerramenta();
+        JTextField campoNome = new JTextField("Teste Nome");
+        tela.setJTFNome(campoNome);
+
+        assertEquals("Teste Nome", tela.getJTFNome().getText());
+    }
+
+    @Test
+    public void deveSetarEObterCampoMarca() {
+        FrmCadastrarFerramenta tela = new FrmCadastrarFerramenta();
+        JTextField campoMarca = new JTextField("Teste Marca");
+        tela.setJTFMarca(campoMarca);
+
+        assertEquals("Teste Marca", tela.getJTFMarca().getText());
+    }
+
+    @Test
+    public void deveSetarEObterCampoValor() {
+        FrmCadastrarFerramenta tela = new FrmCadastrarFerramenta();
+        JTextField campoValor = new JTextField("999");
+        tela.setJTFValor(campoValor);
+
+        assertEquals("999", tela.getJTFValor().getText());
+    }
+
+    @Test
+    public void deveSetarEObterBotaoCancelar() {
+        FrmCadastrarFerramenta tela = new FrmCadastrarFerramenta();
+        JButton botaoCancelar = new JButton("Cancelar");
+        tela.setJBCancelar(botaoCancelar);
+
+        assertEquals("Cancelar", tela.getJBCancelar().getText());
+    }
+
+    @Test
+    public void deveSetarEObterBotaoCadastrar() {
+        FrmCadastrarFerramenta tela = new FrmCadastrarFerramenta();
+        JButton botaoCadastrar = new JButton("Cadastrar");
+        tela.setJBCadastrar(botaoCadastrar);
+
+        assertEquals("Cadastrar", tela.getJBCadastrar().getText());
     }
 }
