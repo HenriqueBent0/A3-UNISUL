@@ -4,92 +4,90 @@ import visao.FrmGerenciadorAmigo;
 import servico.AmigoService;
 import modelo.Amigo;
 
-
 public class GerenciadorAmigoController {
 
     private FrmGerenciadorAmigo view;
     private AmigoService amigoService;
 
-    public GerenciadorAmigoController(FrmGerenciadorAmigo view) {
+    public GerenciadorAmigoController(FrmGerenciadorAmigo view, AmigoService amigoService) {
         this.view = view;
-        this.amigoService = new AmigoService();
+        this.amigoService = amigoService;
     }
 
     // Lógica de apagar amigo
     public void apagarAmigo() {
-    try {
-        int id = 0;
-        if (view.getJTableAmigos().getSelectedRow() == -1) {
-            view.mostrarMensagem("Selecione um Amigo para apagar primeiro");
-            return;
-        } else {
-            id = Integer.parseInt(view.getJTableAmigos().getValueAt(view.getJTableAmigos().getSelectedRow(), 0).toString());
-        }
+        try {
+            int id = 0;
+            if (view.getJTableAmigos().getSelectedRow() == -1) {
+                view.mostrarMensagem("Selecione um Amigo para apagar primeiro");
+                return;
+            } else {
+                id = Integer.parseInt(view.getJTableAmigos().getValueAt(view.getJTableAmigos().getSelectedRow(), 0).toString());
+            }
 
-        // Apaga o amigo sem a confirmação extra
-        if (amigoService.deleteAmigoBD(id)) {
-            view.clearFields();
-            view.mostrarMensagem("Amigo Apagado com Sucesso.");
-        }
+            // Apaga o amigo sem a confirmação extra
+            if (amigoService.deleteAmigoBD(id)) {
+                view.clearFields();
+                view.mostrarMensagem("Amigo Apagado com Sucesso.");
+            }
 
-    } catch (RuntimeException erro) {
-        view.mostrarMensagem(erro.getMessage());
-    } finally {
-        carregarTabela();
+        } catch (RuntimeException erro) {
+            view.mostrarMensagem(erro.getMessage());
+        } finally {
+            carregarTabela();
+        }
     }
-}
-
 
     // Lógica de editar amigo
     public void editarAmigo() {
-    try {
-        int id = 0;
-        String nome = view.getJTFNome();
-        String telefoneStr = view.getJTFTelefone(); // Pega o telefone como String
-
-        // Verifica se o nome não está vazio
-        if (nome.length() < 1) {
-            view.mostrarMensagem("Nome deve conter ao menos 1 caractere.");
-            return;
-        }
-
-        // Verifica se o telefone contém apenas números e tem o tamanho correto
-        if (telefoneStr.length() < 9 || telefoneStr.length() > 10) {
-            view.mostrarMensagem("O Telefone deve ter entre 9 e 10 dígitos.");
-            return;
-        }
-
-        // Tenta converter o telefone para número (se possível)
-        int telefone;
         try {
-            telefone = Integer.parseInt(telefoneStr); // Converte para inteiro
-        } catch (NumberFormatException e) {
-            view.mostrarMensagem("O telefone deve conter apenas números.");
-            return;
-        }
+            int id = 0;
+            String nome = view.getJTFNome();
+            String telefoneStr = view.getJTFTelefone(); // Pega o telefone como String
 
-        // Verifica se algum amigo foi selecionado
-        if (view.getJTableAmigos().getSelectedRow() == -1) {
-            view.mostrarMensagem("Escolha um Amigo para Editar Primeiro");
-            return;
-        } else {
-            id = Integer.parseInt(view.getJTableAmigos().getValueAt(view.getJTableAmigos().getSelectedRow(), 0).toString());
-        }
+            // Verifica se o nome não está vazio
+            if (nome.length() < 1) {
+                view.mostrarMensagem("Nome deve conter ao menos 1 caractere.");
+                return;
+            }
 
-        // Realiza a atualização do amigo
-        if (amigoService.updateAmigoBD(nome, id, telefone)) {
-            view.clearFields();
-            view.mostrarMensagem("Amigo Editado com sucesso.");
-        }
+            // Verifica se o telefone contém apenas números e tem o tamanho correto
+            if (telefoneStr.length() < 9 || telefoneStr.length() > 10) {
+                view.mostrarMensagem("O Telefone deve ter entre 9 e 10 dígitos.");
+                return;
+            }
 
-    } catch (RuntimeException erro) {
-        view.mostrarMensagem(erro.getMessage());
-    } catch (Exception e) {
-        view.mostrarMensagem("Erro inesperado: " + e.getMessage());
-    } finally {
-        carregarTabela();
+            // Tenta converter o telefone para número (se possível)
+            int telefone;
+            try {
+                telefone = Integer.parseInt(telefoneStr); // Converte para inteiro
+            } catch (NumberFormatException e) {
+                view.mostrarMensagem("O telefone deve conter apenas números.");
+                return;
+            }
+
+            // Verifica se algum amigo foi selecionado
+            if (view.getJTableAmigos().getSelectedRow() == -1) {
+                view.mostrarMensagem("Escolha um Amigo para Editar Primeiro");
+                return;
+            } else {
+                id = Integer.parseInt(view.getJTableAmigos().getValueAt(view.getJTableAmigos().getSelectedRow(), 0).toString());
+            }
+
+            // Realiza a atualização do amigo
+            if (amigoService.updateAmigoBD(nome, id, telefone)) {
+                view.clearFields();
+                view.mostrarMensagem("Amigo Editado com sucesso.");
+            }
+
+        } catch (RuntimeException erro) {
+            view.mostrarMensagem(erro.getMessage());
+        } catch (Exception e) {
+            view.mostrarMensagem("Erro inesperado: " + e.getMessage());
+        } finally {
+            carregarTabela();
+        }
     }
-}
 
     // Lógica para carregar dados na tabela quando um item é selecionado
     public void carregarTabelaGerenciador() {
@@ -106,8 +104,9 @@ public class GerenciadorAmigoController {
         } catch (Exception e) {
             view.mostrarMensagem("Erro ao carregar dados para edição: " + e.getMessage());
         }
-        
+
     }
+
     public void carregarTabela() {
         view.clearTable();
         for (Amigo amigo : amigoService.getListaAmigo()) {

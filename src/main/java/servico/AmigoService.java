@@ -10,7 +10,7 @@ public class AmigoService {
 
     // Construtor padrão (uso normal com banco de dados real)
     public AmigoService() {
-        this.dao = new AmigoDAO();
+        this.dao = new AmigoDAO(); 
     }
 
     // Construtor para injetar um DAO (útil para testes com Mockito)

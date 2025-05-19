@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import servico.AmigoService;
 
 /**
  * Classe responsável pela interface gráfica de gerenciador de amigo.
@@ -18,8 +19,12 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
 
     public FrmGerenciadorAmigo() {
         initComponents();
-        controller = new GerenciadorAmigoController(this); // Cria o controlador
-        carregaTabela(); // Inicializa a Tabela
+
+        AmigoService amigoService = new AmigoService();
+
+        controller = new GerenciadorAmigoController(this, amigoService);
+
+        carregaTabela();
     }
 
     @SuppressWarnings("unchecked")

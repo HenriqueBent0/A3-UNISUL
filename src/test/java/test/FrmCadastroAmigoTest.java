@@ -13,17 +13,17 @@ public class FrmCadastroAmigoTest {
     private AmigoService amigoServiceMock;
     private AmigoController controller;
 
-    @BeforeEach
-    public void setUp() {
-        // Cria a tela fake para capturar mensagens
-        telaFake = new AmigoFake();
-        
-        // Mock do serviço
-        amigoServiceMock = mock(AmigoService.class);
-        
-        // Cria o controlador passando a tela fake e o mock do serviço
-        controller = new AmigoController(telaFake, amigoServiceMock);
-    }
+        @BeforeEach
+        public void setUp() {
+            // Cria a tela fake para capturar mensagens
+            telaFake = new AmigoFake();
+
+            // Mock do serviço
+            amigoServiceMock = mock(AmigoService.class);
+
+            // Cria o controlador passando a tela fake e o mock do serviço
+            controller = new AmigoController(telaFake, amigoServiceMock);
+        }
 
     @Test
     public void deveExibirMensagemDeErroQuandoCamposEstaoVazios() {
