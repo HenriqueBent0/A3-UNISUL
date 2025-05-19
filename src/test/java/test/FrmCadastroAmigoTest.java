@@ -4,6 +4,10 @@ import controle.AmigoController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import servico.AmigoService;
+import visao.FrmCadastrarAmigo;
+
+import javax.swing.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -13,17 +17,17 @@ public class FrmCadastroAmigoTest {
     private AmigoService amigoServiceMock;
     private AmigoController controller;
 
-        @BeforeEach
-        public void setUp() {
-            // Cria a tela fake para capturar mensagens
-            telaFake = new AmigoFake();
+    @BeforeEach
+    public void setUp() {
+        // Cria a tela fake para capturar mensagens
+        telaFake = new AmigoFake();
 
-            // Mock do serviço
-            amigoServiceMock = mock(AmigoService.class);
+        // Mock do serviço
+        amigoServiceMock = mock(AmigoService.class);
 
-            // Cria o controlador passando a tela fake e o mock do serviço
-            controller = new AmigoController(telaFake, amigoServiceMock);
-        }
+        // Cria o controlador passando a tela fake e o mock do serviço
+        controller = new AmigoController(telaFake, amigoServiceMock);
+    }
 
     @Test
     public void deveExibirMensagemDeErroQuandoCamposEstaoVazios() {
@@ -70,5 +74,51 @@ public class FrmCadastroAmigoTest {
         controller.cadastrar();
 
         assertEquals("Erro ao cadastrar amigo.", telaFake.getMensagem());
+    }
+
+    // --- TESTES ADICIONAIS PARA COBRIR GETTERS E SETTERS DA CLASSE FrmCadastrarAmigo ---
+
+    @Test
+    public void deveSetarEObterMensagemDaInterface() {
+        FrmCadastrarAmigo tela = new FrmCadastrarAmigo();
+        tela.setMensagem("Mensagem de teste");
+
+        assertEquals("Mensagem de teste", tela.getMensagem());
+    }
+
+    @Test
+    public void deveSetarEObterCampoNome() {
+        FrmCadastrarAmigo tela = new FrmCadastrarAmigo();
+        JTextField campo = new JTextField("Teste Nome");
+        tela.setJTFNome(campo);
+
+        assertEquals("Teste Nome", tela.getJTFNome().getText());
+    }
+
+    @Test
+    public void deveSetarEObterCampoTelefone() {
+        FrmCadastrarAmigo tela = new FrmCadastrarAmigo();
+        JTextField campo = new JTextField("123456");
+        tela.setJTFTelefone(campo);
+
+        assertEquals("123456", tela.getJTFTelefone().getText());
+    }
+
+    @Test
+    public void deveSetarEObterBotaoCadastrar() {
+        FrmCadastrarAmigo tela = new FrmCadastrarAmigo();
+        JButton botao = new JButton("Cadastrar");
+        tela.setJBCadastrar(botao);
+
+        assertEquals("Cadastrar", tela.getJBCadastrar().getText());
+    }
+
+    @Test
+    public void deveSetarEObterBotaoCancelar() {
+        FrmCadastrarAmigo tela = new FrmCadastrarAmigo();
+        JButton botao = new JButton("Cancelar");
+        tela.setJBCancelar(botao);
+
+        assertEquals("Cancelar", tela.getJBCancelar().getText());
     }
 }
