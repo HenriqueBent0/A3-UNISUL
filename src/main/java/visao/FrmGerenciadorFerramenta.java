@@ -2,36 +2,45 @@ package visao;
 
 import dao.FerramentaDAO;
 import java.util.ArrayList;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import modelo.Ferramenta;
+import servico.FerramentaService;
+import controle.GerenciadorFerramentaController;
 
 /**
  * Classe responsável pela interface gráfica do gerenciador de ferramentas.
  */
 public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
 
-    private FerramentaDAO ferramentaDAO; // Objeto para interação com a classe FerramentaDAO
+    private FerramentaService FerramentaService = new FerramentaService();
+    private GerenciadorFerramentaController controller;
+    private String mensagem;
 
-    /**
-     * Construtor da classe FrmGerenciadorFerramenta.
-     */
-    public FrmGerenciadorFerramenta() {
-        initComponents(); // Inicializa os componentes da interface gráfica
-        this.ferramentaDAO = new FerramentaDAO(); // Cria uma instância da classe FerramentaDAO
-        this.carregaTabela(); // Inicializa a tabela
-        this.calculaValorTotal(); // Calcula o valor total das ferramentas exibidas
+    public FrmGerenciadorFerramenta(GerenciadorFerramentaController controller) {
+        initComponents();
+        this.controller = controller;
+
     }
 
-    /**
-     * Calcula o valor total das ferramentas exibidas na tabela.
-     */
+    public FrmGerenciadorFerramenta() {
+        initComponents();
+
+        FerramentaService ferramentaService = new FerramentaService();
+
+        controller = new GerenciadorFerramentaController(this, FerramentaService);
+        
+        carregaTabela();
+
+    }
+
     public void calculaValorTotal() {
-        double total = 0;
-        for (int i = 0; i < JTableFerramenta.getRowCount(); i++) {
-            total += Double.parseDouble(JTableFerramenta.getValueAt(i, 3).toString());
-        }
-        jLabelTotal.setText("R$ " + String.format("%.2f", total));
+        controller.calcularValorTotal();
     }
 
     @SuppressWarnings("unchecked")
@@ -220,7 +229,7 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
     }//GEN-LAST:event_JTFMarcaActionPerformed
 
     private void JBApagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBApagarActionPerformed
-        apagar();
+        controller.apagarFerramenta();
 
     }//GEN-LAST:event_JBApagarActionPerformed
 
@@ -230,19 +239,18 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
 
     // Método executado quando ocorre um clique na tabela de ferramentas
     private void JTableFerramentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTableFerramentaMouseClicked
-      carregaTabelaGerenciador();
-        
+        controller.carregarTabelaGerenciador();
+
     }//GEN-LAST:event_JTableFerramentaMouseClicked
 
     private void JBEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBEditarActionPerformed
-        editar();
+        controller.editarFerramenta();
     }//GEN-LAST:event_JBEditarActionPerformed
 
     private void jLabelTotalAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jLabelTotalAncestorAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_jLabelTotalAncestorAdded
 
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBApagar;
@@ -261,137 +269,156 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-public void apagar(){
-     try {
-            int id = 0;
-            String nome = "";
-            String marca = "";
-            int valor = 0;
-
-            // Verifica se alguma ferramenta foi selecionada na tabela
-            if (this.JTableFerramenta.getSelectedRow() == -1) {
-                throw new Mensagem("Selecione uma ferramenta para apagar primeiro");
-            } else {
-                // Obtém o ID da ferramenta selecionada na tabela
-                id = Integer.parseInt(this.JTableFerramenta.getValueAt(this.JTableFerramenta.getSelectedRow(), 0).toString());
-            }
-
-            // Pede confirmação ao usuário antes de apagar a ferramenta
-            int respostaUsuario = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja apagar esta Ferramenta?");
-
-            if (respostaUsuario == 0) {
-                // Se o usuário confirmar a exclusão
-                // Chama o método deleteFerramentaBD na classe FerramentaDAO
-                FerramentaDAO ferramentaDAO = new FerramentaDAO();
-                if (ferramentaDAO.deleteFerramentaBD(id)) {
-                    // Limpa os campos de texto da interface
-                    this.JTFNome.setText("");
-                    this.JTFMarca.setText("");
-                    this.JTFValor.setText("");
-                    // Exibe uma mensagem de sucesso
-                    JOptionPane.showMessageDialog(rootPane, "Ferramenta Apagada com Sucesso.");
-                }
-            }
-
-            // Exibe a lista de ferramentas após a operação de exclusão
-            FerramentaDAO ferramentaDAO = new FerramentaDAO();
-            System.out.println(ferramentaDAO.getListaFerramenta().toString());
-        } catch (Mensagem erro) {
-            JOptionPane.showMessageDialog(null, erro.getMessage());
-        } finally {
-            // Chama o método carregaTabela para atualizar a tabela de ferramentas
-            carregaTabela();
-            // Recalcula o valor total
-            calculaValorTotal();
-        }
-}
-public void carregaTabelaGerenciador(){
-    // Verifica se alguma ferramenta foi selecionado na tabela
-    if (this.JTableFerramenta.getSelectedRow() != -1) {
-            String nome = this.JTableFerramenta.getValueAt(this.JTableFerramenta.getSelectedRow(), 1).toString();
-            String marca = this.JTableFerramenta.getValueAt(this.JTableFerramenta.getSelectedRow(), 2).toString();
-            String valor = this.JTableFerramenta.getValueAt(this.JTableFerramenta.getSelectedRow(), 3).toString();
-
-            this.JTFNome.setText(nome);
-            this.JTFMarca.setText(marca);
-            this.JTFValor.setText(valor);
-        }
-}
-public void editar(){
-    
-
-     try {
-            int id = 0;
-            String nome = "";
-            String marca = "";
-            int valor = 0;
-
-            // Verifica se foi inserido um nome válido
-            if (this.JTFNome.getText().length() < 1) {
-                throw new Mensagem("Nome deve conter ao menos 1 caractere.");
-            } else {
-                nome = this.JTFNome.getText();
-            }
-
-            // Verifica se foi inserida uma marca válida
-            if (this.JTFMarca.getText().length() < 1) {
-                throw new Mensagem("A marca deve conter ao menos 1 caractere.");
-            } else {
-                marca = this.JTFMarca.getText();
-            }
-
-            // Verifica se foi inserido um valor válido
-            if (this.JTFValor.getText().length() < 1) {
-                throw new Mensagem("O valor deve conter ao menos 1 número.");
-            } else {
-                valor = Integer.parseInt(this.JTFValor.getText());
-            }
-
-            // Verifica se uma ferramenta foi selecionada na tabela
-            if (this.JTableFerramenta.getSelectedRow() == -1) {
-                throw new Mensagem("Escolha uma Ferramenta para Editar Primeiro");
-            } else {
-                // Obtém o ID da ferramenta selecionada na tabela
-                id = Integer.parseInt(this.JTableFerramenta.getValueAt(this.JTableFerramenta.getSelectedRow(), 0).toString());
-            }
-
-            // Atualiza a ferramenta no banco de dados
-            FerramentaDAO ferramentaDAO = new FerramentaDAO();
-            if (ferramentaDAO.updateFerramentaBD(id, nome, marca, valor)) {
-                // Limpa os campos de texto da interface
-                this.JTFNome.setText("");
-                this.JTFMarca.setText("");
-                this.JTFValor.setText("");
-                // Exibe uma mensagem de sucesso
-                JOptionPane.showMessageDialog(null, "Ferramenta Editada com sucesso.");
-            }
-
-            // Exibe a lista de ferramentas após a operação de edição
-            System.out.println(ferramentaDAO.getListaFerramenta().toString());
-        } catch (Mensagem erro) {
-            JOptionPane.showMessageDialog(null, erro.getMessage());
-        } catch (NumberFormatException erro2) {
-            JOptionPane.showMessageDialog(null, "Informe um número válido.");
-        } finally {
-            // Chama o método carregaTabela para atualizar a tabela de ferramentas
-            carregaTabela();
-            // Recalcula o valor total
-            calculaValorTotal();
-        }
-}
-public void carregaTabela(){
-     
-        DefaultTableModel modelo = (DefaultTableModel) this.JTableFerramenta.getModel();
+    public void clearTable() {
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) JTableFerramenta.getModel();
         modelo.setNumRows(0);
-        FerramentaDAO ferramentaDAO = new FerramentaDAO(); // Criar uma instância de FerramentaDAO
-        ArrayList<Ferramenta> minhaLista = ferramentaDAO.getListaFerramenta(); // Obtem lista de ferramentas do DAO
-        for (Ferramenta a : minhaLista) {
-            modelo.addRow(new Object[]{
-                a.getId(),
-                a.getNome(),
-                a.getMarca(),
-                a.getValor(),});
-        }
     }
-}
 
+    public void addRowToTable(int id, String nome, String marca, int telefone) {
+        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) JTableFerramenta.getModel();
+        modelo.addRow(new Object[]{id, nome, telefone});
+    }
+
+    public void clearFields() {
+        JTFNome.setText("");
+        JTFMarca.setText("");
+        JTFValor.setText("");
+    }
+
+    public void carregaTabela() {
+        controller.carregarTabela();
+    }
+
+    public void carregarTabelaGerenciador() {
+        controller.carregarTabelaGerenciador();
+    }
+
+    public JButton getJBApagar() {
+        return JBApagar;
+    }
+
+    public JButton getJBCancelar() {
+        return JBCancelar;
+    }
+
+    public JButton getJBEditar() {
+        return JBEditar;
+    }
+
+    public JTextField getJTFMarca() {
+        return JTFMarca;
+    }
+
+    public JTextField getJTFNome() {
+        return JTFNome;
+    }
+
+    public JTextField getJTFValor() {
+        return JTFValor;
+    }
+
+    public JTable getJTableFerramenta() {
+        return JTableFerramenta;
+    }
+
+    public JLabel getjLabel1() {
+        return jLabel1;
+    }
+
+    public JLabel getjLabel2() {
+        return jLabel2;
+    }
+
+    public JLabel getjLabel3() {
+        return jLabel3;
+    }
+
+    public JLabel getjLabel4() {
+        return jLabel4;
+    }
+
+    public JLabel getjLabel5() {
+        return jLabel5;
+    }
+
+    public JLabel getjLabelTotal() {
+        return jLabelTotal;
+    }
+
+    public JScrollPane getjScrollPane1() {
+        return jScrollPane1;
+    }
+
+    public void setJBApagar(JButton JBApagar) {
+        this.JBApagar = JBApagar;
+    }
+
+    public void setJBCancelar(JButton JBCancelar) {
+        this.JBCancelar = JBCancelar;
+    }
+
+    public void setJBEditar(JButton JBEditar) {
+        this.JBEditar = JBEditar;
+    }
+
+    public void setJTFMarca(JTextField JTFMarca) {
+        this.JTFMarca = JTFMarca;
+    }
+
+    public void setJTFNome(JTextField JTFNome) {
+        this.JTFNome = JTFNome;
+    }
+
+    public void setJTFValor(JTextField JTFValor) {
+        this.JTFValor = JTFValor;
+    }
+
+    public void setJTableFerramenta(JTable JTableFerramenta) {
+        this.JTableFerramenta = JTableFerramenta;
+    }
+
+    public void setjLabel1(JLabel jLabel1) {
+        this.jLabel1 = jLabel1;
+    }
+
+    public void setjLabel2(JLabel jLabel2) {
+        this.jLabel2 = jLabel2;
+    }
+
+    public void setjLabel3(JLabel jLabel3) {
+        this.jLabel3 = jLabel3;
+    }
+
+    public void setjLabel4(JLabel jLabel4) {
+        this.jLabel4 = jLabel4;
+    }
+
+    public void setjLabel5(JLabel jLabel5) {
+        this.jLabel5 = jLabel5;
+    }
+
+    public void setLabelTotal(String texto) {
+        this.jLabelTotal.setText(texto);
+    }
+
+    public void setjScrollPane1(JScrollPane jScrollPane1) {
+        this.jScrollPane1 = jScrollPane1;
+    }
+
+    public void mostrarMensagem(String mensagem) {
+        JOptionPane.showMessageDialog(null, mensagem);
+    }
+
+    public String getMensagem() {
+        return mensagem;
+    }
+
+    public void setMensagem(String mensagem) {
+        this.mensagem = mensagem;
+    }
+
+    public void setJTableAmigos(JTable JTableFerramenta) {
+        this.JTableFerramenta = JTableFerramenta;
+    }
+
+}

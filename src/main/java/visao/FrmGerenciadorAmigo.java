@@ -25,6 +25,7 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
         AmigoService amigoService = new AmigoService();
 
         controller = new GerenciadorAmigoController(this, amigoService);
+        carregaTabela();
 
     }
 
