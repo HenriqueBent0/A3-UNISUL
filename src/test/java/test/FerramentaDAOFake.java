@@ -1,11 +1,10 @@
 package test;
 
-import dao.FerramentaDAO;
 import modelo.Ferramenta;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FerramentaDAOFake extends FerramentaDAO {
+public class FerramentaDAOFake {
 
     private List<Ferramenta> ferramentas = new ArrayList<>();
 
@@ -14,16 +13,13 @@ public class FerramentaDAOFake extends FerramentaDAO {
         ferramentas.add(new Ferramenta(2, "bagulho", "nike", 220));
     }
 
-    @Override
     public boolean insertFerramentaBD(Ferramenta ferramenta) {
         return ferramentas.add(ferramenta);
     }
 
-    @Override
     public boolean deleteFerramentaBD(int id) {
         return ferramentas.removeIf(a -> a.getId() == id);
     }
-
 
     public boolean updateFerramentaBD(Ferramenta ferramenta) {
         for (Ferramenta a : ferramentas) {
@@ -37,20 +33,19 @@ public class FerramentaDAOFake extends FerramentaDAO {
         return false;
     }
 
-    @Override
     public Ferramenta carregaFerramenta(int id) {
         for (Ferramenta a : ferramentas) {
-            if (a.getId() == id) return a;
+            if (a.getId() == id) {
+                return a;
+            }
         }
         return null;
     }
 
-    @Override
     public ArrayList<Ferramenta> getListaFerramenta() {
         return new ArrayList<>(ferramentas);
     }
 
-    @Override
     public int maiorID() {
         return ferramentas.stream()
                 .mapToInt(Ferramenta::getId)
@@ -58,4 +53,3 @@ public class FerramentaDAOFake extends FerramentaDAO {
                 .orElse(0);
     }
 }
-

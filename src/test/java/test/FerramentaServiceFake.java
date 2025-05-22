@@ -11,11 +11,9 @@ public class FerramentaServiceFake extends FerramentaService {
 
     public FerramentaServiceFake() {
         this.daoFake = new FerramentaDAOFake();
-        // Passa o daoFake para o FerramentaService via construtor
-        super.dao = daoFake;
+        // NÃO faça: super.dao = daoFake; porque daoFake não é FerramentaDAO
     }
 
-    // Sobrescreve os métodos para usar daoFake internamente (opcional, já funcionaria pelo super)
     public boolean insertFerramentaBD(String nome, int id, int valor, String marca) {
         int novoId = maiorID() + 1;
         Ferramenta novoFerramenta = new Ferramenta(novoId, nome, marca, valor);

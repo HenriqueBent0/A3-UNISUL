@@ -30,13 +30,8 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
 
     public FrmGerenciadorFerramenta() {
         initComponents();
-
-        FerramentaService ferramentaService = new FerramentaService();
-
-        controller = new GerenciadorFerramentaController(this, FerramentaService);
-
+        this.controller = new GerenciadorFerramentaController(this, FerramentaService);
         carregaTabela();
-
     }
 
     public void calculaValorTotal() {
