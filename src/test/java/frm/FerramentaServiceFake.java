@@ -10,8 +10,7 @@ public class FerramentaServiceFake extends FerramentaService {
     private FerramentaDAOFake daoFake;
 
     public FerramentaServiceFake() {
-        this.daoFake = new FerramentaDAOFake();
-        // NÃO faça: super.dao = daoFake; porque daoFake não é FerramentaDAO
+        super(new FerramentaDAOFake());  
     }
 
     public boolean insertFerramentaBD(String nome, int id, int valor, String marca) {

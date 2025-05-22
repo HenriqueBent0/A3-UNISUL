@@ -93,12 +93,12 @@ class GerenciadorFerramentaTest {
 
     @Test
     void testEditarFerramentaComSucesso() {
-        // Seleciona o primeiro ferramenta da tabela (que já foi populada no setUp)
+        // Seleciona o primeiro amigo da tabela (que já foi populada no setUp)
         fakeView.getJTableFerramenta().setRowSelectionInterval(0, 0);
 
         fakeView.setJTFNome("treco");
-        fakeView.setJTFValor("100");
-        fakeView.setJTFMarca("alguma marca");
+        fakeView.setJTFMarca("tramontina express");
+        fakeView.setJTFValor("123");
 
         controller.editarFerramenta();
 
@@ -108,7 +108,8 @@ class GerenciadorFerramentaTest {
         atualizaTabelaComFerramentas();
 
         // Confere se o nome foi realmente atualizado no serviço
-        Ferramenta a = ferramentaService.carregaFerramenta(1);  // id do primeiro ferramenta
+        Ferramenta a = ferramentaService.carregaFerramenta(1);  
         assertEquals("treco", a.getNome());
     }
 }
+
