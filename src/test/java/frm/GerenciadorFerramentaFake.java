@@ -1,4 +1,4 @@
-package test;
+package frm;
 
 import controle.GerenciadorFerramentaController;
 import visao.FrmGerenciadorFerramenta;

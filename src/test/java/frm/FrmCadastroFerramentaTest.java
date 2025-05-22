@@ -1,4 +1,4 @@
-package test;
+package frm;
 
 import controle.FerramentaController;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,12 +1,16 @@
-package test;
+package frm;
 
-import visao.FrmCadastrarAmigo;
+import visao.FrmCadastrarFerramenta;
 
 /**
- * Classe que cria um formulário de cadastro de amigo falso para ser utilizado
+ *
+ * Classe que cria um formulário de cadastro de amigo falso para ser utilizado,
  * nos testes.
  */
-public class AmigoFake extends FrmCadastrarAmigo {
+
+
+public class FerramentaFake extends FrmCadastrarFerramenta {
+
 
 
     @Override

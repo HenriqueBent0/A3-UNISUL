@@ -1,7 +1,7 @@
-package test;
+package frm;
 
 import controle.GerenciadorFerramentaController;
-import test.FerramentaDAOFake;
+import frm.FerramentaDAOFake;
 import modelo.Ferramenta;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

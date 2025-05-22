@@ -1,4 +1,4 @@
-package test;
+package frm;
 
 import dao.AmigoDAO;
 import modelo.Amigo;

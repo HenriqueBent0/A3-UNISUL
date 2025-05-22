@@ -1,4 +1,4 @@
-package test;
+package frm;
 
 import controle.GerenciadorAmigoController;
 import visao.FrmGerenciadorAmigo;

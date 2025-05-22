@@ -1,7 +1,7 @@
-package test;
+package frm;
 
 import controle.GerenciadorAmigoController;
-import test.AmigoDAOFake;
+import frm.AmigoDAOFake;
 import modelo.Amigo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package test;
+package frm;
 
 import controle.AmigoController;
 import org.junit.jupiter.api.BeforeEach;
