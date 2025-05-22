@@ -34,7 +34,7 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
         FerramentaService ferramentaService = new FerramentaService();
 
         controller = new GerenciadorFerramentaController(this, FerramentaService);
-        
+
         carregaTabela();
 
     }
@@ -274,9 +274,9 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
         modelo.setNumRows(0);
     }
 
-    public void addRowToTable(int id, String nome, String marca, int telefone) {
-        javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) JTableFerramenta.getModel();
-        modelo.addRow(new Object[]{id, nome, telefone});
+    public void addRowToTable(int id, String nome, String marca, int valor) {
+        DefaultTableModel modelo = (DefaultTableModel) JTableFerramenta.getModel();
+        modelo.addRow(new Object[]{id, nome, marca, valor});
     }
 
     public void clearFields() {
@@ -305,16 +305,28 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
         return JBEditar;
     }
 
-    public JTextField getJTFMarca() {
-        return JTFMarca;
+    public String getJTFMarca() {
+        return JTFMarca.getText();
     }
 
-    public JTextField getJTFNome() {
-        return JTFNome;
+    public void setJTFMarca(String marca) {
+        JTFMarca.setText(marca);
     }
 
-    public JTextField getJTFValor() {
-        return JTFValor;
+    public String getJTFNome() {
+        return JTFNome.getText();
+    }
+
+    public void setJTFNome(String nome) {
+        JTFNome.setText(nome);
+    }
+
+    public String getJTFValor() {
+        return JTFValor.getText();
+    }
+
+    public void setJTFValor(String valor) {
+        JTFValor.setText(valor);
     }
 
     public JTable getJTableFerramenta() {
@@ -363,10 +375,6 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
 
     public void setJTFMarca(JTextField JTFMarca) {
         this.JTFMarca = JTFMarca;
-    }
-
-    public void setJTFNome(JTextField JTFNome) {
-        this.JTFNome = JTFNome;
     }
 
     public void setJTFValor(JTextField JTFValor) {

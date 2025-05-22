@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class FerramentaService {
 
-    private FerramentaDAO dao;
+    public FerramentaDAO dao;
 
     // Construtor padrão (uso real com banco)
     public FerramentaService() {

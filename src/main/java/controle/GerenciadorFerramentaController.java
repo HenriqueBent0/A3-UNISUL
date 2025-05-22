@@ -1,3 +1,4 @@
+
 package controle;
 
 import visao.FrmGerenciadorFerramenta;
@@ -23,13 +24,13 @@ public class GerenciadorFerramentaController {
         try {
             int id = 0;
             if (view.getJTableFerramenta().getSelectedRow() == -1) {
-                view.mostrarMensagem("Selecione um Ferramenta para apagar primeiro");
+                view.mostrarMensagem("Selecione uma Ferramenta para apagar primeiro");
                 return;
             } else {
                 id = Integer.parseInt(view.getJTableFerramenta().getValueAt(view.getJTableFerramenta().getSelectedRow(), 0).toString());
             }
 
-            // Apaga o amigo sem a confirmação extra
+            
             if (ferramentaService.deleteFerramentaBD(id)) {
                 view.clearFields();
                 view.mostrarMensagem("Ferramenta Apagada com Sucesso.");
@@ -68,9 +69,9 @@ public class GerenciadorFerramentaController {
     public void editarFerramenta() {
         try {
             int id = 0;
-            String nome = view.getJTFNome().getText();
-            String valorStr = view.getJTFValor().getText();
-            String marca = view.getJTFMarca().getText();
+            String nome = view.getJTFNome();
+            String valorStr = view.getJTFValor();
+            String marca = view.getJTFMarca();
 
             // Verifica se o nome não está vazio
             if (nome.length() < 1) {
@@ -125,9 +126,9 @@ public class GerenciadorFerramentaController {
                 String marca = view.getJTableFerramenta().getValueAt(view.getJTableFerramenta().getSelectedRow(), 2).toString();
                 String valor = view.getJTableFerramenta().getValueAt(view.getJTableFerramenta().getSelectedRow(), 3).toString();
 
-                view.getJTFNome().setText(nome);
-                view.getJTFMarca().setText(marca);
-                view.getJTFValor().setText(valor);
+                view.setJTFNome(nome);
+                view.setJTFMarca(marca);
+                view.setJTFValor(valor);
 
             } else {
                 view.mostrarMensagem("Selecione um ferramenta para editar.");
@@ -146,3 +147,4 @@ public class GerenciadorFerramentaController {
 
     }
 }
+
