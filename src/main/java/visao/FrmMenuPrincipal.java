@@ -34,7 +34,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         jMenuGerenciarFerramentas = new javax.swing.JMenuItem();
         jMenuRelatório = new javax.swing.JMenu();
         jMenuRelatorio = new javax.swing.JMenuItem();
-        jMenuSobre = new javax.swing.JMenu();
 
         jMenuItem5.setText("jMenuItem5");
 
@@ -137,14 +136,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenuRelatório);
 
-        jMenuSobre.setText("Sobre");
-        jMenuSobre.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenuSobreMouseClicked(evt);
-            }
-        });
-        jMenuBar1.add(jMenuSobre);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -215,28 +206,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         menu.setVisible (true);
     }//GEN-LAST:event_jMenuRelatorioActionPerformed
 
-    private void jMenuSobreMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuSobreMouseClicked
-        JOptionPane.showMessageDialog(null,"Bem-vindo ao Software de Empréstimo de Ferramentas!\n\n" +
-                          "Este projeto foi desenvolvido por alunos da Unisul,\n" +
-                          "como parte do Trabalho A3 da disciplina de Programação de Soluções Computacionais.\n\n" +
-                          "A equipe é composta pelos alunos Kevin Nunes, Ian Akira, Henrique Bento," +
-                          " Victor Rodrigues e Gabriel Cordeiro, \nque se dedicaram a criar uma solução prática e eficiente " +
-                          "para gerenciar o empréstimo de ferramentas.\n\n" +
-                          "Explore as funcionalidades do nosso software:\n\n" +
-                   "1. Cadastre seus amigos com seus nomes e números de telefone.\n" +
-                   "2. Registre suas ferramentas, incluindo nome, marca e custo.\n" +
-                   "3. Gerencie facilmente os empréstimos realizados.\n" +
-                   "4. Consulte os dados de amigos e ferramentas salvos.\n" +
-                   "5. Altere informações de amigos e ferramentas conforme necessário.\n" +
-                   "6. Exclua registros de amigos e ferramentas quando apropriado.\n" +
-                   "7. Registre empréstimos de ferramentas para amigos cadastrados.\n" +
-                   "8. Marque a devolução das ferramentas emprestadas.\n" +
-                   "9. Acesse relatórios detalhados sobre os empréstimos realizados.\n" +
-                   "10. Consulte o histórico completo de empréstimos realizados.\n\n" +
-                   "Com esses recursos, você terá controle total sobre quem pegou emprestado suas ferramentas e quando!\n\n"+
-                          "Obrigado por escolher nosso software !!");
-    }//GEN-LAST:event_jMenuSobreMouseClicked
-
     private void jMenuMovimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMovimentoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuMovimentoActionPerformed
@@ -293,7 +262,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuMovimento;
     private javax.swing.JMenuItem jMenuRelatorio;
     private javax.swing.JMenu jMenuRelatório;
-    private javax.swing.JMenu jMenuSobre;
     private javax.swing.JPopupMenu jPopupMenu1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem2;

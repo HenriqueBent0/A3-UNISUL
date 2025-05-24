@@ -93,4 +93,16 @@ import static org.junit.jupiter.api.Assertions.*;
         Amigo a = amigoService.carregaAmigo(1);  // id do primeiro amigo
         assertEquals("Carlos Editado", a.getNome());
     }
+    @Test
+void testCarregarTabelaGerenciadorComLinhaSelecionada() {
+    // Seleciona a primeira linha da tabela
+    fakeView.getJTableAmigos().setRowSelectionInterval(0, 0);
+
+    // Chama o método que carrega os dados para edição a partir da linha selecionada
+    controller.carregarTabelaGerenciador();
+
+    // Verifica se os campos foram preenchidos corretamente com os dados da linha selecionada
+    assertEquals("João", fakeView.getJTFNome());
+    assertEquals("123456789", fakeView.getJTFTelefone());
+}
 }
