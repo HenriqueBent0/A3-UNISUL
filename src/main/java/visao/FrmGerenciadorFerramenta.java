@@ -328,34 +328,13 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
         return JTableFerramenta;
     }
 
-    public JLabel getjLabel1() {
-        return jLabel1;
-    }
-
-    public JLabel getjLabel2() {
-        return jLabel2;
-    }
-
-    public JLabel getjLabel3() {
-        return jLabel3;
-    }
-
-    public JLabel getjLabel4() {
-        return jLabel4;
-    }
-
-    public JLabel getjLabel5() {
-        return jLabel5;
-    }
+   
 
     public JLabel getjLabelTotal() {
         return jLabelTotal;
     }
 
-    public JScrollPane getjScrollPane1() {
-        return jScrollPane1;
-    }
-
+    
     public void setJBApagar(JButton JBApagar) {
         this.JBApagar = JBApagar;
     }
@@ -380,33 +359,11 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
         this.JTableFerramenta = JTableFerramenta;
     }
 
-    public void setjLabel1(JLabel jLabel1) {
-        this.jLabel1 = jLabel1;
-    }
-
-    public void setjLabel2(JLabel jLabel2) {
-        this.jLabel2 = jLabel2;
-    }
-
-    public void setjLabel3(JLabel jLabel3) {
-        this.jLabel3 = jLabel3;
-    }
-
-    public void setjLabel4(JLabel jLabel4) {
-        this.jLabel4 = jLabel4;
-    }
-
-    public void setjLabel5(JLabel jLabel5) {
-        this.jLabel5 = jLabel5;
-    }
 
     public void setLabelTotal(String texto) {
         this.jLabelTotal.setText(texto);
     }
 
-    public void setjScrollPane1(JScrollPane jScrollPane1) {
-        this.jScrollPane1 = jScrollPane1;
-    }
 
     public void mostrarMensagem(String mensagem) {
         JOptionPane.showMessageDialog(null, mensagem);

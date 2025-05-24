@@ -92,6 +92,18 @@ class GerenciadorFerramentaTest {
         assertEquals("Escolha uma Ferramenta para Editar Primeiro", fakeView.getMensagem());
     }
 
+@Test
+void testCarregarTabelaGerenciadorComLinhaSelecionada() {
+    // Seleciona a primeira linha da tabela
+    fakeView.getJTableFerramenta().setRowSelectionInterval(0, 0);
 
+    // Chama o método que carrega os dados do item selecionado
+    controller.carregarTabelaGerenciador();
+
+    // Agora você pode verificar se os campos da view foram atualizados corretamente
+    assertEquals("treco", fakeView.getJTFNome());
+    assertEquals("alguma marca", fakeView.getJTFMarca());
+    assertEquals("100", fakeView.getJTFValor());
+}
 }
 
