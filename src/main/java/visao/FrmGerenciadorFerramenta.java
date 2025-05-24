@@ -335,25 +335,7 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
     }
 
     
-    public void setJBApagar(JButton JBApagar) {
-        this.JBApagar = JBApagar;
-    }
 
-    public void setJBCancelar(JButton JBCancelar) {
-        this.JBCancelar = JBCancelar;
-    }
-
-    public void setJBEditar(JButton JBEditar) {
-        this.JBEditar = JBEditar;
-    }
-
-    public void setJTFMarca(JTextField JTFMarca) {
-        this.JTFMarca = JTFMarca;
-    }
-
-    public void setJTFValor(JTextField JTFValor) {
-        this.JTFValor = JTFValor;
-    }
 
     public void setJTableFerramenta(JTable JTableFerramenta) {
         this.JTableFerramenta = JTableFerramenta;
@@ -377,8 +359,5 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
         this.mensagem = mensagem;
     }
 
-    public void setJTableAmigos(JTable JTableFerramenta) {
-        this.JTableFerramenta = JTableFerramenta;
-    }
 
 }

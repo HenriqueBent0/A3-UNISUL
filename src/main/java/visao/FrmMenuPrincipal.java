@@ -34,7 +34,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
         jMenuGerenciarFerramentas = new javax.swing.JMenuItem();
         jMenuRelatório = new javax.swing.JMenu();
         jMenuRelatorio = new javax.swing.JMenuItem();
-        jMenuHistorico = new javax.swing.JMenuItem();
         jMenuSobre = new javax.swing.JMenu();
 
         jMenuItem5.setText("jMenuItem5");
@@ -135,14 +134,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
             }
         });
         jMenuRelatório.add(jMenuRelatorio);
-
-        jMenuHistorico.setText("Histórico de Empréstimos");
-        jMenuHistorico.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuHistoricoActionPerformed(evt);
-            }
-        });
-        jMenuRelatório.add(jMenuHistorico);
 
         jMenuBar1.add(jMenuRelatório);
 
@@ -246,10 +237,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
                           "Obrigado por escolher nosso software !!");
     }//GEN-LAST:event_jMenuSobreMouseClicked
 
-    private void jMenuHistoricoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuHistoricoActionPerformed
- 
-    }//GEN-LAST:event_jMenuHistoricoActionPerformed
-
     private void jMenuMovimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuMovimentoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuMovimentoActionPerformed
@@ -298,7 +285,6 @@ public class FrmMenuPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuGerenciador;
     private javax.swing.JMenuItem jMenuGerenciarAmigos;
     private javax.swing.JMenuItem jMenuGerenciarFerramentas;
-    private javax.swing.JMenuItem jMenuHistorico;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
