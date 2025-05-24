@@ -124,6 +124,21 @@ void testGettersBotoes() {
     assertNotNull(fakeView.getJBCancelar());
     assertNotNull(fakeView.getJBEditar());
 }
+@Test
+void testApagarFerramentaComLinhaSelecionada() {
+    // Seleciona a primeira linha da tabela
+    fakeView.getJTableFerramenta().setRowSelectionInterval(0, 0);
 
+    // Chama o método apagarFerramenta
+    controller.apagarFerramenta();
+
+    // Verifica se a mensagem de sucesso apareceu
+    assertEquals("Ferramenta Apagada com Sucesso.", fakeView.getMensagem());
+
+    // Pode também verificar se os campos foram limpos (se desejar)
+    assertEquals("", fakeView.getJTFNome());
+    assertEquals("", fakeView.getJTFMarca());
+    assertEquals("", fakeView.getJTFValor());
+}
 }
 
