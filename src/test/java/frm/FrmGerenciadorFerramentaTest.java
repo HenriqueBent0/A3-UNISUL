@@ -105,5 +105,25 @@ void testCarregarTabelaGerenciadorComLinhaSelecionada() {
     assertEquals("alguma marca", fakeView.getJTFMarca());
     assertEquals("100", fakeView.getJTFValor());
 }
+@Test
+void testClearFields() {
+    fakeView.setJTFNome("nome qualquer");
+    fakeView.setJTFMarca("marca qualquer");
+    fakeView.setJTFValor("123");
+
+    fakeView.clearFields();
+
+    assertEquals("", fakeView.getJTFNome());
+    assertEquals("", fakeView.getJTFMarca());
+    assertEquals("", fakeView.getJTFValor());
+}
+
+@Test
+void testGettersBotoes() {
+    assertNotNull(fakeView.getJBApagar());
+    assertNotNull(fakeView.getJBCancelar());
+    assertNotNull(fakeView.getJBEditar());
+}
+
 }
 
