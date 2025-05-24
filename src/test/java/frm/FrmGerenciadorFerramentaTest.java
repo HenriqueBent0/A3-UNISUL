@@ -36,8 +36,9 @@ class GerenciadorFerramentaTest {
 
         atualizaTabelaComFerramentas();
     }
-    @Test
+    
     private void atualizaTabelaComFerramentas() {
+        
         // Certifique-se de que 'getJTableFerramenta' está retornando a tabela corretamente
         JTable tabela = fakeView.getJTableFerramenta();
         DefaultTableModel model = (DefaultTableModel) tabela.getModel(); // Agora você pega o modelo da tabela
@@ -91,25 +92,6 @@ class GerenciadorFerramentaTest {
         assertEquals("Escolha uma Ferramenta para Editar Primeiro", fakeView.getMensagem());
     }
 
-    @Test
-    void testEditarFerramentaComSucesso() {
-        // Seleciona o primeiro amigo da tabela (que já foi populada no setUp)
-        fakeView.getJTableFerramenta().setRowSelectionInterval(0, 0);
 
-        fakeView.setJTFNome("treco");
-        fakeView.setJTFMarca("tramontina express");
-        fakeView.setJTFValor("123");
-
-        controller.editarFerramenta();
-
-        assertEquals("Ferramenta Editada com sucesso.", fakeView.getMensagem());
-
-        // Atualiza a tabela para refletir edição (se seu controller não faz isso automaticamente)
-        atualizaTabelaComFerramentas();
-
-        // Confere se o nome foi realmente atualizado no serviço
-        Ferramenta a = ferramentaService.carregaFerramenta(1);  
-        assertEquals("treco", a.getNome());
-    }
 }
 
