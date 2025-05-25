@@ -4,26 +4,28 @@ import dao.FerramentaDAO;
 import modelo.Ferramenta;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import servico.FerramentaService;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import servico.FerramentaService;
-
+/**
+ * Testes unitários para a classe FerramentaService.
+ */
 public class FerramentaServiceTest {
 
     private FerramentaDAO daoMock;
     private FerramentaService service;
 
+    // Configura os mocks antes de cada teste
     @BeforeEach
     public void setUp() {
         daoMock = mock(FerramentaDAO.class);
         service = new FerramentaService(daoMock);
     }
 
+    // Testa inserção com sucesso
     @Test
     public void testInsertFerramentaBD_Success() {
         when(daoMock.maiorID()).thenReturn(10);
@@ -35,6 +37,7 @@ public class FerramentaServiceTest {
         verify(daoMock, times(1)).insertFerramentaBD(any(Ferramenta.class));
     }
 
+    // Testa falha ao inserir ferramenta
     @Test
     public void testInsertFerramentaBD_Failure() {
         when(daoMock.maiorID()).thenReturn(5);
@@ -46,6 +49,7 @@ public class FerramentaServiceTest {
         verify(daoMock, times(1)).insertFerramentaBD(any(Ferramenta.class));
     }
 
+    // Testa exclusão com sucesso
     @Test
     public void testDeleteFerramentaBD_Success() {
         when(daoMock.deleteFerramentaBD(1)).thenReturn(true);
@@ -56,6 +60,7 @@ public class FerramentaServiceTest {
         verify(daoMock, times(1)).deleteFerramentaBD(1);
     }
 
+    // Testa falha ao excluir ferramenta
     @Test
     public void testDeleteFerramentaBD_Failure() {
         when(daoMock.deleteFerramentaBD(1)).thenReturn(false);
@@ -66,6 +71,7 @@ public class FerramentaServiceTest {
         verify(daoMock, times(1)).deleteFerramentaBD(1);
     }
 
+    // Testa atualização com sucesso
     @Test
     public void testUpdateFerramentaBD_Success() {
         when(daoMock.updateFerramentaBD(1, "Chave", "Gedore", 50)).thenReturn(true);
@@ -76,6 +82,7 @@ public class FerramentaServiceTest {
         verify(daoMock, times(1)).updateFerramentaBD(1, "Chave", "Gedore", 50);
     }
 
+    // Testa falha ao atualizar ferramenta
     @Test
     public void testUpdateFerramentaBD_Failure() {
         when(daoMock.updateFerramentaBD(1, "Chave", "Gedore", 50)).thenReturn(false);
@@ -86,6 +93,7 @@ public class FerramentaServiceTest {
         verify(daoMock, times(1)).updateFerramentaBD(1, "Chave", "Gedore", 50);
     }
 
+    // Testa carregamento de uma ferramenta
     @Test
     public void testCarregaFerramenta() {
         Ferramenta ferramenta = new Ferramenta(1, "Furadeira", "Bosch", 300);
@@ -98,6 +106,7 @@ public class FerramentaServiceTest {
         verify(daoMock, times(1)).carregaFerramenta(1);
     }
 
+    // Testa recuperação da lista de ferramentas
     @Test
     public void testGetListaFerramenta() {
         ArrayList<Ferramenta> lista = new ArrayList<>(Arrays.asList(
@@ -112,6 +121,7 @@ public class FerramentaServiceTest {
         verify(daoMock, times(1)).getListaFerramenta();
     }
 
+    // Testa retorno do maior ID
     @Test
     public void testMaiorID() {
         when(daoMock.maiorID()).thenReturn(42);

@@ -1,18 +1,18 @@
 package dao;
 
-import dao.ConexaoDAO;
-import dao.DevolucaoDAO;
 import modelo.Devolucao;
 import org.junit.jupiter.api.*;
 import org.mockito.MockedStatic;
 import org.mockito.Mockito;
-
 import java.sql.*;
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Testes unitários para a classe DevolucaoDAO. Usa mocks para simular conexões
+ * e operações com banco de dados.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DevolucaoDAOTest {
 
@@ -22,6 +22,9 @@ public class DevolucaoDAOTest {
     private PreparedStatement preparedStatementMock;
     private ResultSet resultSetMock;
 
+    /**
+     * Inicializa os mocks e o DAO antes de cada teste.
+     */
     @BeforeEach
     void setup() {
         dao = new DevolucaoDAO();
@@ -31,11 +34,19 @@ public class DevolucaoDAOTest {
         resultSetMock = mock(ResultSet.class);
     }
 
+    /**
+     * Limpa a lista estática após cada teste para evitar interferências.
+     */
     @AfterEach
     void tearDown() {
         DevolucaoDAO.listaDevolucao.clear();
     }
 
+    /**
+     * Testa a inserção de uma devolução no banco de dados com sucesso.
+     *
+     * @throws Exception em caso de erro no teste.
+     */
     @Test
     @Order(1)
     void testInsertDevolucaoBD() throws Exception {
@@ -58,6 +69,11 @@ public class DevolucaoDAOTest {
         }
     }
 
+    /**
+     * Testa comportamento quando ocorre exceção ao preparar o statement.
+     *
+     * @throws Exception em caso de erro no teste.
+     */
     @Test
     @Order(2)
     void testInsertDevolucaoBDWithSQLException() throws Exception {
@@ -69,16 +85,19 @@ public class DevolucaoDAOTest {
             when(resultSetMock.next()).thenReturn(true);
             when(resultSetMock.getInt("max_id")).thenReturn(1);
 
-            // Simulando erro de SQL ao preparar o statement
             when(connectionMock.prepareStatement(anyString())).thenThrow(new SQLException("Erro ao preparar statement"));
 
             Devolucao devolucao = new Devolucao("Teste", 1, "2025-04-25", 0, "Martelo");
 
-            // Esperamos que o método lance uma exceção em caso de erro
             assertThrows(RuntimeException.class, () -> dao.insertDevolucaoBD(devolucao));
         }
     }
 
+    /**
+     * Testa recuperação da lista de devoluções do banco.
+     *
+     * @throws Exception em caso de erro no teste.
+     */
     @Test
     @Order(3)
     void testGetListaDevolucao() throws Exception {
@@ -103,6 +122,12 @@ public class DevolucaoDAOTest {
         }
     }
 
+    /**
+     * Testa o comportamento quando ocorre exceção ao executar consulta da
+     * lista.
+     *
+     * @throws Exception em caso de erro no teste.
+     */
     @Test
     @Order(4)
     void testGetListaDevolucaoWithSQLException() throws Exception {
@@ -112,14 +137,15 @@ public class DevolucaoDAOTest {
             when(connectionMock.createStatement()).thenReturn(statementMock);
             when(statementMock.executeQuery(anyString())).thenThrow(new SQLException("Erro ao executar consulta"));
 
-            // Esperamos que o método lance uma exceção ou retorne uma lista vazia
             ArrayList<Devolucao> lista = dao.getListaDevolucao();
 
-            // A lista pode ser vazia ou o método pode lançar uma exceção dependendo da implementação
             assertTrue(lista.isEmpty());
         }
     }
 
+    /**
+     * Testa contagem de empréstimos por nome da pessoa.
+     */
     @Test
     @Order(5)
     void testContarEmprestimosPorPessoa() {
@@ -139,6 +165,9 @@ public class DevolucaoDAOTest {
         assertEquals(1, countMaria);
     }
 
+    /**
+     * Testa criação do DAO padrão.
+     */
     @Test
     @Order(6)
     void testConstrutorPadrao() {

@@ -1,8 +1,5 @@
 package modelo;
 
-import dao.AmigoDAO;
-
-
 /**
  * Classe que representa um Amigo.
  */
@@ -12,8 +9,6 @@ public class Amigo {
     private String nome;
     private int id;
     private int telefone;
-
-    private AmigoDAO dao;
 
     //Construtores
     public Amigo() {
@@ -27,7 +22,7 @@ public class Amigo {
         this.nome = nome;
         this.id = id;
         this.telefone = telefone;
-        this.dao = new AmigoDAO();
+
     }
 
     //Getters e Setters

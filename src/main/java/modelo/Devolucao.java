@@ -1,8 +1,5 @@
 package modelo;
 
-import dao.DevolucaoDAO;
-import java.util.ArrayList;
-
 /**
  * Classe que representa uma devolução.
  */
@@ -14,8 +11,6 @@ public class Devolucao {
     private String data;
     private int id;
     private String nomeDaFerramenta;
-
-    private DevolucaoDAO dao;
 
     // Construtores
     public Devolucao() {
@@ -31,7 +26,7 @@ public class Devolucao {
         this.data = data;
         this.id = id;
         this.nomeDaFerramenta = nomeDaFerramenta;
-        this.dao = new DevolucaoDAO();
+
     }
 
     // Getters e Setters
@@ -75,8 +70,4 @@ public class Devolucao {
         this.nomeDaFerramenta = nomeDaFerramenta;
     }
 
-    
-
-   
-    
 }

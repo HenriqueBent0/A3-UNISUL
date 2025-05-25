@@ -7,11 +7,7 @@ import visao.FrmCadastrarFerramenta;
  * Classe que cria um formulário de cadastro de amigo falso para ser utilizado,
  * nos testes.
  */
-
-
 public class FerramentaFake extends FrmCadastrarFerramenta {
-
-
 
     @Override
     public void mostrarMensagem(String mensagem) {

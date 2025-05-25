@@ -4,7 +4,6 @@ import dao.EmprestimoDAO;
 import static dao.EmprestimoDAO.ListaEmprestimo;
 import static dao.FerramentaDAO.ListaFerramenta;
 import static dao.AmigoDAO.ListaAmigo;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;

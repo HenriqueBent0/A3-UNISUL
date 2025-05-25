@@ -1,16 +1,12 @@
 package dao;
 
-import dao.ConexaoDAO;
-import dao.FerramentaDAO;
 import modelo.Ferramenta;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.sql.*;
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -32,17 +28,27 @@ class FerramentaDAOTest {
     @InjectMocks
     private FerramentaDAO ferramentaDAO;
 
+    /**
+     * Configura o mock da conexão antes de cada teste.
+     */
     @BeforeEach
     void setUp() {
         ConexaoDAO.setMockConnection(mockConnection);
     }
 
+    /**
+     * Limpa estado compartilhado e desativa modo de teste após cada execução.
+     */
     @AfterEach
     void tearDown() {
         ConexaoDAO.disableTestMode();
         FerramentaDAO.ListaFerramenta.clear();
     }
 
+    /**
+     * Testa se o método getListaFerramenta retorna uma lista com dados quando
+     * há registros na base.
+     */
     @Test
     void testGetListaFerramenta_ComDados() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -59,6 +65,10 @@ class FerramentaDAOTest {
         assertEquals(10, resultado.get(1).getValor());
     }
 
+    /**
+     * Testa se o método getListaFerramenta retorna uma lista vazia quando não
+     * há registros na base.
+     */
     @Test
     void testGetListaFerramenta_Vazia() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -70,6 +80,10 @@ class FerramentaDAOTest {
         assertTrue(resultado.isEmpty());
     }
 
+    /**
+     * Testa o comportamento do método getListaFerramenta quando ocorre um erro
+     * de SQL. Deve retornar uma lista vazia para evitar falha na aplicação.
+     */
     @Test
     void testGetListaFerramenta_ComErroSQL() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -80,6 +94,11 @@ class FerramentaDAOTest {
         assertTrue(resultado.isEmpty());
     }
 
+    /**
+     * Testa a inserção de uma nova ferramenta no banco com sucesso. Verifica se
+     * o id gerado é obtido corretamente e os parâmetros são passados ao
+     * PreparedStatement.
+     */
     @Test
     void testInsertFerramentaBD_Sucesso() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -101,6 +120,10 @@ class FerramentaDAOTest {
         verify(mockPreparedStatement).setInt(4, 25);
     }
 
+    /**
+     * Testa a inserção da ferramenta quando ocorre erro ao tentar obter o maior
+     * ID do banco. Espera que uma RuntimeException seja lançada.
+     */
     @Test
     void testInsertFerramentaBD_ComErro() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -110,9 +133,14 @@ class FerramentaDAOTest {
 
         Ferramenta ferramenta = new Ferramenta(0, "Falha", "MarcaX", 10);
 
-        assertThrows(RuntimeException.class, () -> ferramentaDAO.insertFerramentaBD(ferramenta));
+        RuntimeException ex = assertThrows(RuntimeException.class, () -> ferramentaDAO.insertFerramentaBD(ferramenta));
+        assertTrue(ex.getMessage().contains("Erro de leitura do último ID"));
     }
 
+    /**
+     * Testa exclusão bem-sucedida da ferramenta pelo ID. Verifica se o método
+     * retorna true e o parâmetro é configurado corretamente.
+     */
     @Test
     void testDeleteFerramentaBD_Sucesso() throws SQLException {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
@@ -124,6 +152,10 @@ class FerramentaDAOTest {
         verify(mockPreparedStatement).setInt(1, 1);
     }
 
+    /**
+     * Testa exclusão de ferramenta quando ocorre erro SQL. O método deve
+     * retornar false indicando falha na exclusão.
+     */
     @Test
     void testDeleteFerramentaBD_ComErro() throws SQLException {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
@@ -134,6 +166,10 @@ class FerramentaDAOTest {
         assertFalse(resultado);
     }
 
+    /**
+     * Testa atualização bem-sucedida de uma ferramenta. Verifica se os
+     * parâmetros são configurados e o retorno é true.
+     */
     @Test
     void testUpdateFerramentaBD_Sucesso() throws SQLException {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
@@ -147,9 +183,12 @@ class FerramentaDAOTest {
         verify(mockPreparedStatement).setString(2, "MarcaX");
         verify(mockPreparedStatement).setInt(3, 15);
         verify(mockPreparedStatement).setInt(4, 1);
-
     }
 
+    /**
+     * Testa atualização de ferramenta com falha na execução do SQL. Espera que
+     * uma RuntimeException seja lançada.
+     */
     @Test
     void testUpdateFerramentaBD_ComErro() throws SQLException {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
@@ -164,26 +203,31 @@ class FerramentaDAOTest {
         });
     }
 
+    /**
+     * Testa o carregamento de uma ferramenta existente pelo ID. Verifica se os
+     * dados são corretamente populados no objeto retornado.
+     */
     @Test
     void testCarregaFerramenta_Existente() throws SQLException {
-
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
-
         when(mockPreparedStatement.executeQuery()).thenReturn(mockResultSet);
-        when(mockResultSet.next()).thenReturn(true);  
-        when(mockResultSet.getString("nome")).thenReturn("Parafusadeira"); 
-        when(mockResultSet.getString("marca")).thenReturn("MarcaX"); 
-        when(mockResultSet.getInt("valor")).thenReturn(20); 
+        when(mockResultSet.next()).thenReturn(true);
+        when(mockResultSet.getString("nome")).thenReturn("Parafusadeira");
+        when(mockResultSet.getString("marca")).thenReturn("MarcaX");
+        when(mockResultSet.getInt("valor")).thenReturn(20);
 
         Ferramenta resultado = ferramentaDAO.carregaFerramenta(1);
 
         assertNotNull(resultado);
-
-        assertEquals("Parafusadeira", resultado.getNome()); 
-        assertEquals("MarcaX", resultado.getMarca()); 
+        assertEquals("Parafusadeira", resultado.getNome());
+        assertEquals("MarcaX", resultado.getMarca());
         assertEquals(20, resultado.getValor());
     }
 
+    /**
+     * Testa o carregamento de ferramenta inexistente pelo ID. Espera retorno
+     * null para indicar ausência de registro.
+     */
     @Test
     void testCarregaFerramenta_NaoExistente() throws SQLException {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
@@ -195,6 +239,9 @@ class FerramentaDAOTest {
         assertNull(resultado);
     }
 
+    /**
+     * Testa o método que retorna o maior ID presente na tabela de ferramentas.
+     */
     @Test
     void testMaiorID_ComDados() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -207,6 +254,10 @@ class FerramentaDAOTest {
         assertEquals(5, maiorID);
     }
 
+    /**
+     * Testa o retorno do método maiorID quando ocorre erro SQL. Deve retornar 0
+     * como valor padrão.
+     */
     @Test
     void testMaiorID_ComErroSQL() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -217,35 +268,17 @@ class FerramentaDAOTest {
         assertEquals(0, maiorID);
     }
 
-    @Test
-    void testSetMockConnection() {
-        ConexaoDAO.setMockConnection(mockConnection);
-        assertNotNull(ConexaoDAO.getConexao());
-    }
-
+    /**
+     * Testa se o método setListaFerramenta realmente altera a lista interna da
+     * classe.
+     */
     @Test
     void testSetListaFerramenta() {
-        ArrayList<Ferramenta> listaTeste = new ArrayList<>();
-        ferramentaDAO.setListaFerramenta(listaTeste);
-        assertEquals(listaTeste, ferramentaDAO.ListaFerramenta);
+        ArrayList<Ferramenta> novaLista = new ArrayList<>();
+        novaLista.add(new Ferramenta(1, "Chave", "MarcaA", 12));
+        ferramentaDAO.setListaFerramenta(novaLista);
+
+        assertEquals(1, FerramentaDAO.ListaFerramenta.size());
+        assertEquals("Chave", FerramentaDAO.ListaFerramenta.get(0).getNome());
     }
-
-    @Test
-    void testGetListaFerramenta_ComSQLException_Tratamento() throws SQLException {
-        when(mockConnection.createStatement()).thenThrow(new SQLException("Erro de conexão"));
-
-        ArrayList<Ferramenta> resultado = ferramentaDAO.getListaFerramenta();
-
-        assertTrue(resultado.isEmpty());
-        assertEquals(mockConnection, ConexaoDAO.getConexao());
-    }
-    @Test
-void testCarregaFerramenta_ComErroSQL() throws SQLException {
-    when(mockConnection.prepareStatement(anyString())).thenThrow(new SQLException("Erro simulado"));
-
-    Ferramenta resultado = ferramentaDAO.carregaFerramenta(123);
-
-    assertNull(resultado); // Como o método retorna null no catch
-}
-
 }

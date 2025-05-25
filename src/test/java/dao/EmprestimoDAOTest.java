@@ -1,19 +1,19 @@
 package dao;
 
-import dao.ConexaoDAO;
-import dao.EmprestimoDAO;
 import modelo.Emprestimo;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.sql.*;
 import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Testes unitários para a classe EmprestimoDAO. Utiliza Mockito para simular
+ * conexões e operações no banco de dados.
+ */
 @ExtendWith(MockitoExtension.class)
 class EmprestimoDAOTest {
 
@@ -32,17 +32,26 @@ class EmprestimoDAOTest {
     @InjectMocks
     private EmprestimoDAO emprestimoDAO;
 
+    /**
+     * Configura conexão mock antes de cada teste.
+     */
     @BeforeEach
     void setUp() {
         ConexaoDAO.setMockConnection(mockConnection);
     }
 
+    /**
+     * Limpa configurações após cada teste.
+     */
     @AfterEach
     void tearDown() {
         ConexaoDAO.disableTestMode();
         EmprestimoDAO.ListaEmprestimo.clear();
     }
 
+    /**
+     * Testa obtenção da lista de empréstimos quando há dados.
+     */
     @Test
     void testGetListaEmprestimo_ComDados() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -60,6 +69,9 @@ class EmprestimoDAOTest {
         assertEquals("João", lista.get(0).getNomeAmigo());
     }
 
+    /**
+     * Testa obtenção da lista de empréstimos quando não há dados.
+     */
     @Test
     void testGetListaEmprestimo_SemDados() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -71,6 +83,9 @@ class EmprestimoDAOTest {
         assertTrue(lista.isEmpty());
     }
 
+    /**
+     * Testa inserção bem-sucedida de empréstimo no banco.
+     */
     @Test
     void testInsertEmprestimoBD_Sucesso() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -93,6 +108,9 @@ class EmprestimoDAOTest {
         verify(mockPreparedStatement).setInt(5, 5);
     }
 
+    /**
+     * Testa comportamento na inserção quando ocorre erro de SQL.
+     */
     @Test
     void testInsertEmprestimoBD_Erro() throws SQLException {
         when(mockConnection.createStatement()).thenReturn(mockStatement);
@@ -103,6 +121,9 @@ class EmprestimoDAOTest {
         assertThrows(RuntimeException.class, () -> emprestimoDAO.insertEmprestimoBD(emprestimo));
     }
 
+    /**
+     * Testa exclusão de empréstimo com sucesso.
+     */
     @Test
     void testDeleteEmprestimoBD_Sucesso() throws SQLException {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
@@ -114,6 +135,9 @@ class EmprestimoDAOTest {
         verify(mockPreparedStatement).setInt(1, 1);
     }
 
+    /**
+     * Testa exclusão de empréstimo quando ocorre erro.
+     */
     @Test
     void testDeleteEmprestimoBD_Erro() throws SQLException {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
@@ -124,6 +148,9 @@ class EmprestimoDAOTest {
         assertFalse(resultado);
     }
 
+    /**
+     * Testa carregar empréstimo existente pelo id.
+     */
     @Test
     void testCarregaEmprestimo_Existente() throws SQLException {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
@@ -144,6 +171,9 @@ class EmprestimoDAOTest {
         assertEquals(7, resultado.getIdFerramenta());
     }
 
+    /**
+     * Testa carregar empréstimo que não existe.
+     */
     @Test
     void testCarregaEmprestimo_NaoExistente() throws SQLException {
         when(mockConnection.prepareStatement(anyString())).thenReturn(mockPreparedStatement);
@@ -152,11 +182,14 @@ class EmprestimoDAOTest {
 
         Emprestimo resultado = emprestimoDAO.carregaEmprestimo(999);
 
-        assertNotNull(resultado);  // objeto é instanciado mesmo sem dados
+        assertNotNull(resultado);  // deve retornar objeto vazio mesmo sem dados
         assertEquals(999, resultado.getId());
         assertNull(resultado.getNomeAmigo());
     }
 
+    /**
+     * Testa a configuração da lista estática de empréstimos.
+     */
     @Test
     void testSetListaEmprestimo() {
         ArrayList<Emprestimo> novaLista = new ArrayList<>();

@@ -3,15 +3,15 @@ package test;
 import modelo.Devolucao;
 import dao.DevolucaoDAO;
 import servico.DevolucaoService;
-
 import org.junit.jupiter.api.*;
 import org.mockito.*;
-
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Testes unitários para a classe DevolucaoService.
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DevolucaoServiceTest {
 
@@ -20,12 +20,14 @@ public class DevolucaoServiceTest {
 
     private DevolucaoService service;
 
+    // Inicializa mocks e instancia o serviço antes de cada teste
     @BeforeEach
     void setup() {
         MockitoAnnotations.openMocks(this);
-        service = new DevolucaoService(devolucaoDAOMock); // Recomendado: criar esse construtor no DevolucaoService
+        service = new DevolucaoService(devolucaoDAOMock); // Construtor com DAO injetado
     }
 
+    // Testa inserção de devolução
     @Test
     @Order(1)
     void testInsertDevolucao() {
@@ -37,6 +39,7 @@ public class DevolucaoServiceTest {
         verify(devolucaoDAOMock, times(1)).insertDevolucaoBD(any());
     }
 
+    // Testa recuperação da lista de devoluções
     @Test
     @Order(2)
     void testGetListaDevolucao() {
@@ -53,16 +56,17 @@ public class DevolucaoServiceTest {
         assertEquals("Martelo", resultado.get(0).getNomeDaFerramenta());
     }
 
-
+    // Testa o construtor padrão do serviço
     @Test
     @Order(3)
     void testConstrutorPadrao() {
         DevolucaoService servicePadrao = new DevolucaoService();
         assertNotNull(servicePadrao);
     }
-    
-        @Test
-    public void testConstrutorPadrao_DeveInicializarComValoresPadrao() {
+
+    // Testa o construtor padrão da entidade Devolucao
+    @Test
+    void testConstrutorPadrao_DeveInicializarComValoresPadrao() {
         Devolucao devolucao = new Devolucao();
 
         assertEquals("", devolucao.getNomeAmigo());
@@ -72,8 +76,9 @@ public class DevolucaoServiceTest {
         assertEquals("", devolucao.getNomeDaFerramenta());
     }
 
+    // Testa o construtor com parâmetros da entidade Devolucao
     @Test
-    public void testConstrutorComParametros_DeveInicializarCorretamente() {
+    void testConstrutorComParametros_DeveInicializarCorretamente() {
         Devolucao devolucao = new Devolucao("Carlos", 2, "2025-05-10", 5, "Chave de Fenda");
 
         assertEquals("Carlos", devolucao.getNomeAmigo());
@@ -83,8 +88,9 @@ public class DevolucaoServiceTest {
         assertEquals("Chave de Fenda", devolucao.getNomeDaFerramenta());
     }
 
+    // Testa os métodos getters e setters da entidade Devolucao
     @Test
-    public void testSettersAndGetters_DeveDefinirEAcessarValoresCorretamente() {
+    void testSettersAndGetters_DeveDefinirEAcessarValoresCorretamente() {
         Devolucao devolucao = new Devolucao();
 
         devolucao.setNomeAmigo("Maria");
@@ -99,5 +105,4 @@ public class DevolucaoServiceTest {
         assertEquals(10, devolucao.getId());
         assertEquals("Alicate", devolucao.getNomeDaFerramenta());
     }
-    
 }

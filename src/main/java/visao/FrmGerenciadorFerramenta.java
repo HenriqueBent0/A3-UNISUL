@@ -1,20 +1,16 @@
 package visao;
 
-import dao.FerramentaDAO;
-import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
-import modelo.Ferramenta;
 import servico.FerramentaService;
 import controle.GerenciadorFerramentaController;
 
 /**
  * Classe responsável pela interface gráfica do gerenciador de ferramentas.
+ * Permite visualizar, editar, apagar e gerenciar ferramentas.
  */
 public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
 
@@ -28,12 +24,18 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Construtor padrão que inicializa o controller e carrega a tabela.
+     */
     public FrmGerenciadorFerramenta() {
         initComponents();
         this.controller = new GerenciadorFerramentaController(this, FerramentaService);
         carregaTabela();
     }
 
+    /**
+     * Solicita ao controller o cálculo do valor total das ferramentas.
+     */
     public void calculaValorTotal() {
         controller.calcularValorTotal();
     }
@@ -263,7 +265,9 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelTotal;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
-
+ /**
+     * Limpa todas as linhas da tabela de ferramentas.
+     */
     public void clearTable() {
         javax.swing.table.DefaultTableModel modelo = (javax.swing.table.DefaultTableModel) JTableFerramenta.getModel();
         modelo.setNumRows(0);
@@ -274,19 +278,31 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
         modelo.addRow(new Object[]{id, nome, marca, valor});
     }
 
+    /**
+     * Limpa os campos de texto da interface.
+     */
     public void clearFields() {
         JTFNome.setText("");
         JTFMarca.setText("");
         JTFValor.setText("");
     }
 
+    /**
+     * Solicita ao controller carregar os dados na tabela.
+     */
     public void carregaTabela() {
         controller.carregarTabela();
     }
 
+    /**
+     * Solicita ao controller carregar dados específicos para gerenciador,
+     * geralmente ao clicar em uma linha da tabela.
+     */
     public void carregarTabelaGerenciador() {
         controller.carregarTabelaGerenciador();
     }
+    // Getters e setters para os componentes da interface, permitindo
+    // interação do controller e outras classes com os campos e botões
 
     public JButton getJBApagar() {
         return JBApagar;
@@ -328,24 +344,17 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
         return JTableFerramenta;
     }
 
-   
-
     public JLabel getjLabelTotal() {
         return jLabelTotal;
     }
-
-    
-
 
     public void setJTableFerramenta(JTable JTableFerramenta) {
         this.JTableFerramenta = JTableFerramenta;
     }
 
-
     public void setLabelTotal(String texto) {
         this.jLabelTotal.setText(texto);
     }
-
 
     public void mostrarMensagem(String mensagem) {
         JOptionPane.showMessageDialog(null, mensagem);
@@ -358,6 +367,4 @@ public class FrmGerenciadorFerramenta extends javax.swing.JFrame {
     public void setMensagem(String mensagem) {
         this.mensagem = mensagem;
     }
-
-
 }

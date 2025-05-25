@@ -6,7 +6,8 @@ import javax.swing.JTable;
 import servico.AmigoService;
 
 /**
- * Classe responsável pela interface gráfica de gerenciador de amigo.
+ * Interface gráfica para gerenciamento de amigos. Permite exibir, editar e
+ * apagar amigos.
  */
 public class FrmGerenciadorAmigo extends javax.swing.JFrame {
 
@@ -19,6 +20,10 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Construtor que inicializa os componentes da interface e cria o
+     * controlador responsável pelo gerenciamento.
+     */
     public FrmGerenciadorAmigo() {
         initComponents();
 
@@ -249,6 +254,8 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
+    // Getters e setters para os componentes da interface,
+    // para que o controlador possa acessar e manipular os dados.
     public String getJTFNome() {
         return JTFNome.getText();
     }
@@ -287,12 +294,15 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
     public void carregaTabela() {
         controller.carregarTabela();
     }
+
     public void carregarTabelaGerenciador() {
         controller.carregarTabelaGerenciador();
     }
+
     public void mostrarMensagem(String mensagem) {
         JOptionPane.showMessageDialog(null, mensagem);
     }
+
     public String getMensagem() {
         return mensagem;
     }
@@ -300,7 +310,6 @@ public class FrmGerenciadorAmigo extends javax.swing.JFrame {
     public void setMensagem(String mensagem) {
         this.mensagem = mensagem;
     }
-
 
     public void setJTableAmigos(JTable JTableAmigos) {
         this.JTableAmigos = JTableAmigos;

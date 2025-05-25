@@ -2,12 +2,12 @@ package visao;
 
 import controle.FerramentaController;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
- * Classe responsável pela interface gráfica de cadastro de ferramenta.
+ * Interface gráfica para cadastro de ferramentas. Permite inserir nome, marca e
+ * custo da ferramenta, e realizar as ações de cadastrar ou cancelar o cadastro.
  */
 public class FrmCadastrarFerramenta extends javax.swing.JFrame {
 
@@ -16,6 +16,10 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
 
     ;
     
+    /**
+     * Construtor que inicializa os componentes da interface
+     * e cria o controlador responsável pelo cadastro.
+     */
     public FrmCadastrarFerramenta() {
         initComponents();
         this.ferramentaController = new FerramentaController(this);
@@ -169,6 +173,8 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     // End of variables declaration//GEN-END:variables
 
+    // Getters e setters para os campos e botões, facilitando
+    // o acesso do controlador aos componentes da interface.
     public void mostrarMensagem(String mensagem) {
         JOptionPane.showMessageDialog(null, mensagem);
     }
@@ -228,6 +234,5 @@ public class FrmCadastrarFerramenta extends javax.swing.JFrame {
     public void setJTFValor(JTextField JTFValor) {
         this.JTFValor = JTFValor;
     }
-
 
 }

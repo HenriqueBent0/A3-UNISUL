@@ -9,25 +9,25 @@ import java.util.ArrayList;
 import modelo.Devolucao;
 
 /**
- * Classe que define as operações de acesso a dados para a entidade Devolucao.
+ * Classe responsável pelas operações de acesso a dados da entidade Devolucao.
  */
 public class DevolucaoDAO {
 
     /**
-     * Lista para armazenar objetos de Devolucao recuperados do banco de dados.
+     * Lista de devoluções obtidas do banco
      */
     public static ArrayList<Devolucao> listaDevolucao = new ArrayList<>();
 
     /**
-     * Método para obter a lista de devoluções do banco de dados.
+     * Obtém a lista de todas as devoluções do banco.
+     *
+     * @return Lista de objetos Devolucao.
      */
     public ArrayList<Devolucao> getListaDevolucao() {
         listaDevolucao.clear();
         String sql = "SELECT * FROM tb_devolucao";
 
-        try (Connection conn = ConexaoDAO.getConexao();
-             Statement stmt = conn.createStatement();
-             ResultSet res = stmt.executeQuery(sql)) {
+        try (Connection conn = ConexaoDAO.getConexao(); Statement stmt = conn.createStatement(); ResultSet res = stmt.executeQuery(sql)) {
 
             while (res.next()) {
                 int id = res.getInt("id");
@@ -47,15 +47,16 @@ public class DevolucaoDAO {
     }
 
     /**
-     * Método para inserir uma devolução no banco de dados.
+     * Insere uma nova devolução no banco.
+     *
+     * @param objeto Devolucao a ser inserida.
+     * @return true se inserção for bem-sucedida.
      */
     public boolean insertDevolucaoBD(Devolucao objeto) {
         String sqlSelectMaxId = "SELECT MAX(id) AS max_id FROM tb_devolucao";
         String sqlInsert = "INSERT INTO tb_devolucao(nomeAmigo, idFerramenta, nomeDaFerramenta, data, id) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection conn = ConexaoDAO.getConexao();
-             Statement stmtUltimoId = conn.createStatement();
-             ResultSet rsUltimoId = stmtUltimoId.executeQuery(sqlSelectMaxId)) {
+        try (Connection conn = ConexaoDAO.getConexao(); Statement stmtUltimoId = conn.createStatement(); ResultSet rsUltimoId = stmtUltimoId.executeQuery(sqlSelectMaxId)) {
 
             int ultimoId = 0;
             if (rsUltimoId.next()) {
@@ -82,7 +83,10 @@ public class DevolucaoDAO {
     }
 
     /**
-     * Conta quantas devoluções um determinado amigo já fez.
+     * Conta quantas devoluções foram feitas por um amigo específico.
+     *
+     * @param nomeAmigo Nome do amigo.
+     * @return Quantidade de devoluções feitas por esse amigo.
      */
     public int contarEmprestimosPorPessoa(String nomeAmigo) {
         int count = 0;

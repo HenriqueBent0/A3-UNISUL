@@ -136,7 +136,6 @@ public class FrmRelatorioEmprestimo extends javax.swing.JFrame {
         devolucao();
     }//GEN-LAST:event_JBDevolucaoActionPerformed
 
-
     public static void main(String args[]) {
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -177,8 +176,8 @@ public class FrmRelatorioEmprestimo extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
-public void devolucao(){
-try {
+public void devolucao() {
+        try {
             int id = 0;
 
             // Verifica se alguma linha da tabela de empréstimos ativos está selecionada
@@ -254,8 +253,9 @@ try {
             // Carrega novamente a tabela de empréstimos ativos
             carregaTabela();
         }
-}
-public void carregaTabela() {
+    }
+
+    public void carregaTabela() {
         DefaultTableModel modelo = (DefaultTableModel) this.JTableEmprestimoAtivo.getModel();
         modelo.setNumRows(0);
         EmprestimoDAO emprestimoDAO = new EmprestimoDAO();

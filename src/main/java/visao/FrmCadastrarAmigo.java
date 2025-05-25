@@ -2,23 +2,26 @@ package visao;
 
 import controle.AmigoController;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
- * Classe responsável pela interface gráfica de cadastro de amigo.
+ * Interface gráfica para cadastro de amigos. Permite inserir nome e telefone, e
+ * cadastrar ou cancelar a operação.
  */
 public class FrmCadastrarAmigo extends javax.swing.JFrame {
 
     private String mensagem;
     AmigoController amigoController;
-    
-    public FrmCadastrarAmigo(){
-        initComponents(); 
+
+    /**
+     * Construtor que inicializa os componentes da interface e cria o
+     * controlador responsável pelo cadastro.
+     */
+    public FrmCadastrarAmigo() {
+        initComponents();
         this.amigoController = new AmigoController(this);
     }
-   
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -125,7 +128,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JTFTelefoneActionPerformed
 
     private void JBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCadastrarActionPerformed
-      amigoController.cadastrar();
+        amigoController.cadastrar();
     }
 
     /**
@@ -146,7 +149,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     }//GEN-LAST:event_JBCancelarActionPerformed
 
     public static void main(String args[]) {
-       
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -159,6 +162,8 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 
+    // Getters e setters para os componentes da interface, 
+    // para que o controlador possa acessar e manipular os dados.
     public String getMensagem() {
         return mensagem;
     }
@@ -166,7 +171,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
     public void setMensagem(String mensagem) {
         this.mensagem = mensagem;
     }
-    
+
     public JButton getJBCadastrar() {
         return JBCadastrar;
     }
@@ -199,7 +204,7 @@ public class FrmCadastrarAmigo extends javax.swing.JFrame {
         this.JTFTelefone = JTFTelefone;
     }
 
-public void mostrarMensagem(String mensagem) {
+    public void mostrarMensagem(String mensagem) {
         JOptionPane.showMessageDialog(null, mensagem);
     }
 }
