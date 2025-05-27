@@ -31,6 +31,6 @@ O sistema permite cadastrar amigos e ferramentas, controlar empréstimos e devol
 ## 👨‍🎓 Alunos Responsáveis
 
 - Henrique Bento RA:1072417437  
-- Nome do Segundo Aluno 
+- Ian Akira Fujimori Gaspar RA:1072417788
 - Nome do Terceiro Aluno  
 - Nome do Quarto Aluno
