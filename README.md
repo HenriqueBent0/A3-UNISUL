@@ -30,7 +30,7 @@ O sistema permite cadastrar amigos e ferramentas, controlar empréstimos e devol
 
 ## 👨‍🎓 Alunos Responsáveis
 
-- Henrique Bento RA:1072417437  
-- Ian Akira Fujimori Gaspar RA:1072417788
-- Nome do Terceiro Aluno  
-- Nome do Quarto Aluno
+- Henrique Bento - RA:1072417437 - Github: HenriqueBent0
+- Ian Akira Fujimori Gaspar - RA:1072417788 - Github: IanAkira
+- Franco Borin Maranhão - RA:1072519160 - Github: francobm06  
+- Bento Biral Foerster - RA:1072413638 - Github: 4kbento
