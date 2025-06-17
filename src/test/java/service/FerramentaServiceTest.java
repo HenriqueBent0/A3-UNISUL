@@ -1,4 +1,4 @@
-package test;
+package service;
 
 import dao.FerramentaDAO;
 import modelo.Ferramenta;

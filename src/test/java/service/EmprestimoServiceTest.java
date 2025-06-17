@@ -1,4 +1,4 @@
-package test;
+package service;
 
 import dao.EmprestimoDAO;
 import modelo.Emprestimo;
